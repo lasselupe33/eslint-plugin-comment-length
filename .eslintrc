@@ -14,9 +14,12 @@
   ],
   "plugins": [
     "react-hooks",
-    "import"
+    "import",
+    "comments"
   ],
   "rules": {
+    "comments/limit-single-line-comments": "warn",
+    "comments/limit-multi-line-comments": "warn",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off",

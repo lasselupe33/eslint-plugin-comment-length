@@ -20,8 +20,9 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
         let hasContentOnFirstLine = true;
 
         // Strip the first line of the multiline-comment if it does not contain
-        // any content.. We do not want to trigger additional unwanted line-breaks
-        // since start and end tag will be appended manually later on.
+        // any content.. We do not want to trigger additional unwanted
+        // line-breaks since start and end tag will be appended manually later
+        // on.
         if (lines[0] === "") {
           hasContentOnFirstLine = false;
           lines.splice(0, 1);
@@ -34,9 +35,9 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
 
         const isSingleLine = rawLines.length === 1;
         const commentBoilerplateSize = isSingleLine
-          ? whitespaceSize + 4
+          ? whitespaceSize + 4 // +4 for "/*" and "*/"
           : hasContentOnFirstLine
-          ? whitespaceSize + 2
+          ? whitespaceSize + 2 // +2 for "/*", but not "*/" since there is more than one line
           : 0;
 
         if (

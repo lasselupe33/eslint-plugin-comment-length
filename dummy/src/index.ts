@@ -1,39 +1,31 @@
-// Jeg ekjrg ekjrg kjreg ekjrg ekrj vejk ckje ckjr kej ckjre cker cjkercjker, jj
-// ups jeg manglere noget tekst her kgjer gkreg cjkecekjr c e og en rettelse j
-// herovre
-//
-// rekgjer k Hejsa!!
+// Her er en root comment som så fint beskriver "foo". wekfjwefkj wefkjwekjf wef
 const foo = 2;
 
 if (foo) {
   // what about my long comment in here, is this considered a problem?? hello wo
+  // Here is the next part of the comment, and i need to fix something on the
+  // other line.
   console.log("hi!");
-
-  /**
-   * ejrngkjer gjker gekjrg ekjrg ekjr gejkrg erkjg erjkg ejkrg ekjrg ekrjg f
-   */
 
   if (2 > foo) {
     /**
-     * rtngoeg eklrg erlkg elkrg elkrg elkrg lekreg klereg lekr glekr glkg l rgs
-     * Hejsa!
+     * Here is a comment that will soon be broken into several lines, neatly ind
      */
     console.log("what?");
   }
 }
 
-// another relevant comment erjgekrjeg ekjr gekrjg erkjeg erkjg ekjrg ekjg ekjrg
-// ekrj
+/** Endnu en god kommentar, som højst sandsynligt ryger på flere linjer lige */
+
 /**
- * Here is a multiline jkef kwef kwjef wkejf wkjef wjkef wekf ewkf wekjf wkf wkf
- * jo
+ * Og her er en lang kommentar som har flere linjers indhold.
  *
- * Hi a mad peerson could do this
+ * Lad os respektere dobbelt linjeskift, det virker til at være en rigtig god
+ * Yes, det sørger vi for at respektere
  */
 
+// Indsæt lorem her
+/** Og her! */
 /**
- * And a singleline-multiline ekrjg ekjrg ekjrg ejkrg ejkrg ejkr gekjrg ekjr
- * gekr
+ * og her!
  */
-
-/** */

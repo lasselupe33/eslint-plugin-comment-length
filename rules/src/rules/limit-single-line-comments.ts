@@ -12,10 +12,12 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
     fixable: "whitespace",
   },
   create: (context: Rule.RuleContext): Rule.RuleListener => {
-    const comments = context.getSourceCode().getAllComments();
+    const sourceCode = context.getSourceCode();
+    const comments = sourceCode.getAllComments();
 
     // Firstly we parse all individual single-line comments into logical chunks,
-    // wherein a group is to be considered all comments that occur directly after
+    // wherein a group is to be considered all comments that occur directly
+    // after
     // each other.
     const groupedComments = comments.reduce<GroupedComments[]>(
       (acc, rawCurr) => {
@@ -29,13 +31,10 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
         const newestChunk = acc[acc.length - 1];
         const newestGroup = newestChunk?.groupedComment;
 
-        // In case the current line comment directly follows the group that we are
-        // currently generating, then append the comment to the group that we're
-        // generating.
-        if (
-          newestGroup?.loc?.start?.line ===
-          (curr.loc?.start?.line ?? 0) - 1
-        ) {
+        // In case the current line comment directly follows the group that we
+        // are currently generating, then append the comment to the group that
+        // we're generating.
+        if (newestGroup?.loc?.end?.line === (curr.loc?.start?.line ?? 0) - 1) {
           if (newestGroup.loc.end && curr.loc?.end) {
             newestGroup.loc.end = curr.loc.end;
           }
@@ -61,9 +60,10 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
 
     for (const comment of comments) {
       const whitespaceSize = comment.loc?.start.column ?? 0;
-      console.log(whitespaceSize);
+      const nodeBefore = sourceCode.getTokenBefore(comment);
 
       if (
+        (!nodeBefore || nodeBefore.type === "Punctuator") &&
         comment.loc &&
         comment.type === "Line" &&
         comment.value.length + whitespaceSize + 2 > 80
