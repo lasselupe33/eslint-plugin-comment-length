@@ -14,6 +14,9 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
   create: (context: Rule.RuleContext): Rule.RuleListener => {
     const comments = context.getSourceCode().getAllComments();
 
+    // Firstly we parse all individual single-line comments into logical chunks,
+    // wherein a group is to be considered all comments that occur directly after
+    // each other.
     const groupedComments = comments.reduce<GroupedComments[]>(
       (acc, rawCurr) => {
         const curr = { ...rawCurr };
@@ -26,11 +29,13 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
         const newestChunk = acc[acc.length - 1];
         const newestGroup = newestChunk?.groupedComment;
 
+        // In case the current line comment directly follows the group that we are
+        // currently generating, then append the comment to the group that we're
+        // generating.
         if (
           newestGroup?.loc?.start?.line ===
           (curr.loc?.start?.line ?? 0) - 1
         ) {
-          // Insert into prev comment
           if (newestGroup.loc.end && curr.loc?.end) {
             newestGroup.loc.end = curr.loc.end;
           }
@@ -42,7 +47,7 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
           newestGroup.value += curr.value;
           newestChunk?.relatedComments.add(rawCurr);
         } else {
-          // New comment
+          // ... else we will begin generating a new group
           acc.push({
             relatedComments: new Set([rawCurr]),
             groupedComment: curr,
@@ -55,7 +60,14 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
     );
 
     for (const comment of comments) {
-      if (comment.loc && comment.type === "Line" && comment.value.length > 80) {
+      const whitespaceSize = comment.loc?.start.column ?? 0;
+      console.log(whitespaceSize);
+
+      if (
+        comment.loc &&
+        comment.type === "Line" &&
+        comment.value.length + whitespaceSize + 2 > 80
+      ) {
         const commentGroup = groupedComments.find((group) =>
           group.relatedComments.has(comment)
         );
@@ -81,7 +93,10 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
               (acc, curr) => {
                 const currLine = acc[acc.length - 1];
 
-                if (!currLine || currLine.length + curr.length + 1 > 80) {
+                if (
+                  !currLine ||
+                  currLine.length + curr.length + whitespaceSize + 1 > 80
+                ) {
                   acc.push(`// ${curr}`);
                 } else {
                   acc[acc.length - 1] = `${currLine} ${curr}`;

@@ -10,56 +10,78 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
 
     for (const comment of comments) {
       const commentRange = comment.range;
+      const whitespaceSize = comment.loc?.start.column ?? 0;
+      const whiteSpace = " ".repeat(whitespaceSize);
 
       if (comment.loc && commentRange && comment.type === "Block") {
-        const individualLines = comment.value.split("\n");
+        const rawLines = comment.value.split("\n");
+        const lines = rawLines.map((line) => line.replace(/\*/g, "").trim());
 
-        for (const line of individualLines) {
-          if (line.length > 80) {
-            context.report({
-              loc: comment.loc,
-              message: "Comments may not exceed 80 characters",
-              fix: (fixer) => {
-                const commentWords = individualLines
-                  .map((line) => line.replace(/\*/g, "").trim())
-                  .slice(1, -1);
+        let hasContentOnFirstLine = true;
 
-                console.log(commentWords);
+        // Strip the first line of the multiline-comment if it does not contain
+        // any content.. We do not want to trigger additional unwanted line-breaks
+        // since start and end tag will be appended manually later on.
+        if (lines[0] === "") {
+          hasContentOnFirstLine = false;
+          lines.splice(0, 1);
+        }
 
-                const newCommentLines = commentWords?.reduce<string[]>(
-                  (acc, oldLine) => {
-                    if (oldLine === "") {
-                      acc.push(" *\n *");
+        // ... strip end line if it does not contain content as well.
+        if (lines[lines.length - 1] === "") {
+          lines.splice(-1, 1);
+        }
 
-                      return acc;
-                    }
+        const isSingleLine = rawLines.length === 1;
+        const commentBoilerplateSize = isSingleLine
+          ? whitespaceSize + 4
+          : hasContentOnFirstLine
+          ? whitespaceSize + 2
+          : 0;
 
-                    const currWords = oldLine.trim().split(" ");
-
-                    for (const word of currWords) {
-                      const currLine = acc[acc.length - 1];
-
-                      if (
-                        !currLine ||
-                        currLine?.length + word.length + 1 > 80
-                      ) {
-                        acc.push(` * ${word}`);
-                      } else {
-                        acc[acc.length - 1] = `${currLine} ${word}`;
-                      }
-                    }
+        if (
+          rawLines.find((line) => line.length + commentBoilerplateSize > 80)
+        ) {
+          context.report({
+            loc: comment.loc,
+            message: "Comments may not exceed 80 characters",
+            fix: (fixer) => {
+              const newCommentLines = lines?.reduce<string[]>(
+                (acc, currentLine) => {
+                  // Respect empty lines.
+                  if (currentLine === "") {
+                    acc.push(`${whiteSpace} *\n${whiteSpace} *`);
 
                     return acc;
-                  },
-                  []
-                );
+                  }
 
-                const newComment = `/**\n${newCommentLines.join("\n")}\n */`;
+                  const wordsInCurrentLine = currentLine.trim().split(" ");
 
-                return fixer.replaceTextRange(commentRange, newComment);
-              },
-            });
-          }
+                  for (const word of wordsInCurrentLine) {
+                    const newLine = acc[acc.length - 1];
+
+                    // In case we are not in the process of constructing a new
+                    // line, or if it would exceed the target chars, then
+                    // create a new line!
+                    if (!newLine || newLine?.length + word.length + 1 > 80) {
+                      acc.push(`${whiteSpace} * ${word}`);
+                    } else {
+                      acc[acc.length - 1] = `${newLine} ${word}`;
+                    }
+                  }
+
+                  return acc;
+                },
+                []
+              );
+
+              const newComment = `/**\n${newCommentLines.join(
+                "\n"
+              )}\n${whiteSpace} */`;
+
+              return fixer.replaceTextRange(commentRange, newComment);
+            },
+          });
         }
       }
     }
