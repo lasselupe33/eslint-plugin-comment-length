@@ -1,0 +1,18 @@
+{
+  "name": "eslint-plugin-comments",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "rm -rf ./lib && tsc",
+    "watch": "yarn build --watch"
+  },
+  "author": "Lasse Felskov Agersten <lasse@felskov-aps.dk>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/eslint": "^7.28.0",
+    "@types/estree": "^0.0.50",
+    "@types/node": "^16.7.10",
+    "typescript": "^4.4.2"
+  }
+}

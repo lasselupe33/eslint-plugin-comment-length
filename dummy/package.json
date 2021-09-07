@@ -1,0 +1,15 @@
+{
+  "name": "dummy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "file.js",
+  "scripts": {
+    "eslint:files": "eslint --cache --cache-location node_modules/.cache/.eslintcache",
+    "eslint": "yarn eslint:files 'src/**/*.{ts,tsx}'"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint-plugin-comments": ">=0.0.0"
+  }
+}

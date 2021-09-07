@@ -1,0 +1,20 @@
+{
+  "ignorePatterns": [
+    "**/lib/**/*",
+    "**/node_modules/**/*",
+    "**/*.json",
+    "!.husky"
+  ],
+  "plugins": [
+    "comments"
+  ],
+  "rules": {
+    "comments/limit-single-line-comments": "warn",
+    "comments/limit-multi-line-comments": "warn"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
