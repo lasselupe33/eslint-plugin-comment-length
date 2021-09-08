@@ -12,6 +12,8 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
     fixable: "whitespace",
   },
   create: (context: Rule.RuleContext): Rule.RuleListener => {
+    const maxLength = context.options[0] ?? 80;
+
     const sourceCode = context.getSourceCode();
     const comments = sourceCode.getAllComments();
 
@@ -71,7 +73,7 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
         (!nodeBefore || nodeBefore.type === "Punctuator") &&
         comment.loc &&
         comment.type === "Line" &&
-        comment.value.length + whitespaceSize + 2 > 80
+        comment.value.length + whitespaceSize + 2 > maxLength
       ) {
         const commentGroup = groupedComments.find((group) =>
           group.relatedComments.has(comment)
@@ -87,7 +89,7 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
 
         context.report({
           loc: comment.loc,
-          message: "Comments may not exceed 80 characters",
+          message: `Comments may not exceed ${maxLength} characters`,
           fix: (fixer): Rule.Fix => {
             const commentWords = commentGroup?.groupedComment.value
               .replace(/\n/g, "")
@@ -100,7 +102,7 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
 
                 if (
                   !currLine ||
-                  currLine.length + curr.length + whitespaceSize + 1 > 80
+                  currLine.length + curr.length + whitespaceSize + 1 > maxLength
                 ) {
                   acc.push(`// ${curr}`);
                 } else {

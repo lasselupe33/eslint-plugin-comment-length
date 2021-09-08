@@ -7,6 +7,10 @@
     "url": "https://github.com/lasselupe33/eslint-plugin-comment-length.git"
   },
   "license": "MIT",
+  "keywords": [
+    "eslint",
+    "eslintplugin"
+  ],
   "workspaces": {
     "packages": [
       "dummy",

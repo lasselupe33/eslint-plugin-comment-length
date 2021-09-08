@@ -6,6 +6,7 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
     fixable: "whitespace",
   },
   create: (context: Rule.RuleContext): Rule.RuleListener => {
+    const maxLength = context.options[0] ?? 80;
     const comments = context.getSourceCode().getAllComments();
 
     for (const comment of comments) {
@@ -50,11 +51,13 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
           : 0;
 
         if (
-          rawLines.find((line) => line.length + commentBoilerplateSize > 80)
+          rawLines.find(
+            (line) => line.length + commentBoilerplateSize > maxLength
+          )
         ) {
           context.report({
             loc: comment.loc,
-            message: "Comments may not exceed 80 characters",
+            message: `Comments may not exceed ${maxLength} characters`,
             fix: (fixer) => {
               const newCommentLines = lines?.reduce<string[]>(
                 (acc, currentLine) => {
@@ -73,7 +76,10 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
                     // In case we are not in the process of constructing a new
                     // line, or if it would exceed the target chars, then
                     // create a new line!
-                    if (!newLine || newLine?.length + word.length + 1 > 80) {
+                    if (
+                      !newLine ||
+                      newLine?.length + word.length + 1 > maxLength
+                    ) {
                       acc.push(`${whiteSpace} * ${word}`);
                     } else {
                       acc[acc.length - 1] = `${newLine} ${word}`;
