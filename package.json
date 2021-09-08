@@ -1,6 +1,12 @@
 {
   "private": true,
   "root": true,
+  "author": "Lasse Felskov Agersten <lfa@appear.dk>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lasselupe33/eslint-plugin-comment-length.git"
+  },
+  "license": "MIT",
   "workspaces": {
     "packages": [
       "dummy",

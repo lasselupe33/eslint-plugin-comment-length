@@ -10,8 +10,12 @@
     "build": "rm -rf ./lib && tsc",
     "watch": "yarn build --watch"
   },
-  "author": "Lasse Felskov Agersten <lasse@felskov-aps.dk>",
-  "license": "UNLICENSED",
+  "author": "Lasse Felskov Agersten <lfa@appear.dk>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lasselupe33/eslint-plugin-comment-length.git"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@types/eslint": "^7.28.0",
     "@types/estree": "^0.0.50",
