@@ -10,12 +10,12 @@
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:import/recommended",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "plugin:comment-length/recommended"
   ],
   "plugins": [
     "react-hooks",
-    "import",
-    "comment-length"
+    "import"
   ],
   "rules": {
     "comment-length/limit-single-line-comments": "warn",

@@ -1,6 +1,6 @@
-// Her er en root comment som så fint beskriver "foo". wekfjwefkj wefkjwekjf wef
-// hello world, remain. erjhergjhe rg ejrkgerkjg erkjg erkjgerkjg erkjg ekrjg
-// ekjrg erjkg ekrjg ekjrg eg
+// Her er en root comment som så fint beskriver "foo". wekfjwefkj wefkjwekjf
+// weff hello world, remain. erjhergjhe rg ejrkgerkjg erkjg erkjgerkjg erkjg
+// ekrjg ekjrg erjkg ekrjg ekjrg eg
 const foo = 2;
 
 if (foo) {

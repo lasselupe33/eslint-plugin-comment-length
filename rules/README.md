@@ -22,9 +22,6 @@ Add the following to your `.eslintrc` configuration:
 {
   "extends": [
     "plugin:comment-length/recommended"
-  ],
-  "plugins": [
-    "comment-length"
   ]
 }
 ```
