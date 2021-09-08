@@ -62,7 +62,12 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
       const whitespaceSize = comment.loc?.start.column ?? 0;
       const nodeBefore = sourceCode.getTokenBefore(comment);
 
+      const isSpecialComment =
+        comment.value.trim().startsWith("eslint-disable") ||
+        comment.value.trim().startsWith("stylelint-disable");
+
       if (
+        !isSpecialComment &&
         (!nodeBefore || nodeBefore.type === "Punctuator") &&
         comment.loc &&
         comment.type === "Line" &&

@@ -10,10 +10,19 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
 
     for (const comment of comments) {
       const commentRange = comment.range;
-      const whitespaceSize = comment.loc?.start.column ?? 0;
-      const whiteSpace = " ".repeat(whitespaceSize);
 
       if (comment.loc && commentRange && comment.type === "Block") {
+        const isSpecialComment =
+          comment.value.includes("eslint-disable") ||
+          comment.value.includes("stylelint-disable");
+
+        if (isSpecialComment) {
+          continue;
+        }
+
+        const whitespaceSize = comment.loc?.start.column ?? 0;
+        const whiteSpace = " ".repeat(whitespaceSize);
+
         const rawLines = comment.value.split("\n");
         const lines = rawLines.map((line) => line.replace(/\*/g, "").trim());
 

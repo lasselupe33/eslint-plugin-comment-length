@@ -1,8 +1,11 @@
 {
-  "name": "eslint-plugin-comments",
-  "version": "0.0.1",
+  "name": "eslint-plugin-comment-length",
+  "version": "0.0.3",
   "description": "",
   "main": "./lib/index.js",
+  "files": [
+    "lib/**"
+  ],
   "scripts": {
     "build": "rm -rf ./lib && tsc",
     "watch": "yarn build --watch"
