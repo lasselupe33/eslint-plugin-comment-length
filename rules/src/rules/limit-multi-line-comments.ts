@@ -151,7 +151,7 @@ function fixCommentLength(
   }
 
   if (endValues[endValues.length - 1] === "") {
-    newValue = `${newValue.slice(0, -1)}${endValues.length === 1 ? "*/" : "/"}`;
+    newValue = `${newValue.slice(0, -1)}/`;
   } else {
     newValue += `\n${whitespace} */`;
   }
