@@ -15,7 +15,8 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
       if (comment.loc && commentRange && comment.type === "Block") {
         const isSpecialComment =
           comment.value.includes("eslint-disable") ||
-          comment.value.includes("stylelint-disable");
+          comment.value.includes("stylelint-disable") ||
+          comment.value.includes("tslint:disable");
 
         if (isSpecialComment) {
           continue;

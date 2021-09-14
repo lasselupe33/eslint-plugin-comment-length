@@ -66,7 +66,8 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
 
       const isSpecialComment =
         comment.value.trim().startsWith("eslint-disable") ||
-        comment.value.trim().startsWith("stylelint-disable");
+        comment.value.trim().startsWith("stylelint-disable") ||
+        comment.value.trim().startsWith("tslint:disable");
 
       if (
         !isSpecialComment &&
