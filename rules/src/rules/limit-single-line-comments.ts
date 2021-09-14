@@ -121,6 +121,7 @@ function fixCommentLength(
   comment: Comment,
   { maxLength, whitespaceSize }: { maxLength: number; whitespaceSize: number }
 ): string {
+  const whitespace = " ".repeat(whitespaceSize);
   const lineStartSize = whitespaceSize + COMMENT_BOILERPLATE_SIZE;
   const words = comment.value.trim().split(" ");
 
@@ -131,7 +132,7 @@ function fixCommentLength(
 
       if (splitToNewline) {
         return {
-          value: `${acc.value}\n// ${curr}`,
+          value: `${acc.value}\n${whitespace}// ${curr}`,
           currentLineLength: lineStartSize,
         };
       } else {
