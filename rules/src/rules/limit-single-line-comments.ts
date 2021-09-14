@@ -22,7 +22,7 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
         comment &&
         comment.loc &&
         comment.type === "Line" &&
-        isCommentOverflowing(comment, { maxLength, whitespaceSize }) &&
+        isCommentOverflowing(comment.value, { maxLength, whitespaceSize }) &&
         !isSpecialComment(comment) &&
         isCommentOnOwnLine(sourceCode, comment)
       ) {
@@ -85,7 +85,15 @@ function captureRelevantComments(
 
     comment = mergeComments(comment, nextComment);
 
-    if (!isCommentOverflowing(nextComment, { maxLength, whitespaceSize })) {
+    if (
+      !isCommentOverflowing(
+        nextComment.value + (comments[i + 1]?.value.trim().split(" ")[0] ?? ""),
+        {
+          maxLength,
+          whitespaceSize,
+        }
+      )
+    ) {
       break;
     }
   }
@@ -146,12 +154,12 @@ function isCommentOnOwnLine(sourceCode: SourceCode, comment: Comment): boolean {
 }
 
 function isCommentOverflowing(
-  comment: Comment,
+  value: string,
   { maxLength, whitespaceSize }: { maxLength: number; whitespaceSize: number }
 ): boolean {
   return (
-    comment.value.trim().split(" ").length > 1 &&
-    comment.value.length + whitespaceSize + COMMENT_BOILERPLATE_SIZE > maxLength
+    value.trim().split(" ").length > 1 &&
+    value.length + whitespaceSize + COMMENT_BOILERPLATE_SIZE > maxLength
   );
 }
 

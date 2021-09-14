@@ -89,7 +89,7 @@ function captureRelevantLines(
     line = mergeLines(line, nextLine);
 
     if (
-      !isLineOverflowing(nextLine + lines[i + 1]?.split(" ")[0], {
+      !isLineOverflowing(nextLine + lines[i + 1]?.trim().split(" ")[0], {
         maxLength,
         whitespaceSize,
         boilerplateSize: SINGLE_LINE_BOILERPLATE_SIZE,
