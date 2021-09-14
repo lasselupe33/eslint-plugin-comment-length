@@ -1,10 +1,7 @@
-import type { Rule } from "eslint";
+import type { Rule, SourceCode } from "eslint";
 import { Comment } from "estree";
 
-type GroupedComments = {
-  relatedComments: Set<Comment>;
-  groupedComment: Comment;
-};
+const COMMENT_BOILERPLATE_SIZE = 2; // i.e. '//'.length
 
 export const limitSingleLineCommentsRule: Rule.RuleModule = {
   meta: {
@@ -12,115 +9,46 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
     fixable: "whitespace",
   },
   create: (context: Rule.RuleContext): Rule.RuleListener => {
-    const maxLength = context.options[0] ?? 80;
+    const maxLength = (context.options[0] as number) ?? 80;
 
     const sourceCode = context.getSourceCode();
     const comments = sourceCode.getAllComments();
 
-    // Firstly we parse all individual single-line comments into logical chunks,
-    // wherein a group is to be considered all comments that occur directly
-    // after
-    // each other.
-    const groupedComments = comments.reduce<GroupedComments[]>(
-      (acc, rawCurr) => {
-        const curr = { ...rawCurr };
-
-        // Skip irrelevant blocks
-        if (curr.type !== "Line") {
-          return acc;
-        }
-
-        const newestChunk = acc[acc.length - 1];
-        const newestGroup = newestChunk?.groupedComment;
-
-        // In case the current line comment directly follows the group that we
-        // are currently generating, then append the comment to the group that
-        // we're generating.
-        if (newestGroup?.loc?.end?.line === (curr.loc?.start?.line ?? 0) - 1) {
-          if (newestGroup.loc.end && curr.loc?.end) {
-            newestGroup.loc.end = curr.loc.end;
-          }
-
-          if (newestGroup.range && curr.range) {
-            newestGroup.range[1] = curr.range[1];
-          }
-
-          newestGroup.value += curr.value;
-          newestChunk?.relatedComments.add(rawCurr);
-        } else {
-          // ... else we will begin generating a new group
-          acc.push({
-            relatedComments: new Set([rawCurr]),
-            groupedComment: curr,
-          });
-        }
-
-        return acc;
-      },
-      []
-    );
-
-    for (const comment of comments) {
-      const whitespaceSize = comment.loc?.start.column ?? 0;
-      const nodeBefore = sourceCode.getTokenBefore(comment);
-
-      const isSpecialComment =
-        comment.value.trim().startsWith("eslint-disable") ||
-        comment.value.trim().startsWith("stylelint-disable") ||
-        comment.value.trim().startsWith("tslint:disable");
+    for (let i = 0; i < comments.length; i++) {
+      const comment = comments[i];
+      const whitespaceSize = comment?.loc?.start.column ?? 0;
 
       if (
-        !isSpecialComment &&
-        (!nodeBefore || nodeBefore.type === "Punctuator") &&
+        comment &&
         comment.loc &&
         comment.type === "Line" &&
-        comment.value.length + whitespaceSize + 2 > maxLength
+        isCommentOverflowing(comment, { maxLength, whitespaceSize }) &&
+        !isSpecialComment(comment) &&
+        isCommentOnOwnLine(sourceCode, comment)
       ) {
-        const commentGroup = groupedComments.find((group) =>
-          group.relatedComments.has(comment)
-        );
-
-        const groupRange = commentGroup?.groupedComment.range;
-
-        // In case the commmentGroup was parsed incorrectly, then this issue
-        // cannot be fixed, and hence we will not bother reporting it either.
-        if (!groupRange) {
-          continue;
-        }
-
         context.report({
           loc: comment.loc,
           message: `Comments may not exceed ${maxLength} characters`,
           fix: (fixer): Rule.Fix => {
-            const commentWords = commentGroup?.groupedComment.value
-              .replace(/\n/g, "")
-              .trim()
-              .split(" ");
-
-            const newCommentLines = commentWords?.reduce<string[]>(
-              (acc, curr) => {
-                const currLine = acc[acc.length - 1];
-
-                if (
-                  !currLine ||
-                  currLine.length + curr.length + whitespaceSize + 1 > maxLength
-                ) {
-                  acc.push(`// ${curr}`);
-                } else {
-                  acc[acc.length - 1] = `${currLine} ${curr}`;
-                }
-
-                return acc;
-              },
-              []
+            const fixableComment = captureRelevantComments(
+              sourceCode,
+              comments,
+              i,
+              { whitespaceSize, maxLength }
             );
 
-            return fixer.replaceTextRange(
-              groupRange,
-              newCommentLines?.join("\n") ??
-                commentGroup?.groupedComment.value ??
-                "// <error />"
-            );
+            if (!fixableComment?.range) {
+              throw new Error(
+                "<eslint-plugin-comment-length/limit-single-line-comments>: unable to fix incompatible comment"
+              );
+            }
+
+            const newValue = fixCommentLength(fixableComment, {
+              maxLength,
+              whitespaceSize,
+            });
+
+            return fixer.replaceTextRange(fixableComment.range, newValue);
           },
         });
       }
@@ -129,3 +57,108 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
     return {};
   },
 };
+
+function captureRelevantComments(
+  sourceCode: SourceCode,
+  comments: Comment[],
+  startIndex: number,
+  { maxLength, whitespaceSize }: { maxLength: number; whitespaceSize: number }
+): Comment | undefined {
+  let comment = comments[startIndex];
+
+  if (!comment) {
+    return;
+  }
+
+  for (let i = startIndex + 1; i < comments.length; i++) {
+    const nextComment = comments[i];
+
+    if (
+      !nextComment ||
+      nextComment.value.trim() === "" ||
+      nextComment.loc?.start.line !== (comment.loc?.end.line ?? 0) + 1 ||
+      isSpecialComment(nextComment) ||
+      !isCommentOnOwnLine(sourceCode, nextComment)
+    ) {
+      break;
+    }
+
+    comment = mergeComments(comment, nextComment);
+
+    if (!isCommentOverflowing(nextComment, { maxLength, whitespaceSize })) {
+      break;
+    }
+  }
+
+  return comment;
+}
+
+function mergeComments(a: Comment, b: Comment): Comment {
+  const newComment = { ...a };
+
+  newComment.value = `${a.value.trim()} ${b.value.trim()}`;
+
+  if (newComment.loc && b.loc) {
+    newComment.loc.end = b.loc.end;
+  }
+
+  if (newComment.range && b.range) {
+    newComment.range[1] = b.range[1];
+  }
+
+  return newComment;
+}
+
+function fixCommentLength(
+  comment: Comment,
+  { maxLength, whitespaceSize }: { maxLength: number; whitespaceSize: number }
+): string {
+  const lineStartSize = whitespaceSize + COMMENT_BOILERPLATE_SIZE;
+  const words = comment.value.trim().split(" ");
+
+  const newValue = words.reduce(
+    (acc, curr) => {
+      const lengthIfAdded = acc.currentLineLength + curr.length + 1;
+      const splitToNewline = lengthIfAdded > maxLength;
+
+      if (splitToNewline) {
+        return {
+          value: `${acc.value}\n// ${curr}`,
+          currentLineLength: lineStartSize,
+        };
+      } else {
+        return {
+          value: `${acc.value} ${curr}`,
+          currentLineLength: lengthIfAdded,
+        };
+      }
+    },
+    { value: "//", currentLineLength: lineStartSize }
+  );
+
+  return newValue.value;
+}
+
+function isCommentOnOwnLine(sourceCode: SourceCode, comment: Comment): boolean {
+  const previousToken = sourceCode.getTokenBefore(comment);
+
+  return previousToken?.loc.end.line !== comment.loc?.start.line;
+}
+
+function isCommentOverflowing(
+  comment: Comment,
+  { maxLength, whitespaceSize }: { maxLength: number; whitespaceSize: number }
+): boolean {
+  return (
+    comment.value.trim().split(" ").length > 1 &&
+    comment.value.length + whitespaceSize + COMMENT_BOILERPLATE_SIZE > maxLength
+  );
+}
+
+function isSpecialComment(comment: Comment): boolean {
+  return (
+    comment.value.trim().startsWith("eslint-disable") ||
+    comment.value.trim().startsWith("stylelint-disable") ||
+    comment.value.trim().startsWith("tslint:disable")
+  );
+}
