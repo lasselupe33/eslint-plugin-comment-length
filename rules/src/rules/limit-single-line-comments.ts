@@ -26,17 +26,21 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
         !isSpecialComment(comment) &&
         isCommentOnOwnLine(sourceCode, comment)
       ) {
+        const fixableComment = captureRelevantComments(
+          sourceCode,
+          comments,
+          i,
+          { whitespaceSize, maxLength }
+        );
+
+        if (!fixableComment || isCommentInComment(fixableComment)) {
+          return {};
+        }
+
         context.report({
           loc: comment.loc,
           message: `Comments may not exceed ${maxLength} characters`,
           fix: (fixer): Rule.Fix => {
-            const fixableComment = captureRelevantComments(
-              sourceCode,
-              comments,
-              i,
-              { whitespaceSize, maxLength }
-            );
-
             if (!fixableComment?.range) {
               throw new Error(
                 "<eslint-plugin-comment-length/limit-single-line-comments>: unable to fix incompatible comment"
@@ -162,6 +166,18 @@ function isCommentOverflowing(
     value.trim().split(" ").length > 1 &&
     value.length + whitespaceSize + COMMENT_BOILERPLATE_SIZE > maxLength
   );
+}
+
+function isCommentInComment(comment: Comment): boolean {
+  if (
+    comment.value.includes("//") ||
+    comment.value.includes("/*") ||
+    comment.value.includes("*/")
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 function isSpecialComment(comment: Comment): boolean {

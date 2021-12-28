@@ -41,15 +41,19 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
             boilerplateSize: getBoilerPlateSize(lines),
           })
         ) {
+          const fixableLines = captureRelevantLines(lines, i, {
+            whitespaceSize,
+            maxLength,
+          });
+
+          if (isCommentInComment(fixableLines.value)) {
+            return {};
+          }
+
           context.report({
             loc: comment.loc,
             message: `Comments may not exceed ${maxLength} characters`,
             fix: (fixer): Rule.Fix => {
-              const fixableLines = captureRelevantLines(lines, i, {
-                whitespaceSize,
-                maxLength,
-              });
-
               const newValue = fixCommentLength(lines, fixableLines, {
                 maxLength,
                 whitespaceSize,
@@ -192,6 +196,14 @@ function isCommentOnOwnLine(sourceCode: SourceCode, comment: Comment): boolean {
     previousToken?.loc.end.line !== comment.loc?.start.line &&
     nextToken?.loc.start.line !== comment.loc?.end.line
   );
+}
+
+function isCommentInComment(value: string): boolean {
+  if (value.includes("//") || value.includes("/*") || value.includes("*/")) {
+    return true;
+  }
+
+  return false;
 }
 
 function getBoilerPlateSize(commentLines: string[]): number {
