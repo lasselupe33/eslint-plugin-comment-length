@@ -138,7 +138,7 @@ function captureNearbyLines(lines: string[], startIndex: number): string {
       break;
     }
 
-    line = mergeLines(prevLine, line);
+    line = mergeLines(prevLine, line, "\n");
   }
 
   for (let i = startIndex + 1; i < lines.length; i++) {
@@ -148,14 +148,14 @@ function captureNearbyLines(lines: string[], startIndex: number): string {
       break;
     }
 
-    line = mergeLines(line, nextLine);
+    line = mergeLines(line, nextLine, "\n");
   }
 
   return line;
 }
 
-function mergeLines(a: string, b: string): string {
-  return `${a.trim()} ${b.trim()}`;
+function mergeLines(a: string, b: string, separator = " "): string {
+  return `${a.trim()}${separator}${b.trim()}`;
 }
 
 function fixCommentLength(

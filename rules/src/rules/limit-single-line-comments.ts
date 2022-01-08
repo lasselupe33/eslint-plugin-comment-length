@@ -136,7 +136,7 @@ function captureNearbyComments(
       break;
     }
 
-    comment = mergeComments(prevComment, comment);
+    comment = mergeComments(prevComment, comment, "\n");
   }
 
   // Following comments
@@ -150,16 +150,16 @@ function captureNearbyComments(
       break;
     }
 
-    comment = mergeComments(comment, nextComment);
+    comment = mergeComments(comment, nextComment, "\n");
   }
 
   return comment;
 }
 
-function mergeComments(a: Comment, b: Comment): Comment {
+function mergeComments(a: Comment, b: Comment, separator = " "): Comment {
   const newComment = deepCloneValue(a);
 
-  newComment.value = `${a.value.trim()} ${b.value.trim()}`;
+  newComment.value = `${a.value.trim()}${separator}${b.value.trim()}`;
 
   if (newComment.loc && b.loc) {
     newComment.loc.end = b.loc.end;
