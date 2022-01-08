@@ -46,6 +46,11 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
             maxLength,
           });
 
+          console.log(
+            fixableLines.value,
+            isCommentInComment(fixableLines.value)
+          );
+
           if (isCommentInComment(fixableLines.value)) {
             return {};
           }
@@ -131,7 +136,10 @@ function fixCommentLength(
   const fixedContent = fixableWords.reduce(
     (acc, curr) => {
       const lengthIfAdded = acc.currentLineLength + curr.length + 1;
-      const splitToNewline = lengthIfAdded > maxLength;
+      // We can safely split to a new line in case we are reaching and
+      // overflowing line AND if there is at least one word on the current line.
+      const splitToNewline =
+        lengthIfAdded > maxLength && acc.currentLineLength !== lineStartSize;
 
       if (splitToNewline) {
         return {
@@ -199,7 +207,7 @@ function isCommentOnOwnLine(sourceCode: SourceCode, comment: Comment): boolean {
 }
 
 function isCommentInComment(value: string): boolean {
-  if (value.includes("//") || value.includes("/*") || value.includes("*/")) {
+  if (value.includes("// ") || value.includes("/*") || value.includes("*/")) {
     return true;
   }
 

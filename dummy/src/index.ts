@@ -1,6 +1,8 @@
 /**
  * ejkrg ekrg ekrjg erjkg erjkg ejkrg eejgerjg ekrjg erkg ekjg ekjrg ejkg ejkeg
  * ekrjg
+ * https://github.com/itu-devops/lecture_notesereiogjeorgjerogierjgeiogjerergeoirgj
+ * erg erg
  *
  * egerjkg erkg erkjg erkjge rgkje rjkg ergkjeg kjrg erkj gerkjg ekjrg erjk
  * gerkjg e ergerjg Hellerkelgr erlkg elkg elkrg erlgk erlkg ergk egkl ergkle
@@ -25,6 +27,8 @@ if (foo) {
 function test() {
   // here is a long comment that will make me very sad, but happy in the moments
   // no oh
+  // https://github.com/itu-devops/lecture_notesereiogjeorgjerogierjgeiogjeergerggrergoiejrg
+  // for more
   if (true) {
     const averylongComment = 124_340934;
 

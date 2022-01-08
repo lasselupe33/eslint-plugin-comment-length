@@ -132,7 +132,10 @@ function fixCommentLength(
   const newValue = words.reduce(
     (acc, curr) => {
       const lengthIfAdded = acc.currentLineLength + curr.length + 1;
-      const splitToNewline = lengthIfAdded > maxLength;
+      // We can safely split to a new line in case we are reaching and
+      // overflowing line AND if there is at least one word on the current line.
+      const splitToNewline =
+        lengthIfAdded > maxLength && acc.currentLineLength !== lineStartSize;
 
       if (splitToNewline) {
         return {
@@ -170,7 +173,7 @@ function isCommentOverflowing(
 
 function isCommentInComment(comment: Comment): boolean {
   if (
-    comment.value.includes("//") ||
+    comment.value.includes("// ") ||
     comment.value.includes("/*") ||
     comment.value.includes("*/")
   ) {
