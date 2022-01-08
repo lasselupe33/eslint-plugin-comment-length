@@ -1,4 +1,5 @@
-import type { Rule, SourceCode } from "eslint";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Linter, Rule, SourceCode } from "eslint";
 import { Comment } from "estree";
 
 const SINGLE_LINE_BOILERPLATE_SIZE = 6; // i.e. '/*'.length + '*/'.length
@@ -30,6 +31,13 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
       const whitespaceSize = comment.loc?.start.column ?? 0;
       const lines = getCommentLines(comment);
 
+      let hasConflictingLine = false;
+      const fixableLinesBlocks: Array<{
+        value: string;
+        startIndex: number;
+        endIndex: number;
+      }> = [];
+
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
 
@@ -46,30 +54,35 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
             maxLength,
           });
 
-          console.log(
-            fixableLines.value,
-            isCommentInComment(fixableLines.value)
-          );
+          fixableLinesBlocks.push(fixableLines);
 
-          if (isCommentInComment(fixableLines.value)) {
-            return {};
+          if (
+            isCommentInComment(fixableLines.value) ||
+            isCodeInComment(captureNearbyLines(lines, i), context.parserPath)
+          ) {
+            hasConflictingLine = true;
+            continue;
           }
-
-          context.report({
-            loc: comment.loc,
-            message: `Comments may not exceed ${maxLength} characters`,
-            fix: (fixer): Rule.Fix => {
-              const newValue = fixCommentLength(lines, fixableLines, {
-                maxLength,
-                whitespaceSize,
-              });
-
-              return fixer.replaceTextRange(commentRange, newValue);
-            },
-          });
-
-          break;
         }
+      }
+
+      if (hasConflictingLine) {
+        return {};
+      }
+
+      for (const fixableLines of fixableLinesBlocks) {
+        context.report({
+          loc: comment.loc,
+          message: `Comments may not exceed ${maxLength} characters`,
+          fix: (fixer): Rule.Fix => {
+            const newValue = fixCommentLength(lines, fixableLines, {
+              maxLength,
+              whitespaceSize,
+            });
+
+            return fixer.replaceTextRange(commentRange, newValue);
+          },
+        });
       }
     }
 
@@ -109,6 +122,36 @@ function captureRelevantLines(
   }
 
   return { value: line, startIndex, endIndex: lines.length };
+}
+
+function captureNearbyLines(lines: string[], startIndex: number): string {
+  let line = lines[startIndex];
+
+  if (!line) {
+    return "";
+  }
+
+  for (let i = startIndex - 1; i >= 0; i--) {
+    const prevLine = lines[i];
+
+    if (!prevLine || prevLine.trim() === "") {
+      break;
+    }
+
+    line = mergeLines(prevLine, line);
+  }
+
+  for (let i = startIndex + 1; i < lines.length; i++) {
+    const nextLine = lines[i];
+
+    if (!nextLine || nextLine.trim() === "") {
+      break;
+    }
+
+    line = mergeLines(line, nextLine);
+  }
+
+  return line;
 }
 
 function mergeLines(a: string, b: string): string {
@@ -212,6 +255,22 @@ function isCommentInComment(value: string): boolean {
   }
 
   return false;
+}
+
+function isCodeInComment(value: string, parserPath: string): boolean {
+  const linter = new Linter();
+
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  linter.defineParser("parser", require(parserPath) as Linter.ParserModule);
+  const output = linter.verify(value, { parser: "parser" });
+
+  for (const msg of output) {
+    if (msg.message.includes("Parsing error")) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function getBoilerPlateSize(commentLines: string[]): number {

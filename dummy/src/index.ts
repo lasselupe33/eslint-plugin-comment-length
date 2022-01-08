@@ -24,16 +24,26 @@ if (foo) {
   }
 }
 
-function test() {
-  // here is a long comment that will make me very sad, but happy in the moments
-  // no oh
-  // https://github.com/itu-devops/lecture_notesereiogjeorgjerogierjgeiogjeergerggrergoiejrg
-  // for more
-  if (true) {
-    const averylongComment = 124_340934;
+// this kejr gekjrg ekjg ekrjg ekrjertulgh rthjkrte klejrth kjrth erkltj"" krth
+// r"ger
 
-    if (false) {
-      console.log("hiyo");
-    }
-  }
-}
+// function test() {
+//   if (true) {
+//     const averylongComment = 124_340934;
+
+/**
+ * rekgjg ekjg erkgj egkj ergejkg ekjrg ejk gejkrg ekjg ekrjg ekjrg erkjg erkjg
+ * erkjg g
+ *
+ *
+ * here is more code.
+ *
+ * I cannot expect everything in the comment to be code, right? kerg kle
+ * rgklerg eglk ge j k
+ */
+
+//     if (false) {
+//       console.log("hiyo");
+//     }
+//   }
+// }

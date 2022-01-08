@@ -8,8 +8,5 @@
     "eslint": "yarn eslint:files 'src/**/*.{ts,tsx}'"
   },
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "eslint-plugin-comments": ">=0.0.0"
-  }
+  "license": "ISC"
 }

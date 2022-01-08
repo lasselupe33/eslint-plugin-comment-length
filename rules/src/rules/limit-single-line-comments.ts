@@ -1,5 +1,8 @@
-import type { Rule, SourceCode } from "eslint";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Linter, Rule, SourceCode } from "eslint";
 import { Comment } from "estree";
+
+import { deepCloneValue } from "../utils/immutableDeepMerge";
 
 const COMMENT_BOILERPLATE_SIZE = 2; // i.e. '//'.length
 
@@ -33,8 +36,15 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
           { whitespaceSize, maxLength }
         );
 
-        if (!fixableComment || isCommentInComment(fixableComment)) {
-          return {};
+        if (
+          !fixableComment ||
+          isCommentInComment(fixableComment) ||
+          isCodeInComment(
+            captureNearbyComments(comments, i),
+            context.parserPath
+          )
+        ) {
+          continue;
         }
 
         context.report({
@@ -105,8 +115,49 @@ function captureRelevantComments(
   return comment;
 }
 
+function captureNearbyComments(
+  comments: Comment[],
+  startIndex: number
+): Comment | undefined {
+  let comment = comments[startIndex];
+
+  if (!comment) {
+    return;
+  }
+
+  // Previous comments
+  for (let i = startIndex - 1; i >= 0; i--) {
+    const prevComment = comments[i];
+
+    if (
+      !prevComment ||
+      (prevComment.loc?.end.line ?? 0) + 1 !== comment.loc?.start.line
+    ) {
+      break;
+    }
+
+    comment = mergeComments(prevComment, comment);
+  }
+
+  // Following comments
+  for (let i = startIndex + 1; i < comments.length; i++) {
+    const nextComment = comments[i];
+
+    if (
+      !nextComment ||
+      nextComment.loc?.start.line !== (comment.loc?.end.line ?? 0) + 1
+    ) {
+      break;
+    }
+
+    comment = mergeComments(comment, nextComment);
+  }
+
+  return comment;
+}
+
 function mergeComments(a: Comment, b: Comment): Comment {
-  const newComment = { ...a };
+  const newComment = deepCloneValue(a);
 
   newComment.value = `${a.value.trim()} ${b.value.trim()}`;
 
@@ -192,4 +243,27 @@ function isSpecialComment(comment: Comment): boolean {
     comment.value.trim().startsWith("stylelint-enable") ||
     comment.value.trim().startsWith("tslint:enable")
   );
+}
+
+function isCodeInComment(
+  comment: Comment | undefined,
+  parserPath: string
+): boolean {
+  if (!comment) {
+    return false;
+  }
+
+  const linter = new Linter();
+
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  linter.defineParser("parser", require(parserPath) as Linter.ParserModule);
+  const output = linter.verify(comment.value, { parser: "parser" });
+
+  for (const msg of output) {
+    if (msg.message.includes("Parsing error")) {
+      return false;
+    }
+  }
+
+  return true;
 }
