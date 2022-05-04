@@ -1,8 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Linter, Rule, SourceCode } from "eslint";
 import { Comment } from "estree";
-import { Options } from "src/classes/Options";
-import { isURL } from "src/utils/utils";
+
+import { Options } from "../classes/Options";
+import { isURL } from "../utils/utils";
 
 const SINGLE_LINE_BOILERPLATE_SIZE = 6; // i.e. '/*'.length + '*/'.length
 const MULTILINE_BOILERPLATE_SIZE = 3; // i.e. '/*'.length OR '*/'.length OR ' *'.length

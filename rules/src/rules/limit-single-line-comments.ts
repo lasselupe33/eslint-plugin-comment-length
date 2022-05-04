@@ -1,10 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Linter, Rule, SourceCode } from "eslint";
 import { Comment } from "estree";
-import { Options } from "src/classes/Options";
-import { isURL } from "src/utils/utils";
 
+import { Options } from "../classes/Options";
 import { deepCloneValue } from "../utils/immutableDeepMerge";
+import { isURL } from "../utils/utils";
 
 const COMMENT_BOILERPLATE_SIZE = 2; // i.e. '//'.length
 
