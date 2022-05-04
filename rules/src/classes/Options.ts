@@ -3,6 +3,10 @@ export class Options {
   ignoreUrls = true;
 
   constructor(specifiedOptions: Options) {
+    if (typeof specifiedOptions !== "object") {
+      return;
+    }
+
     if (typeof specifiedOptions.maxLength === "number") {
       this.maxLength = specifiedOptions.maxLength;
     }
