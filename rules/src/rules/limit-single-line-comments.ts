@@ -1,6 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Linter, Rule, SourceCode } from "eslint";
 import { Comment } from "estree";
+import { Options } from "src/classes/Options";
+import { isURL } from "src/utils/utils";
 
 import { deepCloneValue } from "../utils/immutableDeepMerge";
 
@@ -12,7 +14,10 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
     fixable: "whitespace",
   },
   create: (context: Rule.RuleContext): Rule.RuleListener => {
-    const maxLength = (context.options[0] as number) ?? 80;
+    // The options object must be the last option specified
+    const specifiedOptions = context.options.at(-1);
+    const options = new Options(specifiedOptions);
+    const { maxLength, ignoreUrls } = options;
 
     const sourceCode = context.getSourceCode();
     const comments = sourceCode.getAllComments();
@@ -25,7 +30,11 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
         comment &&
         comment.loc &&
         comment.type === "Line" &&
-        isCommentOverflowing(comment.value, { maxLength, whitespaceSize }) &&
+        isCommentOverflowing(comment.value, {
+          maxLength,
+          whitespaceSize,
+          ignoreUrls,
+        }) &&
         !isSpecialComment(comment) &&
         isCommentOnOwnLine(sourceCode, comment)
       ) {
@@ -33,7 +42,7 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
           sourceCode,
           comments,
           i,
-          { whitespaceSize, maxLength }
+          { whitespaceSize, maxLength, ignoreUrls }
         );
 
         if (
@@ -76,7 +85,11 @@ function captureRelevantComments(
   sourceCode: SourceCode,
   comments: Comment[],
   startIndex: number,
-  { maxLength, whitespaceSize }: { maxLength: number; whitespaceSize: number }
+  {
+    maxLength,
+    whitespaceSize,
+    ignoreUrls,
+  }: { maxLength: number; whitespaceSize: number; ignoreUrls: boolean }
 ): Comment | undefined {
   let comment = comments[startIndex];
 
@@ -105,6 +118,7 @@ function captureRelevantComments(
         {
           maxLength,
           whitespaceSize,
+          ignoreUrls,
         }
       )
     ) {
@@ -214,9 +228,14 @@ function isCommentOnOwnLine(sourceCode: SourceCode, comment: Comment): boolean {
 
 function isCommentOverflowing(
   value: string,
-  { maxLength, whitespaceSize }: { maxLength: number; whitespaceSize: number }
+  {
+    maxLength,
+    whitespaceSize,
+    ignoreUrls,
+  }: { maxLength: number; whitespaceSize: number; ignoreUrls: boolean }
 ): boolean {
   return (
+    (!ignoreUrls || !isURL(value)) &&
     value.trim().split(" ").length > 1 &&
     value.length + whitespaceSize + COMMENT_BOILERPLATE_SIZE > maxLength
   );
