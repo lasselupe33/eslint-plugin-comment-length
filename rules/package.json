@@ -13,7 +13,8 @@
   "scripts": {
     "build": "rm -rf ./lib && tsc",
     "watch": "yarn build --watch",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "cp ../README.md ./README.md; yarn build",
+    "postpublish": "rm README.md"
   },
   "author": "Lasse Felskov Agersten <lfa@appear.dk>",
   "repository": {
