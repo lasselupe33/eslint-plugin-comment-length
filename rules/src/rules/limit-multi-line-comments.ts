@@ -2,6 +2,9 @@
 import { Linter, Rule, SourceCode } from "eslint";
 import { Comment } from "estree";
 
+import { Options } from "../classes/Options";
+import { isURL } from "../utils/utils";
+
 const SINGLE_LINE_BOILERPLATE_SIZE = 6; // i.e. '/*'.length + '*/'.length
 const MULTILINE_BOILERPLATE_SIZE = 3; // i.e. '/*'.length OR '*/'.length OR ' *'.length
 
@@ -10,8 +13,13 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
     type: "layout",
     fixable: "whitespace",
   },
+
   create: (context: Rule.RuleContext): Rule.RuleListener => {
-    const maxLength = context.options[0] ?? 80;
+    // The options object must be the last option specified
+    const specifiedOptions = context.options.at(-1);
+    const options = new Options(specifiedOptions);
+    const { maxLength, ignoreUrls } = options;
+
     const sourceCode = context.getSourceCode();
     const comments = sourceCode.getAllComments();
 
@@ -47,11 +55,13 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
             maxLength,
             whitespaceSize,
             boilerplateSize: getBoilerPlateSize(lines),
+            ignoreUrls,
           })
         ) {
           const fixableLines = captureRelevantLines(lines, i, {
             whitespaceSize,
             maxLength,
+            ignoreUrls,
           });
 
           fixableLinesBlocks.push(fixableLines);
@@ -93,7 +103,11 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
 function captureRelevantLines(
   lines: string[],
   startIndex: number,
-  { maxLength, whitespaceSize }: { maxLength: number; whitespaceSize: number }
+  {
+    maxLength,
+    whitespaceSize,
+    ignoreUrls,
+  }: { maxLength: number; whitespaceSize: number; ignoreUrls: boolean }
 ): { value: string; startIndex: number; endIndex: number } {
   let line = lines[startIndex];
 
@@ -115,6 +129,7 @@ function captureRelevantLines(
         maxLength,
         whitespaceSize,
         boilerplateSize: SINGLE_LINE_BOILERPLATE_SIZE,
+        ignoreUrls,
       })
     ) {
       return { value: line, startIndex, endIndex: i + 1 };
@@ -220,9 +235,16 @@ function isLineOverflowing(
     maxLength,
     whitespaceSize,
     boilerplateSize,
-  }: { maxLength: number; whitespaceSize: number; boilerplateSize: number }
+    ignoreUrls,
+  }: {
+    maxLength: number;
+    whitespaceSize: number;
+    boilerplateSize: number;
+    ignoreUrls: boolean;
+  }
 ): boolean {
   return (
+    (!ignoreUrls || !isURL(line)) &&
     line.trim().split(" ").length > 1 &&
     line.length + whitespaceSize + boilerplateSize > maxLength
   );
