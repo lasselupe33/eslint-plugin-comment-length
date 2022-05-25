@@ -15,7 +15,7 @@ export const limitSingleLineCommentsRule: Rule.RuleModule = {
   },
   create: (context: Rule.RuleContext): Rule.RuleListener => {
     // The options object must be the last option specified
-    const specifiedOptions = context.options.at(-1);
+    const specifiedOptions = context.options[context.options.length - 1];
     const options = new Options(specifiedOptions);
     const { maxLength, ignoreUrls } = options;
 
