@@ -54,8 +54,8 @@ Only line-breaks are considered as splits.
   "comment-length/limit-single-line-comments": [
     "warn",
     {
-      maxLength: 80,
-      ignoreUrls: true
+      "maxLength": 80,
+      "ignoreUrls": true
     }
   ]
 }
@@ -72,8 +72,8 @@ Locates multi line comments, i.e. `/* comment */` and ensures that each line in 
   "comment-length/limit-multi-line-comments": [
     "warn",
     {
-      maxLength: 80,
-      ignoreUrls: true
+      "maxLength": 80,
+      "ignoreUrls": true
     }
   ]
 }
