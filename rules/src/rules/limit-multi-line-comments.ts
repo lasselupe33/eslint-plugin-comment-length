@@ -39,53 +39,80 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
       const whitespaceSize = comment.loc?.start.column ?? 0;
       const lines = getCommentLines(comment);
 
-      let hasConflictingLine = false;
-      const fixableLinesBlocks: Array<{
+      const blocks: Array<{
+        lines: string[];
+        startIndex: number;
+        endIndex: number;
+      }> = [];
+
+      // Processing multi-line comments becomes a tad more difficult than simply
+      // parsing single-line comments since a single comment may contain
+      // multiple logical comment blocks which should be handled individually.
+      //
+      // Thus our first step is to take a multi-line comment and convert it into
+      // logical block
+      for (let i = 0; i < lines.length; i++) {
+        if (i < (blocks[blocks.length - 1]?.endIndex ?? 0)) {
+          continue;
+        }
+
+        const block = captureBlock(lines, i);
+        blocks.push(block);
+      }
+      console.log(blocks);
+
+      const fixableBlocks: Array<{
         value: string;
         startIndex: number;
         endIndex: number;
       }> = [];
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-
-        if (
-          line &&
-          isLineOverflowing(line, {
-            maxLength,
-            whitespaceSize,
-            boilerplateSize: getBoilerPlateSize(lines),
-            ignoreUrls,
-          })
-        ) {
-          const fixableLines = captureRelevantLines(lines, i, {
-            whitespaceSize,
-            maxLength,
-            ignoreUrls,
-          });
-
-          fixableLinesBlocks.push(fixableLines);
+      // ... and then we can go through each block to determine if it violates
+      // our rule to mark it as fixable using logic similar to the single-line
+      // rule.
+      for (const block of blocks) {
+        for (let i = 0; i < block.lines.length; i++) {
+          const line = block.lines[i];
 
           if (
-            isCommentInComment(fixableLines.value) ||
-            isCodeInComment(captureNearbyLines(lines, i), context.parserPath)
+            line &&
+            isLineOverflowing(line, {
+              maxLength,
+              whitespaceSize,
+              boilerplateSize: getBoilerPlateSize(lines),
+              ignoreUrls,
+            })
           ) {
-            hasConflictingLine = true;
-            continue;
+            const mergedLines = block.lines.reduce((acc, curr) =>
+              mergeLines(acc, curr)
+            );
+
+            // Even though a line is overflowing, then it might need to be
+            // ignored in some cases where it is likely the intent that it
+            // should overflow.
+            if (
+              block.lines.some(
+                (line) => isCommentInComment(line) || isJSDocLikeComment(line)
+              ) ||
+              isCodeInComment(mergedLines, context.parserPath)
+            ) {
+              continue;
+            }
+
+            fixableBlocks.push({
+              ...block,
+              value: mergedLines,
+            });
           }
         }
       }
 
-      if (hasConflictingLine) {
-        return {};
-      }
-
-      for (const fixableLines of fixableLinesBlocks) {
+      for (const fixableBlock of fixableBlocks) {
         context.report({
           loc: comment.loc,
           message: `Comments may not exceed ${maxLength} characters`,
           fix: (fixer): Rule.Fix => {
-            const newValue = fixCommentLength(lines, fixableLines, {
+            const newValue = fixCommentLength(lines, fixableBlock, {
               maxLength,
               whitespaceSize,
             });
@@ -100,73 +127,38 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
   },
 };
 
-function captureRelevantLines(
+function captureBlock(
   lines: string[],
-  startIndex: number,
-  {
-    maxLength,
-    whitespaceSize,
-    ignoreUrls,
-  }: { maxLength: number; whitespaceSize: number; ignoreUrls: boolean }
-): { value: string; startIndex: number; endIndex: number } {
-  let line = lines[startIndex];
+  initialStartIndex: number
+): { lines: string[]; startIndex: number; endIndex: number } {
+  let startIndex = initialStartIndex;
 
-  if (!line) {
-    return { value: "", startIndex, endIndex: startIndex + 1 };
+  for (let i = initialStartIndex; i < lines.length; i++) {
+    const line = lines[i];
+
+    if (line && line.trim() !== "") {
+      startIndex = i;
+      break;
+    }
+  }
+
+  const relatedLines = lines.slice(startIndex, startIndex + 1);
+
+  if (relatedLines.length === 0) {
+    return { lines: relatedLines, startIndex, endIndex: startIndex + 1 };
   }
 
   for (let i = startIndex + 1; i < lines.length; i++) {
     const nextLine = lines[i];
 
-    if (!nextLine || nextLine.trim() === "") {
-      return { value: line, startIndex, endIndex: i };
+    if (!nextLine || (nextLine.trim() === "" && !nextLine.startsWith(" "))) {
+      return { lines: relatedLines, startIndex, endIndex: i };
     }
 
-    line = mergeLines(line, nextLine);
-
-    if (
-      !isLineOverflowing(nextLine + lines[i + 1]?.trim().split(" ")[0], {
-        maxLength,
-        whitespaceSize,
-        boilerplateSize: SINGLE_LINE_BOILERPLATE_SIZE,
-        ignoreUrls,
-      })
-    ) {
-      return { value: line, startIndex, endIndex: i + 1 };
-    }
+    relatedLines.push(nextLine);
   }
 
-  return { value: line, startIndex, endIndex: lines.length };
-}
-
-function captureNearbyLines(lines: string[], startIndex: number): string {
-  let line = lines[startIndex];
-
-  if (!line) {
-    return "";
-  }
-
-  for (let i = startIndex - 1; i >= 0; i--) {
-    const prevLine = lines[i];
-
-    if (!prevLine || prevLine.trim() === "") {
-      break;
-    }
-
-    line = mergeLines(prevLine, line, "\n");
-  }
-
-  for (let i = startIndex + 1; i < lines.length; i++) {
-    const nextLine = lines[i];
-
-    if (!nextLine || nextLine.trim() === "") {
-      break;
-    }
-
-    line = mergeLines(line, nextLine, "\n");
-  }
-
-  return line;
+  return { lines: relatedLines, startIndex, endIndex: lines.length };
 }
 
 function mergeLines(a: string, b: string, separator = " "): string {
@@ -272,11 +264,11 @@ function isCommentOnOwnLine(sourceCode: SourceCode, comment: Comment): boolean {
 }
 
 function isCommentInComment(value: string): boolean {
-  if (value.includes("// ") || value.includes("/*") || value.includes("*/")) {
-    return true;
-  }
+  return value.includes("// ") || value.includes("/*") || value.includes("*/");
+}
 
-  return false;
+function isJSDocLikeComment(value: string): boolean {
+  return value.startsWith("@");
 }
 
 function isCodeInComment(value: string, parserPath: string): boolean {
@@ -303,7 +295,7 @@ function getBoilerPlateSize(commentLines: string[]): number {
 
 function getCommentLines(comment: Comment): string[] {
   return comment.value
-    .replace(/\*/g, "")
+    .replace(/ *\*/g, "")
     .split("\n")
-    .map((line) => line.trim());
+    .map((it) => it.replace(/^ /, ""));
 }
