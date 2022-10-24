@@ -52,7 +52,7 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
       // Thus our first step is to take a multi-line comment and convert it into
       // logical block
       for (let i = 0; i < lines.length; i++) {
-        if (i < (blocks[blocks.length - 1]?.endIndex ?? 0)) {
+        if (i <= (blocks[blocks.length - 1]?.endIndex ?? 0)) {
           continue;
         }
 
@@ -176,7 +176,7 @@ function fixCommentLength(
   const lineStartSize = whitespaceSize + MULTILINE_BOILERPLATE_SIZE;
   const fixableWords = fixable.value.trim().split(" ");
 
-  let newValue = `/** `;
+  let newValue = `/**`;
 
   if (startValues.length > 0) {
     newValue += startValues.join(`\n${whitespace} * `);
@@ -191,9 +191,10 @@ function fixCommentLength(
         lengthIfAdded > maxLength && acc.currentLineLength !== lineStartSize;
 
       if (splitToNewline) {
+        const nextLine = `${acc.value}\n${whitespace} * ${curr}`;
         return {
-          value: `${acc.value}\n${whitespace} * ${curr}`,
-          currentLineLength: lineStartSize,
+          value: nextLine,
+          currentLineLength: `${whitespace} * ${curr}`.length,
         };
       } else {
         return {
