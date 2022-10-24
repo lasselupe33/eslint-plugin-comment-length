@@ -59,7 +59,6 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
         const block = captureBlock(lines, i);
         blocks.push(block);
       }
-      console.log(blocks);
 
       const fixableBlocks: Array<{
         value: string;
