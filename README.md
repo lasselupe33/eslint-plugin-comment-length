@@ -4,12 +4,12 @@ This plugin provides [ESLint](https://eslint.org/) rules that limit the line len
 
 This project aims to ease the process of writing long comments where each line needs to be cropped to a specific line length. This is similar to the [`max-len`](https://eslint.org/docs/rules/max-len) ESLint rule, but it will automatically fix violations.
 
-The plugin has not been tested extensively. As such, the plugin will probably not work with some JSDoc comments.
-
 Note that the rules that this plugin provides will not apply to comments that:
 
 - are not on their own lines
 - include the strings `eslint-disable-*` and `stylelint-disable-*`
+- include code snippets
+- are part of JSDoc-like comments (i.e. starting with '@')
 
 ## Installation
 
