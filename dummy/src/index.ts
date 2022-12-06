@@ -13,9 +13,11 @@ const foo = 2;
 if (foo) {
   /**
    * okergerkg rlkeg erklg erlkg erklg erklg erlg eklrg erlkg elkrg erkl gerkl
-   * gle
-   * ekrgjegkj erjgke gkje rgkje rgkjer gkjer gkejr gejkr gekje gekjg ekrg
-   * ekgekjr
+   * wefkjwef ergerg gle ekrgjegkj erjgke gkje rgkje rgkjer gkjer gkejr gejkr
+   * gekje gekjg erf ekrg ekgekjr
+   *
+   * fwef weklf ewlkf welkf wlkf klwef lkwef lwkef lwke fwlk flkwe fklw fklwef
+   * welkf
    */
   console.log("hi!");
 
@@ -29,7 +31,7 @@ if (foo) {
 }
 
 // this kejr gekjrg ekjg ekrjg ekrjertulgh rthjkrte klejrth kjrth erkltj"" krth
-// r"ger
+// er r"ger
 
 // function test() {
 //   if (true) {

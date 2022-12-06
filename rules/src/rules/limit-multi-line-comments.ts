@@ -297,5 +297,5 @@ function getCommentLines(comment: Comment): string[] {
   return comment.value
     .replace(/ *\*/g, "")
     .split("\n")
-    .map((it) => it.replace(/^ /, ""));
+    .map((it) => it.replace(/^ */, ""));
 }
