@@ -41,6 +41,7 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
 
       const blocks: Array<{
         lines: string[];
+        lineOffsets: number[];
         startIndex: number;
         endIndex: number;
       }> = [];
@@ -50,18 +51,24 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
       // multiple logical comment blocks which should be handled individually.
       //
       // Thus our first step is to take a multi-line comment and convert it into
-      // logical block
+      // logical blocks
       for (let i = 0; i < lines.length; i++) {
-        if (i <= (blocks[blocks.length - 1]?.endIndex ?? 0)) {
+        if (i <= (blocks[blocks.length - 1]?.endIndex ?? -1)) {
           continue;
         }
 
-        const block = captureBlock(lines, i);
+        const block = captureNextBlock(lines, i, {
+          maxLength,
+          whitespaceSize,
+          boilerplateSize: getBoilerPlateSize(lines),
+          ignoreUrls,
+        });
         blocks.push(block);
       }
 
-      const fixableBlocks: Array<{
+      const problematicBlocks: Array<{
         value: string;
+        lineOffsets: number[];
         startIndex: number;
         endIndex: number;
       }> = [];
@@ -98,25 +105,73 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
               continue;
             }
 
-            fixableBlocks.push({
+            problematicBlocks.push({
               ...block,
               value: mergedLines,
             });
+            break;
           }
         }
       }
 
-      for (const fixableBlock of fixableBlocks) {
+      for (const fixableBlock of problematicBlocks) {
         context.report({
-          loc: comment.loc,
+          // Ensure we only highlight exactly the block within the multi-line
+          // comment which violates the rule.
+          loc: {
+            start: {
+              column: comment.loc.start.column,
+              line: comment.loc.start.line + fixableBlock.startIndex,
+            },
+            end: {
+              column: comment.loc.start.column,
+              line: comment.loc.start.line + fixableBlock.endIndex + 1,
+            },
+          },
           message: `Comments may not exceed ${maxLength} characters`,
           fix: (fixer): Rule.Fix => {
-            const newValue = fixCommentLength(lines, fixableBlock, {
+            const newValue = fixCommentLength(fixableBlock, {
               maxLength,
               whitespaceSize,
             });
 
-            return fixer.replaceTextRange(commentRange, newValue);
+            // Now, in case the entire block is only a single line
+            // (e.g. /** text... */), then we should expand it into a multi-line
+            // comment to preserve space.
+            if (lines.length === 1) {
+              return fixer.replaceTextRange(
+                commentRange,
+                `${" ".repeat(whitespaceSize)}/**\n${newValue}\n${" ".repeat(
+                  whitespaceSize
+                )} */`
+              );
+            } else {
+              // ... else we should simply replace the part of the comment which
+              // overflows.
+              const rawLines = comment.value.split("\n");
+              const rangeStart =
+                (comment.range?.[0] ?? 0) +
+                MULTILINE_BOILERPLATE_SIZE +
+                rawLines.slice(0, fixableBlock.startIndex).join("\n").length;
+              const rangeEnd =
+                (comment.range?.[0] ?? 0) +
+                MULTILINE_BOILERPLATE_SIZE -
+                1 +
+                rawLines.slice(0, fixableBlock.endIndex + 1).join("\n").length;
+
+              // ... but, in the rare case where the violating block starts on
+              // the same line as the start of the multi-comment
+              // (i.e. /** my-comment...), then move it down to the next line,
+              // to maximize the available space.
+              if (fixableBlock.startIndex === 0) {
+                return fixer.replaceTextRange(
+                  [rangeStart, rangeEnd],
+                  `\n${" ".repeat(whitespaceSize)}${newValue}`
+                );
+              } else {
+                return fixer.replaceTextRange([rangeStart, rangeEnd], newValue);
+              }
+            }
           },
         });
       }
@@ -126,99 +181,170 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
   },
 };
 
-function captureBlock(
+/**
+ * captures the next logical group/block in the provided multi-line comment
+ * content, based on a set of rules.
+ *
+ * 1) Everything within a set of back-ticks (``) is ignored, as this is used
+ * to explicitly declare that the content should not be auto-fixed.
+ *
+ * 2) Lines that are not on the same indentation-level will not be recognized
+ * as part of the same block.
+ *
+ * 3) Lines separated by a new-line will not be considered as part of the same
+ * block.
+ *
+ * 4) Lines will only be grouped in case the current line of the block to be
+ * constructed actually is overflowing. This avoids issues where auto-fixing
+ * 'sucks' a line up even though the previous line should have been considered a
+ * logical end to a block.
+ */
+function captureNextBlock(
   lines: string[],
-  initialStartIndex: number
-): { lines: string[]; startIndex: number; endIndex: number } {
+  initialStartIndex: number,
+  args: {
+    maxLength: number;
+    whitespaceSize: number;
+    boilerplateSize: number;
+    ignoreUrls: boolean;
+  }
+): {
+  lines: string[];
+  lineOffsets: number[];
+  startIndex: number;
+  endIndex: number;
+} {
   let startIndex = initialStartIndex;
+  let ignoreLines = false;
 
+  // the provided startIndex may not necessarily indicate the startIndex of the
+  // next logical block. (it may e.g. just point to a blank line)
+  // as such we need to determine the actual start of the next block.
   for (let i = initialStartIndex; i < lines.length; i++) {
     const line = lines[i];
 
-    if (line && line.trim() !== "") {
-      startIndex = i;
+    // ensure that lines within backticks is skipped (and that the line itself
+    // is ignored as it acts as a marker).
+    if (line?.startsWith("` ") || line?.startsWith("``")) {
+      ignoreLines = !ignoreLines;
+      continue;
+    }
+
+    startIndex = i;
+
+    if (line && line.trim() !== "" && !ignoreLines) {
       break;
     }
   }
 
-  const relatedLines = lines.slice(startIndex, startIndex + 1);
+  const blockLines: string[] = lines.slice(startIndex, startIndex + 1);
 
-  if (relatedLines.length === 0) {
-    return { lines: relatedLines, startIndex, endIndex: startIndex + 1 };
+  // In case we could not resolve the start of a new block, then we cannot
+  // continue...
+  if (blockLines.length === 0) {
+    return {
+      lines: blockLines,
+      startIndex,
+      endIndex: startIndex,
+      lineOffsets: [],
+    };
   }
 
-  for (let i = startIndex + 1; i < lines.length; i++) {
-    const nextLine = lines[i];
+  // ... else we can begin analysing the following lines to determine if they
+  // are to be added to the current group
+  for (let i = startIndex; i < lines.length; i++) {
+    const currLine = lines[i];
+    const nextLine = lines[i + 1];
 
-    if (!nextLine || (nextLine.trim() === "" && !nextLine.startsWith(" "))) {
-      return { lines: relatedLines, startIndex, endIndex: i };
+    if (!currLine) {
+      break;
     }
 
-    relatedLines.push(nextLine);
+    if (
+      !nextLine ||
+      nextLine.trim() === "" ||
+      (currLine.match(/^ */)?.[0]?.length ?? 0) !==
+        (nextLine.match(/^ */)?.[0]?.length ?? 0) ||
+      !isLineOverflowing(currLine + (nextLine.split(" ")[0] ?? ""), args)
+    ) {
+      return {
+        lines: blockLines,
+        startIndex,
+        endIndex: i,
+        lineOffsets: blockLines.map((it) => it.match(/^ */)?.[0]?.length ?? 0),
+      };
+    }
+
+    blockLines.push(nextLine);
   }
 
-  return { lines: relatedLines, startIndex, endIndex: lines.length };
+  return {
+    lines: blockLines,
+    startIndex,
+    endIndex: lines.length,
+    lineOffsets: blockLines.map((it) => it.match(/^ */)?.[0]?.length ?? 0),
+  };
 }
 
 function mergeLines(a: string, b: string, separator = " "): string {
   return `${a.trim()}${separator}${b.trim()}`;
 }
 
+/**
+ * takes a fixable block and transform it into a singular string which
+ * represents the fixed format of the block.
+ */
 function fixCommentLength(
-  lines: string[],
-  fixable: { value: string; startIndex: number; endIndex: number },
+  fixable: {
+    value: string;
+    lineOffsets: number[];
+    startIndex: number;
+    endIndex: number;
+  },
   { maxLength, whitespaceSize }: { maxLength: number; whitespaceSize: number }
 ): string {
   const whitespace = " ".repeat(whitespaceSize);
-  const startValues = lines.slice(0, fixable.startIndex);
-  const endValues = lines.slice(fixable.endIndex);
+  const lineStartSize =
+    whitespaceSize + MULTILINE_BOILERPLATE_SIZE + (fixable.lineOffsets[0] ?? 0);
+  const words = fixable.value.trim().split(" ");
 
-  const lineStartSize = whitespaceSize + MULTILINE_BOILERPLATE_SIZE;
-  const fixableWords = fixable.value.trim().split(" ");
-
-  let newValue = `/**`;
-
-  if (startValues.length > 0) {
-    newValue += startValues.join(`\n${whitespace} * `);
-  }
-
-  const fixedContent = fixableWords.reduce(
+  const newValue = words.reduce(
     (acc, curr) => {
-      const lengthIfAdded = acc.currentLineLength + curr.length + 1;
+      const lengthIfAdded = acc.currentLineLength + curr.length + 1; // + 1 to act as a final space, i.e. " "
+
       // We can safely split to a new line in case we are reaching and
       // overflowing line AND if there is at least one word on the current line.
       const splitToNewline =
         lengthIfAdded > maxLength && acc.currentLineLength !== lineStartSize;
 
       if (splitToNewline) {
-        const nextLine = `${acc.value}\n${whitespace} * ${curr}`;
+        const nextLine = `${whitespace} *${" ".repeat(
+          fixable.lineOffsets[
+            Math.min(acc.currentLineIndex + 1, fixable.lineOffsets.length - 1)
+          ] ?? 0
+        )} ${curr}`;
+
         return {
-          value: nextLine,
-          currentLineLength: `${whitespace} * ${curr}`.length,
+          value: `${acc.value}\n${nextLine}`,
+          currentLineLength: nextLine.length,
+          currentLineIndex: acc.currentLineIndex + 1,
         };
       } else {
         return {
           value: `${acc.value} ${curr}`,
           currentLineLength: lengthIfAdded,
+          currentLineIndex: acc.currentLineIndex,
         };
       }
     },
-    { value: "", currentLineLength: lineStartSize }
+    {
+      value: `${whitespace} *${" ".repeat(fixable.lineOffsets[0] ?? 0)}`,
+      currentLineLength: lineStartSize,
+      currentLineIndex: 0,
+    }
   );
 
-  newValue += `\n${whitespace} *${fixedContent.value}`;
-
-  if (endValues.length > 0) {
-    newValue += `\n${whitespace} * ${endValues.join(`\n${whitespace} * `)}`;
-  }
-
-  if (endValues[endValues.length - 1] === "") {
-    newValue = `${newValue.slice(0, -1)}/`;
-  } else {
-    newValue += `\n${whitespace} */`;
-  }
-
-  return newValue;
+  return newValue.value;
 }
 
 function isLineOverflowing(
@@ -294,8 +420,5 @@ function getBoilerPlateSize(commentLines: string[]): number {
 }
 
 function getCommentLines(comment: Comment): string[] {
-  return comment.value
-    .replace(/ *\*/g, "")
-    .split("\n")
-    .map((it) => it.replace(/^ */, ""));
+  return comment.value.split("\n").map((it) => it.replace(/^ *?\* ?/, ""));
 }
