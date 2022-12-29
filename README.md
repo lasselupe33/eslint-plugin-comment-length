@@ -1,6 +1,6 @@
 # eslint-plugin-comment-length
 
-This plugin provides [ESLint](https://eslint.org/) rules that limit the line length of your comments. Furthermore, an automatic fix is included such that you can save time manually formatting your comments.
+This plugin provides [ESLint](https://eslint.org/) rules that limit the line length of your comments. Furthermore, an automatic fix is included such that you can save time manually formatting your comments. As such it is **recommended** to apply this rule every time a file is saved in order to avoid the hassle of manually formatting comments.
 
 This project aims to ease the process of writing long comments where each line needs to be cropped to a specific line length. This is similar to the [`max-len`](https://eslint.org/docs/rules/max-len) ESLint rule, but violations can be automatically fixed.
 
@@ -97,14 +97,18 @@ Will be fixed into:
 // very very long.
 ```
 
-##### Leading whitespace
+##### Indentation
+
+When fixing this comment-block, then the leading whitespace on the following line will currently be discarded. This may change in the future.
+
+As an example:
 
 ```ts
 // When fixing this comment-block, then the leading whitespace on the following line will be discarded.
 //    white-space will be discarded when fixing.
 ```
 
-Will be fixed into
+Will be fixed into:
 
 ```ts
 // When fixing this comment-block, then the leading whitespace on the following
@@ -211,7 +215,92 @@ Which will be transformed into the snippet below when applying the automatic fix
 
 #### Examples
 
-@TODO: Add several examples introducing additional edge-case behavior related to backticks, JSDoc-like comments etc.
+##### Basic
+
+```ts
+/**
+ * This is a single block.
+ * This is another block which violates the maximum length. This block will as such be automatically fixed.
+ * This is part of the previous block.
+ * 
+ * This is a third block.
+ */
+```
+
+```ts
+/**
+ * This is a single block.
+ * This is another block which violates the maximum length. This block will as
+ * such be automatically fixed. This is part of the previous block.
+ *
+ * This is a third block.
+ */
+```
+
+##### JSDoc
+
+In order to preserve semantics of JSDoc-like comments the automatic fix will not apply to lines that seems to be part of a JSDoc comment (i.e. starting with the character "@").
+
+At times, when JSDoc declarations (e.g. @example) span multiple lines, then it may be desired to combine with the `backtick` escape-hatch described below.
+
+```ts
+/**
+ * @example Here is my JSDoc-comment which will not be automatically fixable in order to avoid altering semantics.
+ */
+```
+
+##### Backticks
+
+Backticks inside a multi-line comment acts as an escape hatch for the automatic fix. In other words, all content within backticks will never be considered as a block that can be automatically fixed.
+
+```ts
+/**
+ * @example
+ * ```ts
+ * Everything within backticks will not be automatically formatted. They essientially acts as an escape-hatch for the automatic fix.
+ * ```
+ */
+```
+
+##### Indentation
+
+When capturing logical blocks within a multi-line comment the rule will consider indentation levels. If two lines do not share the same indentation level, then they will never be considered as part of the same block.
+
+This is illustrated with the following example:
+
+```ts
+/**
+ * This is a single block which overflows the default maximum line-length (80 characters).
+ *    Since this line has a different indentation level it will be considered as a separate block (which also overflows!)
+ */
+```
+
+Will be fixed into:
+
+```ts
+/**
+ * This is a single block which overflows the default maximum line-length (80
+ * characters).
+ *    Since this line has a different indentation level it will be considered
+ *    as a separate block (which also overflows!)
+ */
+```
+
+##### Single-line
+
+```ts
+/** In case a multi-line comment is on a single line and it violates the configured max-length, then it will be split into multiple lines automatically. */
+```
+
+Will be fixed into:
+
+```ts
+/**
+ * In case a multi-line comment is on a single line and it violates the
+ * configured max-length, then it will be split into multiple lines
+ * automatically.
+ */
+```
 
 ##### Must not be a comment with special semantics
 
