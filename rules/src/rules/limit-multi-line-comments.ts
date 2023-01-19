@@ -46,6 +46,8 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
         endIndex: number;
       }> = [];
 
+      let ignoreFollowingLines = false;
+
       // Processing multi-line comments becomes a tad more difficult than simply
       // parsing single-line comments since a single comment may contain
       // multiple logical comment blocks which should be handled individually.
@@ -57,13 +59,19 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
           continue;
         }
 
-        const block = captureNextBlock(lines, i, {
-          maxLength,
-          whitespaceSize,
-          boilerplateSize: getBoilerPlateSize(lines),
-          ignoreUrls,
-        });
+        const [block, ignoreLines] = captureNextBlock(
+          lines,
+          ignoreFollowingLines,
+          i,
+          {
+            maxLength,
+            whitespaceSize,
+            boilerplateSize: getBoilerPlateSize(lines),
+            ignoreUrls,
+          }
+        );
         blocks.push(block);
+        ignoreFollowingLines = ignoreLines;
       }
 
       const problematicBlocks: Array<{
@@ -181,8 +189,6 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
   },
 };
 
-let ignoreLines = false;
-
 /**
  * captures the next logical group/block in the provided multi-line comment
  * content, based on a set of rules.
@@ -203,6 +209,7 @@ let ignoreLines = false;
  */
 function captureNextBlock(
   lines: string[],
+  ignoreFollowingLines: boolean,
   initialStartIndex: number,
   args: {
     maxLength: number;
@@ -210,12 +217,16 @@ function captureNextBlock(
     boilerplateSize: number;
     ignoreUrls: boolean;
   }
-): {
-  lines: string[];
-  lineOffsets: number[];
-  startIndex: number;
-  endIndex: number;
-} {
+): [
+  {
+    lines: string[];
+    lineOffsets: number[];
+    startIndex: number;
+    endIndex: number;
+  },
+  boolean
+] {
+  let ignoreLines = ignoreFollowingLines;
   let startIndex = initialStartIndex;
 
   // the provided startIndex may not necessarily indicate the startIndex of the
@@ -243,12 +254,15 @@ function captureNextBlock(
   // In case we could not resolve the start of a new block, then we cannot
   // continue...
   if (blockLines.length === 0) {
-    return {
-      lines: blockLines,
-      startIndex,
-      endIndex: startIndex,
-      lineOffsets: [],
-    };
+    return [
+      {
+        lines: blockLines,
+        startIndex,
+        endIndex: startIndex,
+        lineOffsets: [],
+      },
+      ignoreLines,
+    ];
   }
 
   // ... else we can begin analysing the following lines to determine if they
@@ -268,23 +282,31 @@ function captureNextBlock(
         (nextLine.match(/^ */)?.[0]?.length ?? 0) ||
       !isLineOverflowing(currLine + (nextLine.split(" ")[0] ?? ""), args)
     ) {
-      return {
-        lines: blockLines,
-        startIndex,
-        endIndex: i,
-        lineOffsets: blockLines.map((it) => it.match(/^ */)?.[0]?.length ?? 0),
-      };
+      return [
+        {
+          lines: blockLines,
+          startIndex,
+          endIndex: i,
+          lineOffsets: blockLines.map(
+            (it) => it.match(/^ */)?.[0]?.length ?? 0
+          ),
+        },
+        ignoreLines,
+      ];
     }
 
     blockLines.push(nextLine);
   }
 
-  return {
-    lines: blockLines,
-    startIndex,
-    endIndex: lines.length,
-    lineOffsets: blockLines.map((it) => it.match(/^ */)?.[0]?.length ?? 0),
-  };
+  return [
+    {
+      lines: blockLines,
+      startIndex,
+      endIndex: lines.length,
+      lineOffsets: blockLines.map((it) => it.match(/^ */)?.[0]?.length ?? 0),
+    },
+    ignoreLines,
+  ];
 }
 
 function mergeLines(a: string, b: string, separator = " "): string {
