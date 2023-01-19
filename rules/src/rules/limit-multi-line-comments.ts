@@ -53,7 +53,7 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
       // Thus our first step is to take a multi-line comment and convert it into
       // logical blocks
       for (let i = 0; i < lines.length; i++) {
-        if (i <= (blocks[blocks.length - 1]?.endIndex ?? -1)) {
+        if (i < (blocks[blocks.length - 1]?.endIndex ?? -1)) {
           continue;
         }
 
@@ -181,6 +181,8 @@ export const limitMultiLineCommentsRule: Rule.RuleModule = {
   },
 };
 
+let ignoreLines = false;
+
 /**
  * captures the next logical group/block in the provided multi-line comment
  * content, based on a set of rules.
@@ -215,7 +217,6 @@ function captureNextBlock(
   endIndex: number;
 } {
   let startIndex = initialStartIndex;
-  let ignoreLines = false;
 
   // the provided startIndex may not necessarily indicate the startIndex of the
   // next logical block. (it may e.g. just point to a blank line)
