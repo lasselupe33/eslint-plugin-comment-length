@@ -260,7 +260,11 @@ function isSpecialComment(comment: Comment): boolean {
     comment.value.trim().startsWith("tslint:disable") ||
     comment.value.trim().startsWith("eslint-enable") ||
     comment.value.trim().startsWith("stylelint-enable") ||
-    comment.value.trim().startsWith("tslint:enable")
+    comment.value.trim().startsWith("tslint:enable") ||
+    comment.value.trim().startsWith("@ts-ignore") ||
+    comment.value.trim().startsWith("@ts-expect-error") ||
+    comment.value.trim().startsWith("@ts-check") ||
+    comment.value.trim().startsWith("@ts-nocheck")
   );
 }
 
