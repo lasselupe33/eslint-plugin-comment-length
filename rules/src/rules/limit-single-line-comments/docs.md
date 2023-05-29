@@ -32,7 +32,8 @@ Which will be transformed into:
     "warn",
     {
       "maxLength": 80,
-      "ignoreUrls": true
+      "ignoreUrls": true,
+      "ignoreCommentsWithCode": true
     }
   ]
 }

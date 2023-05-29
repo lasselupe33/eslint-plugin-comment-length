@@ -1,7 +1,7 @@
 /**
  * egerjkg erkg erkjg erkjge rgkje rjkg ergkjeg kjrg erkj gerkjg ekjrg erjk
- * gerkjg e ergerjg Hellerkelgr erlkg elkg elkrg erlgk erlkg ergk egkl ergkle
- * gelrkg eg
+ * gelrkg erglk gerkjg e ergerjg Hellerkelgr erlkg elkg elkrg erlgk erlkg ergk
+ * egkl ergkle gelrkg eg
  */
 const foo = 2;
 
@@ -49,3 +49,6 @@ if (foo) {
 //     }
 //   }
 // }
+
+// stylelint-disable-next-line some-css-plugin/some-css-rule, more-rules,that-will,trigger,overflow...
+// tslint:disable comment-length/limit-single-line-comments, comment-length/limit-multi-line-comments, ...

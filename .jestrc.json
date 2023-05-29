@@ -1,0 +1,10 @@
+{
+  "testMatch": ["**/tests/_tests.ts"],
+  "modulePathIgnorePatterns": ["/lib/"],
+  "coverageDirectory": "<rootDir>/.coverage",
+
+  "testEnvironment": "node",
+  "transform": {
+    "\\.tsx?$": ["@swc-node/jest", { "sourcemap": "inline" }]
+  }
+}

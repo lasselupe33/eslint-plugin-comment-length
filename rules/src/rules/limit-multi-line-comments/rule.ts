@@ -1,8 +1,11 @@
 import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
 
-import { defaultOptions, optionsSchema } from "../../const.default-options";
+import {
+  RuleOptions,
+  defaultOptions,
+  optionsSchema,
+} from "../../const.default-options";
 import { Context } from "../../typings.context";
-import { RuleOptions } from "../../typings.options";
 import { isCodeInComment } from "../../utils/is-code-in-comment";
 import { isCommentInComment } from "../../utils/is-comment-in-comment";
 import { isJSDocLikeComment } from "../../utils/is-jsdoc-like";
@@ -17,7 +20,7 @@ import { getBoilerPlateSize } from "./util.boilerplate-size";
 import { captureNextBlock } from "./util.capture-next-block";
 import { mergeLines } from "./util.merge-lines";
 
-enum MessageIds {
+export enum MessageIds {
   EXCEEDS_MAX_LENGTH = "exceeds-max-length",
 }
 
@@ -81,7 +84,7 @@ export const limitMultiLineCommentsRule = createRule<RuleOptions, MessageIds>({
       // Thus our first step is to take a multi-line comment and convert it into
       // logical blocks
       for (let i = 0; i < context.comment.lines.length; i++) {
-        if (i < (blocks[blocks.length - 1]?.endIndex ?? -1)) {
+        if (i <= (blocks[blocks.length - 1]?.endIndex ?? -1)) {
           continue;
         }
 
@@ -114,7 +117,7 @@ export const limitMultiLineCommentsRule = createRule<RuleOptions, MessageIds>({
               block.lines.some(
                 (line) => isCommentInComment(line) || isJSDocLikeComment(line)
               ) ||
-              isCodeInComment(block.value, ruleContext.parserPath)
+              isCodeInComment(block.value, ruleContext.parserPath, context)
             ) {
               continue;
             }

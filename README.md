@@ -75,7 +75,8 @@ Which will be transformed into:
     "warn",
     {
       "maxLength": 80,
-      "ignoreUrls": true
+      "ignoreUrls": true,
+      "ignoreCommentsWithCode": true
     }
   ]
 }
@@ -206,7 +207,8 @@ Which will be transformed into the snippet below when applying the automatic fix
     "warn",
     {
       "maxLength": 80,
-      "ignoreUrls": true
+      "ignoreUrls": true,
+      "ignoreCommentsWithCode": true
     }
   ]
 }

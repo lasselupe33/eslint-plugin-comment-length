@@ -1,6 +1,10 @@
 import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
 
-import { defaultOptions, optionsSchema } from "../../const.default-options";
+import {
+  RuleOptions,
+  defaultOptions,
+  optionsSchema,
+} from "../../const.default-options";
 import { Context } from "../../typings.context";
 import { isCodeInComment } from "../../utils/is-code-in-comment";
 import { isCommentInComment } from "../../utils/is-comment-in-comment";
@@ -16,11 +20,11 @@ import { captureRelevantComments } from "./util.capture-relevant-comments";
 
 const createRule = ESLintUtils.RuleCreator(resolveDocsRoute);
 
-enum MessageIds {
+export enum MessageIds {
   EXCEEDS_MAX_LENGTH = "exceeds-max-length",
 }
 
-export const limitSingleLineCommentsRule = createRule({
+export const limitSingleLineCommentsRule = createRule<RuleOptions, MessageIds>({
   name: "limit-single-line-comments",
   defaultOptions,
   meta: {
@@ -93,7 +97,8 @@ export const limitSingleLineCommentsRule = createRule({
           isCommentInComment(fixableComment.value) ||
           isCodeInComment(
             captureNearbyComments(comments, i)?.value,
-            ruleContext.parserPath
+            ruleContext.parserPath,
+            context
           )
         ) {
           continue;

@@ -1,15 +1,20 @@
-import { RuleOptions } from "./typings.options";
+import { Context } from "./typings.context";
+
+export type RuleOptions = [
+  Pick<Context, "maxLength" | "ignoreUrls" | "ignoreCommentsWithCode">
+];
 
 export const defaultOptions = [
-  { maxLength: 80, ignoreUrls: true },
+  { maxLength: 80, ignoreUrls: true, ignoreCommentsWithCode: true },
 ] satisfies RuleOptions;
 
 export const optionsSchema = [
   {
     type: "object",
     properties: {
-      maxLength: { type: "integer", required: true },
-      ignoreUrls: { type: "boolean", required: true },
+      maxLength: { type: "integer" },
+      ignoreUrls: { type: "boolean" },
+      ignoreCommentsWithCode: { type: "boolean" },
     },
   },
 ];

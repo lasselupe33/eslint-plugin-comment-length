@@ -1,10 +1,13 @@
 import { Linter } from "@typescript-eslint/utils/dist/ts-eslint";
 
+import { Context } from "../typings.context";
+
 export function isCodeInComment(
   value: string | undefined,
-  parserPath: string
+  parserPath: string,
+  context: Context
 ): boolean {
-  if (!value) {
+  if (!value || !context.ignoreCommentsWithCode) {
     return false;
   }
 
