@@ -1,9 +1,4 @@
 /**
- * ejkrg ekrg ekrjg erjkg erjkg ejkrg eejgerjg ekrjg erkg ekjg ekjrg ejkg ejkeg
- * ekrjg
- * https://github.com/itu-devops/lecture_notesereiogjeorgjerogierjgeiogjerergeoirgj
- * erg erg
- *
  * egerjkg erkg erkjg erkjge rgkje rjkg ergkjeg kjrg erkj gerkjg ekjrg erjk
  * gerkjg e ergerjg Hellerkelgr erlkg elkg elkrg erlgk erlkg ergk egkl ergkle
  * gelrkg eg
@@ -31,7 +26,8 @@ if (foo) {
 }
 
 // this kejr gekjrg ekjg ekrjg ekrjertulgh rthjkrte klejrth kjrth erkltj"" krth
-// er r"ger
+// hello? er r"ger gflrke glker gelkrg elkr gelkrg elrk erlkg elrkg elrkg elrkg
+// elkrg elkrg erg
 
 // function test() {
 //   if (true) {

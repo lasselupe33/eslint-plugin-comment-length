@@ -154,7 +154,6 @@ The rationaly is essentially the same as above. In particular we wish to avoid b
 // const myVariableWhichDefinitelyOverflows = window.getComputedStyle(document.body).accentColor;
 ```
 
-
 ### `comment-length/limit-multi-line-comments`
 
 Locates multi-line comments, i.e. `/* comment */` and ensures that each line in the comment never exceeds the configured length.
