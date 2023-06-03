@@ -7,22 +7,30 @@ import { isSemanticComment } from "../../utils/is-semantic-comment";
 
 import { mergeComments } from "./util.merge-comments";
 
-export function captureRelevantComments(
+export function captureRelevantCommentsIntoBlock(
   sourceCode: TSESLint.SourceCode,
   comments: TSESTree.LineComment[],
   startIndex: number,
   context: Context
-): TSESTree.LineComment | undefined {
+): {
+  mergedComment: TSESTree.LineComment | undefined;
+  startIndex: number;
+  endIndex: number;
+} {
   let comment = comments[startIndex];
 
   if (!comment) {
-    return;
+    return { mergedComment: undefined, startIndex, endIndex: startIndex };
   }
+
+  let endIndex = startIndex;
 
   for (let i = startIndex + 1; i < comments.length; i++) {
     const nextComment = comments[i];
 
     if (
+      (context.mode === "overflow-only" &&
+        !isLineOverflowing(comment.value, context)) ||
       !nextComment ||
       nextComment.value.trim() === "" ||
       nextComment.loc?.start.line !== (comment.loc?.end.line ?? 0) + 1 ||
@@ -33,16 +41,8 @@ export function captureRelevantComments(
     }
 
     comment = mergeComments(comment, nextComment);
-
-    if (
-      !isLineOverflowing(
-        nextComment.value + (comments[i + 1]?.value.trim().split(" ")[0] ?? ""),
-        context
-      )
-    ) {
-      break;
-    }
+    endIndex = i;
   }
 
-  return comment;
+  return { mergedComment: comment, startIndex, endIndex };
 }

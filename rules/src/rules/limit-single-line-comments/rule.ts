@@ -1,27 +1,29 @@
 import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
 
+import { Context } from "../../typings.context";
 import {
   RuleOptions,
   defaultOptions,
   optionsSchema,
-} from "../../const.default-options";
-import { Context } from "../../typings.context";
+} from "../../typings.options";
 import { isCodeInComment } from "../../utils/is-code-in-comment";
 import { isCommentInComment } from "../../utils/is-comment-in-comment";
 import { isLineOverflowing } from "../../utils/is-line-overflowing";
 import { isCommentOnOwnLine } from "../../utils/is-on-own-line";
 import { isSemanticComment } from "../../utils/is-semantic-comment";
+import { isURL } from "../../utils/is-url";
 import { resolveDocsRoute } from "../../utils/resolve-docs-route";
 
 import { SINGLE_LINE_COMMENT_BOILERPLATE_SIZE } from "./const.boilerplate-size";
 import { fixOverflow } from "./fix.overflow";
 import { captureNearbyComments } from "./util.capture-nearby-comments";
-import { captureRelevantComments } from "./util.capture-relevant-comments";
+import { captureRelevantCommentsIntoBlock } from "./util.capture-relevant-comments";
 
 const createRule = ESLintUtils.RuleCreator(resolveDocsRoute);
 
 export enum MessageIds {
   EXCEEDS_MAX_LENGTH = "exceeds-max-length",
+  CAN_COMPACT = "can-compact",
 }
 
 export const limitSingleLineCommentsRule = createRule<RuleOptions, MessageIds>({
@@ -33,6 +35,8 @@ export const limitSingleLineCommentsRule = createRule<RuleOptions, MessageIds>({
     messages: {
       [MessageIds.EXCEEDS_MAX_LENGTH]:
         "Comments may not exceed {{maxLength}} characters",
+      [MessageIds.CAN_COMPACT]:
+        "It is possible to make the current comment block more compact.",
     },
     docs: {
       description:
@@ -48,70 +52,111 @@ export const limitSingleLineCommentsRule = createRule<RuleOptions, MessageIds>({
       .filter((it): it is TSESTree.LineComment => it.type === "Line");
 
     for (let i = 0; i < comments.length; i++) {
-      const comment = comments[i];
+      const currentCommentLine = comments[i];
 
-      if (!comment?.range || !comment.value) {
+      if (
+        !currentCommentLine?.range ||
+        !currentCommentLine.value ||
+        !isCommentOnOwnLine(sourceCode, currentCommentLine) ||
+        isSemanticComment(currentCommentLine)
+      ) {
         continue;
       }
 
       let context = {
         ...options,
-        whitespaceSize: comment?.loc?.start.column ?? 0,
+        whitespaceSize: currentCommentLine?.loc?.start.column ?? 0,
         boilerplateSize: SINGLE_LINE_COMMENT_BOILERPLATE_SIZE,
         comment: {
-          range: comment.range,
-          lines: [comment.value],
-          value: comment.value,
+          range: currentCommentLine.range,
+          lines: [currentCommentLine.value],
+          value: currentCommentLine.value,
         },
       } satisfies Context;
 
+      const currentBlock = captureRelevantCommentsIntoBlock(
+        sourceCode,
+        comments,
+        i,
+        context
+      );
+      const fixableComment = currentBlock.mergedComment;
+
+      // ensure that we only visit a captured block once
+      i += currentBlock.endIndex - currentBlock.startIndex;
+
       if (
-        comment &&
-        comment.loc &&
-        comment.type === "Line" &&
-        isLineOverflowing(comment.value, context) &&
-        !isSemanticComment(comment) &&
-        isCommentOnOwnLine(sourceCode, comment)
-      ) {
-        const fixableComment = captureRelevantComments(
-          sourceCode,
-          comments,
-          i,
+        !fixableComment ||
+        isCommentInComment(fixableComment.value) ||
+        isCodeInComment(
+          captureNearbyComments(comments, i)?.value,
+          ruleContext.parserPath,
           context
-        );
+        )
+      ) {
+        continue;
+      }
 
-        if (!fixableComment) {
-          continue;
-        }
+      // Update our context to reflect that we may have merged multiple comment
+      // lines into a singular block.
+      context = {
+        ...context,
+        comment: {
+          range: fixableComment.range,
+          lines: [fixableComment.value],
+          value: fixableComment.value,
+        },
+      };
 
-        context = {
-          ...context,
-          comment: {
-            range: fixableComment.range,
-            lines: [fixableComment.value],
-            value: fixableComment.value,
-          },
-        };
-
-        if (
-          isCommentInComment(fixableComment.value) ||
-          isCodeInComment(
-            captureNearbyComments(comments, i)?.value,
-            ruleContext.parserPath,
-            context
-          )
-        ) {
-          continue;
-        }
-
+      // In case any lines in our current block overflows, then we need to warn
+      // that overflow has been detected
+      if (
+        comments
+          .slice(currentBlock.startIndex, currentBlock.endIndex + 1)
+          .some((line) => isLineOverflowing(line.value, context))
+      ) {
         ruleContext.report({
-          loc: comment.loc,
+          loc: fixableComment.loc,
           messageId: MessageIds.EXCEEDS_MAX_LENGTH,
           data: {
             maxLength: context.maxLength,
           },
           fix: (fixer) => fixOverflow(fixer, fixableComment, context),
         });
+      } else if (context.mode === "compact") {
+        for (
+          let i = currentBlock.startIndex + 1;
+          i <= currentBlock.endIndex;
+          i++
+        ) {
+          const prev = comments[i - 1];
+          const curr = comments[i];
+
+          if (!prev || !curr || (context.ignoreUrls && isURL(curr?.value))) {
+            continue;
+          }
+
+          const firstWordOnCurrentLine = curr.value.split(" ");
+          const lengthOfPrevLine =
+            prev.value.length +
+            context.boilerplateSize +
+            context.whitespaceSize +
+            1;
+
+          if (
+            lengthOfPrevLine + firstWordOnCurrentLine.length <=
+            context.maxLength
+          ) {
+            ruleContext.report({
+              loc: fixableComment.loc,
+              messageId: MessageIds.CAN_COMPACT,
+              data: {
+                maxLength: context.maxLength,
+              },
+              fix: (fixer) => fixOverflow(fixer, fixableComment, context),
+            });
+          }
+        }
       }
     }
 

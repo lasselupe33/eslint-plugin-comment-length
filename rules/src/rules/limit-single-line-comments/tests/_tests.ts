@@ -4,7 +4,7 @@ import { ESLintUtils } from "@typescript-eslint/utils";
 import { getCode } from "../../../utils/testing.get-code";
 
 import { MessageIds, limitSingleLineCommentsRule } from "../rule";
-import { defaultOptions } from "../../../const.default-options";
+import { defaultOptions } from "../../../typings.options";
 
 const ruleTester = new ESLintUtils.RuleTester({
   parser: "@typescript-eslint/parser",
@@ -25,6 +25,16 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
     getCode(__dirname, "valid.comment-within-comment", defaultOptions),
     getCode(__dirname, "option.code-within", defaultOptions),
     getCode(__dirname, "option.no-urls", defaultOptions),
+    getCode(
+      __dirname,
+      "option.compact",
+      [
+        {
+          ...defaultOptions[0],
+          mode: "compact-on-overflow",
+        },
+      ] as const,
+    ),
   ],
   invalid: [
     getCode(
@@ -71,6 +81,17 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
         },
       ] as const,
       MessageIds.EXCEEDS_MAX_LENGTH
+    ),
+    getCode(
+      __dirname,
+      "option.compact",
+      [
+        {
+          ...defaultOptions[0],
+          mode: "compact",
+        },
+      ] as const,
+      MessageIds.CAN_COMPACT
     ),
   ],
 });

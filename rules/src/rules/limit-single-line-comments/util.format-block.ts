@@ -1,6 +1,7 @@
 import { TSESTree } from "@typescript-eslint/utils";
 
 import { Context } from "../../typings.context";
+import { isURL } from "../../utils/is-url";
 
 import { SINGLE_LINE_COMMENT_BOILERPLATE_SIZE } from "./const.boilerplate-size";
 
@@ -15,17 +16,20 @@ export function formatBlock(
 
   const newValue = words.reduce(
     (acc, curr) => {
+      const currentWordIsURL = isURL(curr);
+
       const lengthIfAdded = acc.currentLineLength + curr.length + 1;
       // We can safely split to a new line in case we are reaching and
       // overflowing line AND if there is at least one word on the current line.
       const splitToNewline =
-        lengthIfAdded > context.maxLength &&
-        acc.currentLineLength !== lineStartSize;
+        lengthIfAdded >= context.maxLength &&
+        acc.currentLineLength !== lineStartSize &&
+        (!context.ignoreUrls || !currentWordIsURL);
 
       if (splitToNewline) {
         return {
           value: `${acc.value}\n${whitespace}// ${curr}`,
-          currentLineLength: lineStartSize,
+          currentLineLength: lineStartSize + curr.length,
         };
       } else {
         return {

@@ -4,7 +4,7 @@ import {
   RuleOptions,
   defaultOptions,
   optionsSchema,
-} from "../../const.default-options";
+} from "../../typings.options";
 import { Context } from "../../typings.context";
 import { isCodeInComment } from "../../utils/is-code-in-comment";
 import { isCommentInComment } from "../../utils/is-comment-in-comment";

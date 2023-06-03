@@ -35,6 +35,7 @@ export function getCode<TIds extends string, TOpts extends readonly unknown[]>(
   }
 
   const base = {
+    name,
     code: fs.readFileSync(resolvedPath, "utf-8"),
     filename: resolvedPath,
     options: options,

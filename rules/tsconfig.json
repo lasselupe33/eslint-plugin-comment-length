@@ -4,7 +4,7 @@
     "outDir": "./lib",
     "lib": [
       "dom",
-      "esnext"
+      "esnext",
     ],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -15,6 +15,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noPropertyAccessFromIndexSignature": true,

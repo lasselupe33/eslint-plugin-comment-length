@@ -4,7 +4,7 @@ import { ESLintUtils } from "@typescript-eslint/utils";
 import { getCode } from "../../../utils/testing.get-code";
 
 import { MessageIds, limitMultiLineCommentsRule } from "../rule";
-import { defaultOptions } from "../../../const.default-options";
+import { defaultOptions } from "../../../typings.options";
 
 const ruleTester = new ESLintUtils.RuleTester({
   parser: "@typescript-eslint/parser",
