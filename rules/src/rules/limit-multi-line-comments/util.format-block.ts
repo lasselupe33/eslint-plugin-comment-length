@@ -1,13 +1,13 @@
 import { Context } from "../../typings.context";
 
-import { Block } from "./typings.block";
+import { MultilineBlock } from "./typings.block";
 import { MULTILINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
 
 /**
  * takes a fixable block and transform it into a singular string which
  * represents the fixed format of the block.
  */
-export function formatBlock(fixable: Block, context: Context): string {
+export function formatBlock(fixable: MultilineBlock, context: Context): string {
   const whitespace = " ".repeat(context.whitespaceSize);
   const lineStartSize =
     context.whitespaceSize +

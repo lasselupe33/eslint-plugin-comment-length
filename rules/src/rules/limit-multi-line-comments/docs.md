@@ -45,11 +45,12 @@ Which will be transformed into the snippet below when applying the automatic fix
 
 ## Options
 
-```json
+```jsonc
 {
   "comment-length/limit-multi-line-comments": [
     "warn",
     {
+      "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
       "ignoreUrls": true,
       "ignoreCommentsWithCode": true

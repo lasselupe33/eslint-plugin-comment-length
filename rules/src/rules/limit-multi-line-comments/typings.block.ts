@@ -1,7 +1,7 @@
 /**
  * defines a singular logical block within a comment.
  */
-export type Block = {
+export type MultilineBlock = {
   /**
    * includes the merged value of all comment lines within the block
    */

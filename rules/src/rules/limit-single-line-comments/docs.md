@@ -26,11 +26,12 @@ Which will be transformed into:
 
 ## Options
 
-```json
+```jsonc
 {
   "comment-length/limit-single-line-comments": [
     "warn",
     {
+      "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
       "ignoreUrls": true,
       "ignoreCommentsWithCode": true

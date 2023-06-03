@@ -26,6 +26,16 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
     getCode(__dirname, "valid.comment-within-comment", defaultOptions),
     getCode(__dirname, "option.code-within", defaultOptions),
     getCode(__dirname, "option.no-urls", defaultOptions),
+    getCode(
+      __dirname,
+      "option.compact",
+      [
+        {
+          ...defaultOptions[0],
+          mode: "compact-on-overflow",
+        },
+      ] as const
+    ),
   ],
   invalid: [
     getCode(
@@ -78,6 +88,17 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
         },
       ] as const,
       MessageIds.EXCEEDS_MAX_LENGTH
+    ),
+    getCode(
+      __dirname,
+      "option.compact",
+      [
+        {
+          ...defaultOptions[0],
+          mode: "compact",
+        },
+      ] as const,
+      MessageIds.CAN_COMPACT
     ),
   ],
 });

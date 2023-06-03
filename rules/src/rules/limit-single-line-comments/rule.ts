@@ -11,11 +11,11 @@ import { isCommentInComment } from "../../utils/is-comment-in-comment";
 import { isLineOverflowing } from "../../utils/is-line-overflowing";
 import { isCommentOnOwnLine } from "../../utils/is-on-own-line";
 import { isSemanticComment } from "../../utils/is-semantic-comment";
-import { isURL } from "../../utils/is-url";
 import { resolveDocsRoute } from "../../utils/resolve-docs-route";
 
 import { SINGLE_LINE_COMMENT_BOILERPLATE_SIZE } from "./const.boilerplate-size";
 import { fixOverflow } from "./fix.overflow";
+import { canBlockBeCompated } from "./util.can-block-be-compacted";
 import { captureNearbyComments } from "./util.capture-nearby-comments";
 import { captureRelevantCommentsIntoBlock } from "./util.capture-relevant-comments";
 
@@ -36,7 +36,7 @@ export const limitSingleLineCommentsRule = createRule<RuleOptions, MessageIds>({
       [MessageIds.EXCEEDS_MAX_LENGTH]:
         "Comments may not exceed {{maxLength}} characters",
       [MessageIds.CAN_COMPACT]:
-        "It is possible to make the current comment block more compact.",
+        "It is possible to make the current comment block more compact",
     },
     docs: {
       description:
@@ -123,40 +123,18 @@ export const limitSingleLineCommentsRule = createRule<RuleOptions, MessageIds>({
           },
           fix: (fixer) => fixOverflow(fixer, fixableComment, context),
         });
-      } else if (context.mode === "compact") {
-        for (
-          let i = currentBlock.startIndex + 1;
-          i <= currentBlock.endIndex;
-          i++
-        ) {
-          const prev = comments[i - 1];
-          const curr = comments[i];
-
-          if (!prev || !curr || (context.ignoreUrls && isURL(curr?.value))) {
-            continue;
-          }
-
-          const firstWordOnCurrentLine = curr.value.split(" ");
-          const lengthOfPrevLine =
-            prev.value.length +
-            context.boilerplateSize +
-            context.whitespaceSize +
-            1;
-
-          if (
-            lengthOfPrevLine + firstWordOnCurrentLine.length <=
-            context.maxLength
-          ) {
-            ruleContext.report({
-              loc: fixableComment.loc,
-              messageId: MessageIds.CAN_COMPACT,
-              data: {
-                maxLength: context.maxLength,
-              },
-              fix: (fixer) => fixOverflow(fixer, fixableComment, context),
-            });
-          }
-        }
+      } else if (
+        context.mode === "compact" &&
+        canBlockBeCompated(comments, currentBlock, context)
+      ) {
+        ruleContext.report({
+          loc: fixableComment.loc,
+          messageId: MessageIds.CAN_COMPACT,
+          data: {
+            maxLength: context.maxLength,
+          },
+          fix: (fixer) => fixOverflow(fixer, fixableComment, context),
+        });
       }
     }
 

@@ -1,11 +1,11 @@
 import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
 
+import { Context } from "../../typings.context";
 import {
   RuleOptions,
   defaultOptions,
   optionsSchema,
 } from "../../typings.options";
-import { Context } from "../../typings.context";
 import { isCodeInComment } from "../../utils/is-code-in-comment";
 import { isCommentInComment } from "../../utils/is-comment-in-comment";
 import { isJSDocLikeComment } from "../../utils/is-jsdoc-like";
@@ -15,13 +15,15 @@ import { isSemanticComment } from "../../utils/is-semantic-comment";
 import { resolveDocsRoute } from "../../utils/resolve-docs-route";
 
 import { fixOverflowingBlock } from "./fix.overflow";
-import { Block } from "./typings.block";
+import { MultilineBlock } from "./typings.block";
 import { getBoilerPlateSize } from "./util.boilerplate-size";
+import { canBlockBeCompated } from "./util.can-block-be-compacted";
 import { captureNextBlock } from "./util.capture-next-block";
 import { mergeLines } from "./util.merge-lines";
 
 export enum MessageIds {
   EXCEEDS_MAX_LENGTH = "exceeds-max-length",
+  CAN_COMPACT = "can-compact",
 }
 
 const createRule = ESLintUtils.RuleCreator(resolveDocsRoute);
@@ -35,6 +37,8 @@ export const limitMultiLineCommentsRule = createRule<RuleOptions, MessageIds>({
     messages: {
       [MessageIds.EXCEEDS_MAX_LENGTH]:
         "Comments may not exceed {{maxLength}} characters",
+      [MessageIds.CAN_COMPACT]:
+        "It is possible to make the current comment block more compact",
     },
     docs: {
       description:
@@ -73,7 +77,7 @@ export const limitMultiLineCommentsRule = createRule<RuleOptions, MessageIds>({
         },
       } satisfies Context;
 
-      const blocks = [] as Block[];
+      const blocks = [] as MultilineBlock[];
 
       let ignoreFollowingLines = false;
 
@@ -100,7 +104,7 @@ export const limitMultiLineCommentsRule = createRule<RuleOptions, MessageIds>({
         ignoreFollowingLines = ignoreLines;
       }
 
-      const problematicBlocks = [] as Block[];
+      const problematicBlocks = [] as MultilineBlock[];
 
       // ... and then we can go through each block to determine if it violates
       // our rule to mark it as fixable using logic similar to the single-line
@@ -134,12 +138,15 @@ export const limitMultiLineCommentsRule = createRule<RuleOptions, MessageIds>({
           // comment which violates the rule.
           loc: {
             start: {
-              column: comment.loc.start.column,
+              column: 0,
               line: comment.loc.start.line + fixableBlock.startIndex,
             },
             end: {
-              column: comment.loc.start.column,
-              line: comment.loc.start.line + fixableBlock.endIndex + 1,
+              column:
+                comment.loc.start.column +
+                context.boilerplateSize +
+                (fixableBlock.lines.at(-1)?.length ?? 0),
+              line: comment.loc.start.line + fixableBlock.endIndex,
             },
           },
           messageId: MessageIds.EXCEEDS_MAX_LENGTH,
@@ -148,6 +155,38 @@ export const limitMultiLineCommentsRule = createRule<RuleOptions, MessageIds>({
           },
           fix: (fixer) => fixOverflowingBlock(fixer, fixableBlock, context),
         });
+      }
+
+      if (context.mode === "compact") {
+        for (const block of blocks) {
+          if (
+            problematicBlocks.includes(block) ||
+            !canBlockBeCompated(block, context)
+          ) {
+            continue;
+          }
+
+          ruleContext.report({
+            loc: {
+              start: {
+                column: 0,
+                line: comment.loc.start.line + block.startIndex,
+              },
+              end: {
+                column:
+                  comment.loc.start.column +
+                  context.boilerplateSize +
+                  (block.lines.at(-1)?.length ?? 0),
+                line: comment.loc.start.line + block.endIndex,
+              },
+            },
+            messageId: MessageIds.CAN_COMPACT,
+            data: {
+              maxLength: options.maxLength,
+            },
+            fix: (fixer) => fixOverflowingBlock(fixer, block, context),
+          });
+        }
       }
     }
 

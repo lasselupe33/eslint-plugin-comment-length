@@ -2,13 +2,13 @@ import { TSESLint } from "@typescript-eslint/utils";
 
 import { Context } from "../../typings.context";
 
-import { Block } from "./typings.block";
+import { MultilineBlock } from "./typings.block";
 import { MULTILINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
 import { formatBlock } from "./util.format-block";
 
 export function fixOverflowingBlock(
   fixer: TSESLint.RuleFixer,
-  fixableBlock: Block,
+  fixableBlock: MultilineBlock,
   context: Context
 ) {
   const newValue = formatBlock(fixableBlock, context);

@@ -89,7 +89,8 @@ export function captureNextBlock(
       nextLine.trim() === "" ||
       (currLine.match(/^ */)?.[0]?.length ?? 0) !==
         (nextLine.match(/^ */)?.[0]?.length ?? 0) ||
-      !isLineOverflowing(currLine + (nextLine.split(" ")[0] ?? ""), context)
+      (context.mode === "overflow-only" &&
+        !isLineOverflowing(currLine + (nextLine.split(" ")[0] ?? ""), context))
     ) {
       return [
         {

@@ -2,6 +2,19 @@
 
 This plugin provides [ESLint](https://eslint.org/) rules that limit the line length of your comments. Furthermore, an automatic fix is included such that you can save time manually formatting your comments. As such it is **recommended** to apply this rule every time a file is saved in order to avoid the hassle of manually formatting comments.
 
+```ts
+// Here is a comment that is too long to fit on the current line, given the configured maximum.
+// It also includes a line afterwards which originally isn't too wide to fit.
+```
+
+Which will be transformed into the following:
+
+```ts
+// Here is a comment that is too long to fit on the current line, given the
+// configured maximum. It also includes a line afterwards which originally isn't
+// too wide to fit.
+```
+
 This project aims to ease the process of writing long comments where each line needs to be cropped to a specific line length. This is similar to the [`max-len`](https://eslint.org/docs/rules/max-len) ESLint rule, but violations can be automatically fixed.
 
 **NB:** There are several cases wherein the rules will not attempt to automatically format comments. This is to accomodate cases wherein it is *not* desired to break a comment into multiple lines. Examples include comments that:
@@ -40,6 +53,60 @@ Add the following to your `.eslintrc` configuration:
 }
 ```
 
+## Configuration
+
+Both rules accept the same set of configuration options, as described by the
+provided TypeScript type declaration.
+
+Please refer to the individual rules for examples of how to apply these
+configurations in your ESLint config.
+
+```ts
+type Options = {
+  /**
+   * specifies how the auto-fix wrapping mechanism functions.
+   *
+   * - "overflow-only" ensures that only overflowing lines are reflowed to new
+   * lines,
+   *
+   * - whereas "compact" tries to produce as compact blocks as possible,
+   * potentially merging multiple nearby lines even though no overflow was
+   * occuring on the lines.
+   *
+   * - Finally, "compact-on-overflow" attempts to produce as compact blocks as
+   * possible, however only when overflow within a block has been detected.
+   *
+   * @default overflow-only
+   */
+  mode: "overflow-only" | "compact-on-overflow" | "compact";
+
+  /**
+   * specifies the maxmium length that a comment is allowed to take
+   *
+   * @default 80
+   */
+  maxLength: number;
+
+  /**
+   * if set to true, then overflow lines including comments will be ignored
+   *
+   * @default true
+   */
+  ignoreUrls: boolean;
+
+  /**
+   * attempts to avoid reflowing comments that contains code as this may break
+   * the semantic meaning of the code.
+   *
+   * NB: This option causes ESLint to be run on comment content in an attempt
+   * to see if the code inside is parsable.
+   *
+   * @default true
+   */
+  ignoreCommentsWithCode: boolean;
+};
+```
+
 ## Rules
 
 ### `comment-length/limit-single-line-comments`
@@ -69,11 +136,12 @@ Which will be transformed into:
 
 #### Options
 
-```json
+```jsonc
 {
   "comment-length/limit-single-line-comments": [
     "warn",
     {
+      "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
       "ignoreUrls": true,
       "ignoreCommentsWithCode": true
@@ -201,11 +269,12 @@ Which will be transformed into the snippet below when applying the automatic fix
 
 #### Options
 
-```json
+```jsonc
 {
   "comment-length/limit-multi-line-comments": [
     "warn",
     {
+      "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
       "ignoreUrls": true,
       "ignoreCommentsWithCode": true
