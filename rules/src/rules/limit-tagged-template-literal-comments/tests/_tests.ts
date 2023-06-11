@@ -10,7 +10,7 @@ import { limitTaggedTemplateLiteralCommentsRule } from "../rule";
 const ruleTester = new ESLintUtils.RuleTester({
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: "./tsconfig.json",
+    project: "./tsconfig.test.json",
     tsconfigRootDir: path.resolve(__dirname, "..", "..", "..", ".."),
     ecmaFeatures: {
       jsx: true,

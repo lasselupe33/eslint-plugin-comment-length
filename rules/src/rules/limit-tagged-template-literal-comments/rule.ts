@@ -111,7 +111,11 @@ export const limitTaggedTemplateLiteralCommentsRule = createRule<
               continue;
             }
 
-            if (currentChar === "/" && nextChar === "/") {
+            if (
+              currentChar === "/" &&
+              nextChar === "/" &&
+              quasi.value.cooked[cursor + 2] === " "
+            ) {
               currentLineComment = {
                 type: AST_TOKEN_TYPES.Line,
                 value: "",

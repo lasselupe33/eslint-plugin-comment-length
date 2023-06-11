@@ -23,5 +23,6 @@
     "noFallthroughCasesInSwitch": true,
     "target": "ESNext",
   },
-  "exclude": ["**/tests/**"]
+  "include": ["./src/**/*"],
+  "exclude": ["**/tests/**/*"]
 }
