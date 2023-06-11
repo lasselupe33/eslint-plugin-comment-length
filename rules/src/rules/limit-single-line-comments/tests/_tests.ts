@@ -3,8 +3,9 @@ import path from "path";
 import { ESLintUtils } from "@typescript-eslint/utils";
 import { getCode } from "../../../utils/testing.get-code";
 
-import { MessageIds, limitSingleLineCommentsRule } from "../rule";
+import {  limitSingleLineCommentsRule } from "../rule";
 import { defaultOptions } from "../../../typings.options";
+import { MessageIds } from "../../../const.message-ids";
 
 const ruleTester = new ESLintUtils.RuleTester({
   parser: "@typescript-eslint/parser",

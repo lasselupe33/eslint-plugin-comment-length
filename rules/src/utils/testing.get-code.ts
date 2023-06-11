@@ -20,13 +20,15 @@ export function getCode<TIds extends string, TOpts extends readonly unknown[]>(
   dirname: string,
   name: string,
   options: TOpts,
-  expectedError: TIds
+  expectedError: TIds,
+  repeat?: number
 ): InvalidTestCase<TIds, TOpts>;
 export function getCode<TIds extends string, TOpts extends readonly unknown[]>(
   dirname: string,
   name: string,
   options: TOpts,
-  expectedError?: TIds
+  expectedError?: TIds,
+  repeat?: number
 ): ValidTestCase<TOpts> | InvalidTestCase<TIds, TOpts> {
   const resolvedPath = resolver(dirname, `./${name}`);
 
@@ -53,7 +55,7 @@ export function getCode<TIds extends string, TOpts extends readonly unknown[]>(
 
   return {
     ...base,
-    errors: [{ messageId: expectedError }],
+    errors: new Array(repeat ?? 1).fill({ messageId: expectedError }),
     output: fs.readFileSync(expectedValuePath, "utf-8"),
   };
 }

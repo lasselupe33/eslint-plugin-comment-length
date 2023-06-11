@@ -19,9 +19,7 @@ export function fixOverflowingBlock(
   if (context.comment.lines.length === 1) {
     return fixer.replaceTextRange(
       context.comment.range,
-      `${" ".repeat(context.whitespaceSize)}/**\n${newValue}\n${" ".repeat(
-        context.whitespaceSize
-      )} */`
+      `/**\n${newValue}\n${" ".repeat(context.whitespaceSize)} */`
     );
   } else {
     // ... else we should simply replace the part of the comment which

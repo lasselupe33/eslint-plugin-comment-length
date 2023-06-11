@@ -22,5 +22,6 @@
     "noPropertyAccessFromIndexSignature": true,
     "noFallthroughCasesInSwitch": true,
     "target": "ESNext",
-  }
+  },
+  "exclude": ["**/tests/**"]
 }

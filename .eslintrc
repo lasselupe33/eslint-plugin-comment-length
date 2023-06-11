@@ -19,6 +19,7 @@
   "rules": {
     "comment-length/limit-single-line-comments": "warn",
     "comment-length/limit-multi-line-comments": "warn",
+    "comment-length/limit-tagged-template-literal-comments": "warn",
     "@typescript-eslint/no-use-before-define": "off",
     "import/no-unresolved": "off",
     "import/no-relative-packages": "error",
@@ -45,9 +46,7 @@
           "sibling",
           "index"
         ],
-        "pathGroupsExcludedImportTypes": [
-          "builtin"
-        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
         "newlines-between": "always"
       }
     ]
