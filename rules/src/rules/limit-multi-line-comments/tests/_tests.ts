@@ -25,18 +25,19 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
     getCode(__dirname, "valid.backticks", defaultOptions),
     getCode(__dirname, "valid.semantic", defaultOptions),
     getCode(__dirname, "valid.comment-within-comment", defaultOptions),
-    getCode(__dirname, "option.code-within", defaultOptions),
+    getCode(__dirname, "option.code-within", [
+      {
+        ...defaultOptions[0],
+        ignoreCommentsWithCode: true,
+      },
+    ] as const),
     getCode(__dirname, "option.no-urls", defaultOptions),
-    getCode(
-      __dirname,
-      "option.compact",
-      [
-        {
-          ...defaultOptions[0],
-          mode: "compact-on-overflow",
-        },
-      ] as const
-    ),
+    getCode(__dirname, "option.compact", [
+      {
+        ...defaultOptions[0],
+        mode: "compact-on-overflow",
+      },
+    ] as const),
   ],
   invalid: [
     getCode(

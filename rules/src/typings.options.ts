@@ -37,9 +37,10 @@ export type Options = {
    * the semantic meaning of the code.
    *
    * NB: This option causes ESLint to be run on comment content in an attempt
-   * to see if the code inside is parsable.
+   * to see if the code inside is parsable, which may have a significant
+   * performance impact depending on the parser used.
    *
-   * @default true
+   * @default false
    */
   ignoreCommentsWithCode: boolean;
 };
@@ -51,7 +52,7 @@ export const defaultOptions = [
     mode: "overflow-only",
     maxLength: 80,
     ignoreUrls: true,
-    ignoreCommentsWithCode: true,
+    ignoreCommentsWithCode: false,
   },
 ] satisfies RuleOptions;
 
