@@ -111,8 +111,12 @@ export function captureNextBlock(
           lines: blockLines,
           startIndex,
           endIndex: i,
-          lineOffsets: blockLines.map((it) => {
-            const whitespaceString = it.match(/^( |\t)*/)?.[0] ?? "";
+          lineOffsets: blockLines.map((it, lineIndex) => {
+            const whitespaceString = context.comment.value
+              .split("\n")
+              [startIndex + lineIndex]?.includes("*")
+              ? it.match(/^( |\t)*/)?.[0] ?? ""
+              : " ";
 
             return {
               string: whitespaceString,
@@ -138,8 +142,12 @@ export function captureNextBlock(
       lines: blockLines,
       startIndex,
       endIndex: context.comment.lines.length,
-      lineOffsets: blockLines.map((it) => {
-        const whitespaceString = it.match(/^( |\t)*/)?.[0] ?? "";
+      lineOffsets: blockLines.map((it, lineIndex) => {
+        const whitespaceString = context.comment.value
+          .split("\n")
+          [startIndex + lineIndex]?.includes("*")
+          ? it.match(/^( |\t)*/)?.[0] ?? ""
+          : " ";
 
         return {
           string: whitespaceString,

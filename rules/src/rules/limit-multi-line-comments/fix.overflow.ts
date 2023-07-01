@@ -35,17 +35,22 @@ export function fixOverflowingBlock(
       1 +
       rawLines.slice(0, fixableBlock.endIndex + 1).join("\n").length;
 
-    // ... but, in the rare case where the violating block starts on
+    let paddedValue = newValue;
+
+    // and, in the rare case where the violating block starts on
     // the same line as the start of the multi-comment
     // (i.e. /** my-comment...), then move it down to the next line,
     // to maximize the available space.
     if (fixableBlock.startIndex === 0) {
-      return fixer.replaceTextRange(
-        [rangeStart, rangeEnd],
-        `\n${context.whitespace.string}${newValue}`
-      );
-    } else {
-      return fixer.replaceTextRange([rangeStart, rangeEnd], newValue);
+      paddedValue = `\n${paddedValue}`;
     }
+
+    // ... and ensure that the end of the comment is actually pushed to the
+    // final line if it isn't already.
+    if (fixableBlock.endIndex === rawLines.length - 1) {
+      paddedValue = `${paddedValue}\n${context.whitespace.string} `;
+    }
+
+    return fixer.replaceTextRange([rangeStart, rangeEnd], paddedValue);
   }
 }
