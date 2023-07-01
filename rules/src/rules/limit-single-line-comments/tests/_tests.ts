@@ -21,6 +21,7 @@ const ruleTester = new ESLintUtils.RuleTester({
 ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
   valid: [
     getCode(__dirname, "valid.basic", defaultOptions),
+    getCode(__dirname, "valid.backticks", defaultOptions),
     getCode(__dirname, "valid.semantic", defaultOptions),
     getCode(__dirname, "valid.same-line", defaultOptions),
     getCode(__dirname, "valid.comment-within-comment", defaultOptions),

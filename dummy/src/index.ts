@@ -18,10 +18,12 @@ if (foo) {
 
   if (2 > foo) {
     console.log("what?");
+    // ```ts
     // if (input.password !== EXISTING_USER_PASSWORD) {
     //    // test?
     //   return makeFailure(GetUserByCredentialsErrorCodes.INVALID_PASSWORDDDDDDDD);
     // }
+    // ```
   }
 }
 

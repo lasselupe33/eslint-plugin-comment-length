@@ -43,8 +43,9 @@ export function limitSingleLineComments(
       ...options,
       whitespace: {
         string: whitespaceString,
-        size:
-          whitespaceString.split("").reduce(
+        size: whitespaceString
+          .split("")
+          .reduce(
             (acc, curr) => acc + (curr === "\t" ? options.tabSize : 1),
             0
           ),
@@ -68,14 +69,17 @@ export function limitSingleLineComments(
     // ensure that we only visit a captured block once
     i += currentBlock.endIndex - currentBlock.startIndex;
 
+    const nearbyComments = captureNearbyComments(comments, i);
+    const wrappedByBackticks =
+      (nearbyComments?.value.trimStart().startsWith("` ") ||
+        nearbyComments?.value.trimStart().startsWith("``")) &&
+      nearbyComments?.value.trimEnd().endsWith("`");
+
     if (
       !fixableComment ||
+      wrappedByBackticks ||
       isCommentInComment(fixableComment.value) ||
-      isCodeInComment(
-        captureNearbyComments(comments, i)?.value,
-        ruleContext.parserPath,
-        context
-      )
+      isCodeInComment(nearbyComments?.value, ruleContext.parserPath, context)
     ) {
       continue;
     }
