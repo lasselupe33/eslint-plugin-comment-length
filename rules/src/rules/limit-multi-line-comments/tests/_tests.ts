@@ -60,6 +60,12 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
     ),
     getCode(
       __dirname,
+      "invalid.multiple-lines",
+      defaultOptions,
+      MessageIds.EXCEEDS_MAX_LENGTH
+    ),
+    getCode(
+      __dirname,
       "invalid.malformed",
       defaultOptions,
       MessageIds.EXCEEDS_MAX_LENGTH
