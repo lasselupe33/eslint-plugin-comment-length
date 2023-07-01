@@ -5,7 +5,8 @@ import { limitTaggedTemplateLiteralCommentsRule } from "./rules/limit-tagged-tem
 export const rules = {
   "limit-single-line-comments": limitSingleLineCommentsRule,
   "limit-multi-line-comments": limitMultiLineCommentsRule,
-  "limit-tagged-template-literal-comments": limitTaggedTemplateLiteralCommentsRule,
+  "limit-tagged-template-literal-comments":
+    limitTaggedTemplateLiteralCommentsRule,
 };
 
 export const configs = {
