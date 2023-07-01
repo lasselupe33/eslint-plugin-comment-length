@@ -43,6 +43,18 @@ export type Options = {
    * @default false
    */
   ignoreCommentsWithCode: boolean;
+
+  /**
+   * in case you are using tabs to indent your code, then this plugin needs to
+   * know the configured tab size, in order to properly determine when a
+   * comment exceeds the configured max length.
+   *
+   * If you are using VSCode, then this option should match the
+   * `editor.tabSize` option.
+   *
+   * @default 2
+   */
+  tabSize: number;
 };
 
 export type RuleOptions = [Options];
@@ -53,6 +65,7 @@ export const defaultOptions = [
     maxLength: 80,
     ignoreUrls: true,
     ignoreCommentsWithCode: false,
+    tabSize: 2,
   },
 ] satisfies RuleOptions;
 

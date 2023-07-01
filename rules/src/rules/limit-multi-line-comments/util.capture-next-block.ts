@@ -1,6 +1,8 @@
 import { Context } from "../../typings.context";
 import { isLineOverflowing } from "../../utils/is-line-overflowing";
 
+import { MultilineBlock } from "./typings.block";
+
 /**
  * captures the next logical group/block in the provided multi-line comment
  * content, based on a set of rules.
@@ -16,22 +18,14 @@ import { isLineOverflowing } from "../../utils/is-line-overflowing";
  *
  * 4) Lines will only be grouped in case the current line of the block to be
  * constructed actually is overflowing. This avoids issues where auto-fixing
- * 'sucks' a line up even though the previous line should have been considered a
- * logical end to a block.
+ * 'sucks' a line up even though the previous line should have been considered
+ * a logical end to a block.
  */
 export function captureNextBlock(
   ignoreFollowingLines: boolean,
   initialStartIndex: number,
   context: Context
-): [
-  {
-    lines: string[];
-    lineOffsets: number[];
-    startIndex: number;
-    endIndex: number;
-  },
-  boolean
-] {
+): [Omit<MultilineBlock, "value">, boolean] {
   let ignoreLines = ignoreFollowingLines;
   let startIndex = initialStartIndex;
 
@@ -43,7 +37,10 @@ export function captureNextBlock(
 
     // ensure that lines within backticks is skipped (and that the line itself
     // is ignored as it acts as a marker).
-    if (line?.startsWith("` ") || line?.startsWith("``")) {
+    if (
+      line?.trimStart().startsWith("` ") ||
+      line?.trimStart().startsWith("``")
+    ) {
       ignoreLines = !ignoreLines;
       continue;
     }
@@ -84,11 +81,28 @@ export function captureNextBlock(
       break;
     }
 
+    const currLineOffset =
+      currLine
+        .match(/^( |\t)*/)?.[0]
+        ?.split("")
+        .reduce(
+          (acc, curr) => acc + (curr === "\t" ? context.tabSize : 1),
+          0
+        ) ?? 0;
+
+    const nextLineOffset =
+      currLine
+        .match(/^( |\t)*/)?.[0]
+        ?.split("")
+        .reduce(
+          (acc, curr) => acc + (curr === "\t" ? context.tabSize : 1),
+          0
+        ) ?? 0;
+
     if (
       !nextLine ||
       nextLine.trim() === "" ||
-      (currLine.match(/^ */)?.[0]?.length ?? 0) !==
-        (nextLine.match(/^ */)?.[0]?.length ?? 0) ||
+      currLineOffset !== nextLineOffset ||
       (context.mode === "overflow-only" &&
         !isLineOverflowing(currLine + (nextLine.split(" ")[0] ?? ""), context))
     ) {
@@ -97,9 +111,20 @@ export function captureNextBlock(
           lines: blockLines,
           startIndex,
           endIndex: i,
-          lineOffsets: blockLines.map(
-            (it) => it.match(/^ */)?.[0]?.length ?? 0
-          ),
+          lineOffsets: blockLines.map((it) => {
+            const whitespaceString = it.match(/^( |\t)*/)?.[0] ?? "";
+
+            return {
+              string: whitespaceString,
+              size:
+                whitespaceString
+                  .split("")
+                  .reduce(
+                    (acc, curr) => acc + (curr === "\t" ? context.tabSize : 1),
+                    0
+                  ) ?? 0,
+            };
+          }),
         },
         ignoreLines,
       ];
@@ -113,7 +138,20 @@ export function captureNextBlock(
       lines: blockLines,
       startIndex,
       endIndex: context.comment.lines.length,
-      lineOffsets: blockLines.map((it) => it.match(/^ */)?.[0]?.length ?? 0),
+      lineOffsets: blockLines.map((it) => {
+        const whitespaceString = it.match(/^( |\t)*/)?.[0] ?? "";
+
+        return {
+          string: whitespaceString,
+          size:
+            whitespaceString
+              .split("")
+              .reduce(
+                (acc, curr) => acc + (curr === "\t" ? context.tabSize : 1),
+                0
+              ) ?? 0,
+        };
+      }),
     },
     ignoreLines,
   ];

@@ -18,6 +18,7 @@ export function limitMultiLineComments(
   comments: TSESTree.Comment[]
 ) {
   const sourceCode = ruleContext.getSourceCode();
+  const lines = sourceCode.getLines();
 
   for (const comment of comments) {
     const commentRange = comment.range;
@@ -32,10 +33,21 @@ export function limitMultiLineComments(
       continue;
     }
 
+    const line = lines[comment.loc.start.line - 1];
+    const whitespaceString = line?.split("/*")[0] ?? "";
+
     const commentLines = getCommentLines(comment);
     const context = {
       ...options,
-      whitespaceSize: comment.loc?.start.column ?? 0,
+      whitespace: {
+        string: whitespaceString,
+        size: whitespaceString
+          .split("")
+          .reduce(
+            (acc, curr) => acc + (curr === "\t" ? options.tabSize : 1),
+            0
+          ),
+      },
       boilerplateSize: getBoilerPlateSize(commentLines),
       comment: {
         range: commentRange,
@@ -61,5 +73,5 @@ export function limitMultiLineComments(
 }
 
 function getCommentLines(comment: TSESTree.BlockComment): string[] {
-  return comment.value.split("\n").map((it) => it.replace(/^ *?\* ?/, ""));
+  return comment.value.split("\n").map((it) => it.replace(/^( |\t)*?\*/, ""));
 }

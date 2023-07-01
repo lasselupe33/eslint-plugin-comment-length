@@ -8,11 +8,10 @@ import { MULTILINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
  * represents the fixed format of the block.
  */
 export function formatBlock(fixable: MultilineBlock, context: Context): string {
-  const whitespace = " ".repeat(context.whitespaceSize);
   const lineStartSize =
-    context.whitespaceSize +
+    context.whitespace.size +
     MULTILINE_BOILERPLATE_SIZE +
-    (fixable.lineOffsets[0] ?? 0);
+    (fixable.lineOffsets[0]?.size ?? 0);
   const words = fixable.value.trim().split(" ");
 
   const newValue = words.reduce(
@@ -26,31 +25,33 @@ export function formatBlock(fixable: MultilineBlock, context: Context): string {
         acc.currentLineLength !== lineStartSize;
 
       if (splitToNewline) {
-        const nextLine = `${whitespace} *${" ".repeat(
+        const nextLine = `${context.whitespace.string} *${
           fixable.lineOffsets[
             Math.min(acc.currentLineIndex + 1, fixable.lineOffsets.length - 1)
-          ] ?? 0
-        )} ${curr}`;
+          ]?.string ?? ""
+        }${curr} `;
 
         return {
-          value: `${acc.value}\n${nextLine}`,
+          value: `${acc.value.trimEnd()}\n${nextLine}`,
           currentLineLength: nextLine.length,
           currentLineIndex: acc.currentLineIndex + 1,
         };
       } else {
         return {
-          value: `${acc.value} ${curr}`,
+          value: `${acc.value}${curr} `,
           currentLineLength: lengthIfAdded,
           currentLineIndex: acc.currentLineIndex,
         };
       }
     },
     {
-      value: `${whitespace} *${" ".repeat(fixable.lineOffsets[0] ?? 0)}`,
+      value: `${context.whitespace.string} *${
+        fixable.lineOffsets[0]?.string ?? ""
+      }`,
       currentLineLength: lineStartSize,
       currentLineIndex: 0,
     }
   );
 
-  return newValue.value;
+  return newValue.value.trimEnd();
 }

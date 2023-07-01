@@ -4,10 +4,13 @@ import type { Options } from "./typings.options";
 
 export type Context = Options & {
   /**
-   * specifies the amount of whitespace a particular comment has to the left of
-   * it.
+   * specifies the amount and format of whitespace a particular comment has to
+   * the left of it.
    */
-  whitespaceSize: number;
+  whitespace: {
+    string: string;
+    size: number;
+  };
 
   /**
    * specifies the amount if characters that a particular comment boilerplate

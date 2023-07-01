@@ -16,7 +16,10 @@ export type MultilineBlock = {
    * specifies, for each line, how much whitespace there is to the left of the
    * comment, i.e. its offset to the left.
    */
-  lineOffsets: number[];
+  lineOffsets: Array<{
+    string: string;
+    size: number;
+  }>;
 
   /**
    * specifies the index that the first line of this block has within the

@@ -14,7 +14,7 @@ export function canBlockBeCompated(block: MultilineBlock, context: Context) {
 
     const firstWordOnCurrentLine = curr.trim().split(" ")[0];
     const lengthOfPrevLine =
-      prev.length + context.boilerplateSize + context.whitespaceSize + 1;
+      prev.length + context.boilerplateSize + context.whitespace.size + 1;
 
     if (
       lengthOfPrevLine + 1 + (firstWordOnCurrentLine?.length ?? 0) + 1 <=

@@ -22,6 +22,7 @@ export function limitSingleLineComments(
   comments: TSESTree.LineComment[]
 ) {
   const sourceCode = ruleContext.getSourceCode();
+  const lines = sourceCode.getLines();
 
   for (let i = 0; i < comments.length; i++) {
     const currentCommentLine = comments[i];
@@ -35,9 +36,19 @@ export function limitSingleLineComments(
       continue;
     }
 
+    const line = lines[currentCommentLine.loc.start.line - 1];
+    const whitespaceString = line?.split("//")[0] ?? "";
+
     let context = {
       ...options,
-      whitespaceSize: currentCommentLine?.loc?.start.column ?? 0,
+      whitespace: {
+        string: whitespaceString,
+        size:
+          whitespaceString.split("").reduce(
+            (acc, curr) => acc + (curr === "\t" ? options.tabSize : 1),
+            0
+          ),
+      },
       boilerplateSize: SINGLE_LINE_COMMENT_BOILERPLATE_SIZE,
       comment: {
         range: currentCommentLine.range,

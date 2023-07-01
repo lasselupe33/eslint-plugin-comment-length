@@ -9,9 +9,8 @@ export function formatBlock(
   block: TSESTree.LineComment,
   context: Context
 ): string {
-  const whitespace = " ".repeat(context.whitespaceSize);
   const lineStartSize =
-    context.whitespaceSize + SINGLE_LINE_COMMENT_BOILERPLATE_SIZE;
+    context.whitespace.size + SINGLE_LINE_COMMENT_BOILERPLATE_SIZE;
   const words = block.value.trim().split(" ");
 
   const newValue = words.reduce(
@@ -28,7 +27,7 @@ export function formatBlock(
 
       if (splitToNewline) {
         return {
-          value: `${acc.value}\n${whitespace}// ${curr}`,
+          value: `${acc.value}\n${context.whitespace.string}// ${curr}`,
           currentLineLength: lineStartSize + curr.length,
         };
       } else {

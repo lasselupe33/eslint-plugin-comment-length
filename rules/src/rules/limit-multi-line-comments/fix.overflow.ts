@@ -19,7 +19,7 @@ export function fixOverflowingBlock(
   if (context.comment.lines.length === 1) {
     return fixer.replaceTextRange(
       context.comment.range,
-      `/**\n${newValue}\n${" ".repeat(context.whitespaceSize)} */`
+      `/**\n${newValue}\n${context.whitespace.string} */`
     );
   } else {
     // ... else we should simply replace the part of the comment which
@@ -42,7 +42,7 @@ export function fixOverflowingBlock(
     if (fixableBlock.startIndex === 0) {
       return fixer.replaceTextRange(
         [rangeStart, rangeEnd],
-        `\n${" ".repeat(context.whitespaceSize)}${newValue}`
+        `\n${context.whitespace.string}${newValue}`
       );
     } else {
       return fixer.replaceTextRange([rangeStart, rangeEnd], newValue);
