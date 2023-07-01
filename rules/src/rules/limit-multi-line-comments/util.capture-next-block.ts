@@ -91,8 +91,8 @@ export function captureNextBlock(
         ) ?? 0;
 
     const nextLineOffset =
-      currLine
-        .match(/^( |\t)*/)?.[0]
+      nextLine
+        ?.match(/^( |\t)*/)?.[0]
         ?.split("")
         .reduce(
           (acc, curr) => acc + (curr === "\t" ? context.tabSize : 1),
