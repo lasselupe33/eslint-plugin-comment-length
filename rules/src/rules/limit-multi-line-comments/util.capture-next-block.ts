@@ -105,7 +105,7 @@ export function captureNextBlock(
       currLineOffset !== nextLineOffset ||
       (context.mode === "overflow-only" &&
         !isLineOverflowing(
-          currLine + (nextLine.trimStart().split(" ")[0] ?? ""),
+          `${currLine} ${nextLine.trimStart().split(" ")[0] ?? ""}`.trimEnd(),
           context
         ))
     ) {
