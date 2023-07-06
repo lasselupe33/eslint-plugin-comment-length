@@ -55,6 +55,16 @@ export type Options = {
    * @default 2
    */
   tabSize: number;
+
+  /**
+   * attempts to wrap at logical pauses in the comments like punctuation
+   *
+   * This will often wrap the text sooner than if this was disabled,
+   * but it should be easier to read.
+   *
+   * @default true
+   */
+  logicalWrap: boolean;
 };
 
 export type RuleOptions = [Options];
@@ -66,6 +76,7 @@ export const defaultOptions = [
     ignoreUrls: true,
     ignoreCommentsWithCode: false,
     tabSize: 2,
+    logicalWrap: true,
   },
 ] satisfies RuleOptions;
 

@@ -96,5 +96,12 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
       ] as const,
       MessageIds.CAN_COMPACT
     ),
+    getCode(__dirname, "option.no-logical-wrap", [
+      {
+        ...defaultOptions[0],
+        logicalWrap: false
+      }
+    ] as const,
+    MessageIds.EXCEEDS_MAX_LENGTH),
   ],
 });

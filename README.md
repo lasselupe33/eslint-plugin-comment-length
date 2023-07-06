@@ -132,6 +132,16 @@ type Options = {
    * @default true
    */
   ignoreCommentsWithCode: boolean;
+
+  /**
+   * attempts to wrap at logical pauses in the comments like punctuation
+   *
+   * This will often wrap the text sooner than if this was disabled,
+   * but it should be easier to read.
+   *
+   * @default true
+   */
+  logicalWrap: boolean;
 };
 ```
 
@@ -172,7 +182,8 @@ Which will be transformed into:
       "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
       "ignoreUrls": true,
-      "ignoreCommentsWithCode": true
+      "ignoreCommentsWithCode": true,
+      "logicalWrap": true,
     }
   ]
 }
@@ -305,7 +316,8 @@ Which will be transformed into the snippet below when applying the automatic fix
       "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
       "ignoreUrls": true,
-      "ignoreCommentsWithCode": true
+      "ignoreCommentsWithCode": true,
+      "logicalWrap": true,
     }
   ]
 }
@@ -472,7 +484,8 @@ const myCss = css`
       "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
       "ignoreUrls": true,
-      "ignoreCommentsWithCode": true
+      "ignoreCommentsWithCode": true,
+      "logicalWrap": true,
     }
   ]
 }
