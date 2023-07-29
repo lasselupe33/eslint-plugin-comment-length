@@ -24,6 +24,7 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
     getCode(__dirname, "valid.backticks", defaultOptions),
     getCode(__dirname, "valid.semantic", defaultOptions),
     getCode(__dirname, "valid.same-line", defaultOptions),
+    getCode(__dirname, "valid.exactly-80", defaultOptions),
     getCode(__dirname, "valid.comment-within-comment", defaultOptions),
     getCode(__dirname, "option.code-within", [
       {

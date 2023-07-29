@@ -24,6 +24,7 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
     getCode(__dirname, "valid.jsdoc", defaultOptions),
     getCode(__dirname, "valid.backticks", defaultOptions),
     getCode(__dirname, "valid.semantic", defaultOptions),
+    getCode(__dirname, "valid.exactly-80", defaultOptions),
     getCode(__dirname, "valid.comment-within-comment", defaultOptions),
     getCode(__dirname, "option.code-within", [
       {

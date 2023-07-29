@@ -3,7 +3,7 @@ import { TSESLint } from "@typescript-eslint/utils";
 import { Context } from "../../typings.context";
 
 import { MultilineBlock } from "./typings.block";
-import { MULTILINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
+import { FIRST_LINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
 import { formatBlock } from "./util.format-block";
 
 export function fixOverflowingBlock(
@@ -27,11 +27,11 @@ export function fixOverflowingBlock(
     const rawLines = context.comment.value.split("\n");
     const rangeStart =
       context.comment.range[0] +
-      MULTILINE_BOILERPLATE_SIZE +
+      FIRST_LINE_BOILERPLATE_SIZE +
       rawLines.slice(0, fixableBlock.startIndex).join("\n").length;
     const rangeEnd =
       context.comment.range[0] +
-      MULTILINE_BOILERPLATE_SIZE -
+      FIRST_LINE_BOILERPLATE_SIZE -
       1 +
       rawLines.slice(0, fixableBlock.endIndex + 1).join("\n").length;
 
