@@ -1,9 +1,6 @@
 import { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
 
 import { Context } from "../../typings.context";
-import { isCodeInComment } from "../../utils/is-code-in-comment";
-import { isCommentInComment } from "../../utils/is-comment-in-comment";
-import { isJSDocLikeComment } from "../../utils/is-jsdoc-like";
 import { isLineOverflowing } from "../../utils/is-line-overflowing";
 
 import { MultilineBlock } from "./typings.block";

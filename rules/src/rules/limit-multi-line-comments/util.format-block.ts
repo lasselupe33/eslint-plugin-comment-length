@@ -33,7 +33,7 @@ export function formatBlock(fixable: MultilineBlock, context: Context): string {
         acc.currentLineLength >= context.maxLength / 2 &&
         previousWord &&
         previousWord.at(-1) &&
-        isPunctuation(previousWord.at(-1)!) &&
+        isPunctuation(previousWord.at(-1)) &&
         previousWord.length > 1 &&
         !isAnotherWrapPointComing(
           acc.currentLineLength,

@@ -1,5 +1,5 @@
 const punctuation = [",", ".", "?", ":", "!", ";"];
 
-export function isPunctuation(char: string): boolean {
-  return punctuation.includes(char);
+export function isPunctuation(char: string | undefined): boolean {
+  return !!char && punctuation.includes(char);
 }
