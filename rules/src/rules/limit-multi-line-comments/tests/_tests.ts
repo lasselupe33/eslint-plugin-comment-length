@@ -22,6 +22,19 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
   valid: [
     getCode(__dirname, "valid.basic", defaultOptions),
     getCode(__dirname, "valid.jsdoc", defaultOptions),
+    getCode(__dirname, "valid.oneline-jsdoc", defaultOptions),
+    getCode(__dirname, "valid.oneline-jsdoc", [
+      {
+        ...defaultOptions[0],
+        mode: "compact",
+      },
+    ] as const),
+    getCode(__dirname, "valid.jsdoc-compact", [
+      {
+        ...defaultOptions[0],
+        mode: "compact",
+      },
+    ] as const),
     getCode(__dirname, "valid.backticks", defaultOptions),
     getCode(__dirname, "valid.semantic", defaultOptions),
     getCode(__dirname, "valid.comment-within-comment", defaultOptions),
@@ -114,5 +127,12 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
       ] as const,
       MessageIds.CAN_COMPACT
     ),
+    getCode(__dirname, "option.logical-wrap", [
+      {
+        ...defaultOptions[0],
+        logicalWrap: true
+      }
+    ] as const,
+    MessageIds.EXCEEDS_MAX_LENGTH),
   ],
 });

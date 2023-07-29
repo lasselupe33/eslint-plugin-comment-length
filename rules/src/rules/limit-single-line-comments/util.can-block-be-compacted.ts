@@ -3,12 +3,11 @@ import { TSESTree } from "@typescript-eslint/utils";
 import { Context } from "../../typings.context";
 import { isURL } from "../../utils/is-url";
 
+import { CommentBlock } from "./typings.block";
+
 export function canBlockBeCompated(
   comments: TSESTree.LineComment[],
-  block: {
-    startIndex: number;
-    endIndex: number;
-  },
+  block: CommentBlock,
   context: Context
 ): boolean {
   for (let i = block.startIndex + 1; i <= block.endIndex; i++) {

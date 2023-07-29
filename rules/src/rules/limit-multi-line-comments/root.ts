@@ -3,6 +3,9 @@ import { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
 
 import { Context } from "../../typings.context";
 import { Options } from "../../typings.options";
+import { isCodeInComment } from "../../utils/is-code-in-comment";
+import { isCommentInComment } from "../../utils/is-comment-in-comment";
+import { isJSDocLikeComment } from "../../utils/is-jsdoc-like";
 import { isCommentOnOwnLine } from "../../utils/is-on-own-line";
 import { isSemanticComment } from "../../utils/is-semantic-comment";
 
@@ -56,7 +59,15 @@ export function limitMultiLineComments(
       },
     } satisfies Context;
 
-    const blocks = extractBlocksFromMultilineComment(context);
+    // Extract all valid blocks, but immediately remove those that should be
+    // ignored no matter what.
+    const blocks = extractBlocksFromMultilineComment(context).filter(
+      (block) =>
+        !block.lines.some(
+          (line) => isCommentInComment(line) || isJSDocLikeComment(line)
+        ) && !isCodeInComment(block.value, ruleContext.parserPath, context)
+    );
+
     const overflowingBlocks = detectOverflowInMultilineBlocks(
       ruleContext,
       context,
