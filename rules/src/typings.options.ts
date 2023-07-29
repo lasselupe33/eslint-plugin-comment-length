@@ -26,6 +26,17 @@ export type Options = {
   maxLength: number;
 
   /**
+   * attempts to wrap at logical pauses in comments based on where punctuation
+   * is found.
+   *
+   * This will often wrap the text sooner than if this was disabled,
+   * but it potentially makes it easier to read comments.
+   *
+   * @default false
+   */
+  logicalWrap: boolean;
+
+  /**
    * if set to true, then overflow lines including comments will be ignored
    *
    * @default true
@@ -55,16 +66,6 @@ export type Options = {
    * @default 2
    */
   tabSize: number;
-
-  /**
-   * attempts to wrap at logical pauses in the comments like punctuation
-   *
-   * This will often wrap the text sooner than if this was disabled,
-   * but it should be easier to read.
-   *
-   * @default true
-   */
-  logicalWrap: boolean;
 };
 
 export type RuleOptions = [Options];
@@ -76,7 +77,7 @@ export const defaultOptions = [
     ignoreUrls: true,
     ignoreCommentsWithCode: false,
     tabSize: 2,
-    logicalWrap: true,
+    logicalWrap: false,
   },
 ] satisfies RuleOptions;
 
@@ -90,6 +91,8 @@ export const optionsSchema = [
       maxLength: { type: "integer" },
       ignoreUrls: { type: "boolean" },
       ignoreCommentsWithCode: { type: "boolean" },
+      tabSize: { type: "integer" },
+      logicalWrap: { type: "boolean" },
     },
   },
 ] as [JSONSchema4];

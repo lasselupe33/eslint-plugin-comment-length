@@ -25,6 +25,12 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
     getCode(__dirname, "valid.semantic", defaultOptions),
     getCode(__dirname, "valid.same-line", defaultOptions),
     getCode(__dirname, "valid.comment-within-comment", defaultOptions),
+    getCode(__dirname, "option.no-compact", [
+      {
+        ...defaultOptions[0],
+        mode: "compact",
+      },
+    ] as const),
     getCode(__dirname, "option.code-within", [
       {
         ...defaultOptions[0],
@@ -96,12 +102,16 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
       ] as const,
       MessageIds.CAN_COMPACT
     ),
-    getCode(__dirname, "option.no-logical-wrap", [
-      {
-        ...defaultOptions[0],
-        logicalWrap: false
-      }
-    ] as const,
-    MessageIds.EXCEEDS_MAX_LENGTH),
+    getCode(
+      __dirname,
+      "option.logical-wrap",
+      [
+        {
+          ...defaultOptions[0],
+          logicalWrap: true,
+        },
+      ] as const,
+      MessageIds.EXCEEDS_MAX_LENGTH
+    ),
   ],
 });

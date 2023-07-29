@@ -27,6 +27,7 @@ export function formatBlock(fixable: MultilineBlock, context: Context): string {
         acc.currentLineLength !== lineStartSize;
 
       const previousWord = words[index - 1];
+
       const splitEarly =
         context.logicalWrap &&
         acc.currentLineLength >= context.maxLength / 2 &&
@@ -39,6 +40,7 @@ export function formatBlock(fixable: MultilineBlock, context: Context): string {
           context.maxLength,
           words.slice(index)
         );
+
       if (splitToNewline || splitEarly) {
         const nextLine = `${context.whitespace.string} *${
           fixable.lineOffsets[

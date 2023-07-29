@@ -127,10 +127,10 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
       ] as const,
       MessageIds.CAN_COMPACT
     ),
-    getCode(__dirname, "option.no-logical-wrap", [
+    getCode(__dirname, "option.logical-wrap", [
       {
         ...defaultOptions[0],
-        logicalWrap: false
+        logicalWrap: true
       }
     ] as const,
     MessageIds.EXCEEDS_MAX_LENGTH),

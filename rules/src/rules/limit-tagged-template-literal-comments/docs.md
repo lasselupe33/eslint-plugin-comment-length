@@ -40,8 +40,10 @@ const myCss = css`
       // the configurations below will be propagated to the other rules that this rule extends.
       "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
+      "logicalWrap": true,
       "ignoreUrls": true,
-      "ignoreCommentsWithCode": true
+      "ignoreCommentsWithCode": true,
+      "tabSize": 2
     }
   ]
 }

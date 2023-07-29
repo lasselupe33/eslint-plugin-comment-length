@@ -18,6 +18,7 @@ export function formatBlock(
     (acc, curr, index) => {
       const currentWordIsURL = isURL(curr);
       const lengthIfAdded = acc.currentLineLength + curr.length + 1;
+
       // We can safely split to a new line in case we are reaching and
       // overflowing line AND if there is at least one word on the current line.
       const splitToNewline =
@@ -26,6 +27,7 @@ export function formatBlock(
         (!context.ignoreUrls || !currentWordIsURL);
 
       const previousWord = words[index - 1];
+
       const splitEarly =
         context.logicalWrap &&
         acc.currentLineLength >= context.maxLength / 2 &&
@@ -37,6 +39,7 @@ export function formatBlock(
           context.maxLength,
           words.slice(index)
         );
+
       if (splitToNewline || splitEarly) {
         return {
           value: `${acc.value}\n${context.whitespace.string}// ${curr}`,
