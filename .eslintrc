@@ -18,7 +18,6 @@
   ],
   "rules": {
     "comment-length/limit-tagged-template-literal-comments": "warn",
-    "@typescript-eslint/no-use-before-define": "off",
     "import/no-unresolved": "off",
     "import/no-relative-packages": "error",
     "import/no-extraneous-dependencies": [
@@ -57,7 +56,10 @@
       ],
       "extends": [
         "plugin:@typescript-eslint/recommended"
-      ]
+      ],
+      "rules": {
+        "@typescript-eslint/no-use-before-define": "off"
+      }
     }
   ]
 }

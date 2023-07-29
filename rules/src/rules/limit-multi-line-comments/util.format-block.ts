@@ -1,4 +1,6 @@
 import { Context } from "../../typings.context";
+import { isAnotherWrapPointComing } from "../../utils/is-another-wrap-point-coming";
+import { isPunctuation } from "../../utils/is-punctuation";
 
 import { MultilineBlock } from "./typings.block";
 import { MULTILINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
@@ -15,7 +17,7 @@ export function formatBlock(fixable: MultilineBlock, context: Context): string {
   const words = fixable.value.trim().split(" ");
 
   const newValue = words.reduce(
-    (acc, curr) => {
+    (acc, curr, index) => {
       const lengthIfAdded = acc.currentLineLength + curr.length + 1; // + 1 to act as a final space, i.e. " "
 
       // We can safely split to a new line in case we are reaching and
@@ -24,7 +26,22 @@ export function formatBlock(fixable: MultilineBlock, context: Context): string {
         lengthIfAdded > context.maxLength &&
         acc.currentLineLength !== lineStartSize;
 
-      if (splitToNewline) {
+      const previousWord = words[index - 1];
+
+      const splitEarly =
+        context.logicalWrap &&
+        acc.currentLineLength >= context.maxLength / 2 &&
+        previousWord &&
+        previousWord.at(-1) &&
+        isPunctuation(previousWord.at(-1)) &&
+        previousWord.length > 1 &&
+        !isAnotherWrapPointComing(
+          acc.currentLineLength,
+          context.maxLength,
+          words.slice(index)
+        );
+
+      if (splitToNewline || splitEarly) {
         const nextLine = `${context.whitespace.string} *${
           fixable.lineOffsets[
             Math.min(acc.currentLineIndex + 1, fixable.lineOffsets.length - 1)

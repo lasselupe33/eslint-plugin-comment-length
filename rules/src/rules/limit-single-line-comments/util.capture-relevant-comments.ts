@@ -5,6 +5,7 @@ import { isLineOverflowing } from "../../utils/is-line-overflowing";
 import { isCommentOnOwnLine } from "../../utils/is-on-own-line";
 import { isSemanticComment } from "../../utils/is-semantic-comment";
 
+import { CommentBlock } from "./typings.block";
 import { mergeComments } from "./util.merge-comments";
 
 export function captureRelevantCommentsIntoBlock(
@@ -12,11 +13,7 @@ export function captureRelevantCommentsIntoBlock(
   comments: TSESTree.LineComment[],
   startIndex: number,
   context: Context
-): {
-  mergedComment: TSESTree.LineComment | undefined;
-  startIndex: number;
-  endIndex: number;
-} {
+): CommentBlock {
   let comment = comments[startIndex];
 
   if (!comment) {

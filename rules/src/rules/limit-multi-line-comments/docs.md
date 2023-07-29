@@ -52,8 +52,10 @@ Which will be transformed into the snippet below when applying the automatic fix
     {
       "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
+      "logicalWrap": true,
       "ignoreUrls": true,
-      "ignoreCommentsWithCode": true
+      "ignoreCommentsWithCode": true,
+      "tabSize": 2
     }
   ]
 }

@@ -104,6 +104,17 @@ type Options = {
   maxLength: number;
 
   /**
+   * attempts to wrap at logical pauses in comments based on where punctuation
+   * is found.
+   *
+   * This will often wrap the text sooner than if this was disabled,
+   * but it potentially makes it easier to read comments.
+   *
+   * @default false
+   */
+  logicalWrap: boolean;
+
+  /**
    * in case you are using tabs to indent your code, then this plugin needs to
    * know the configured tab size, in order to properly determine when a comment
    * exceeds the configured max length.
@@ -171,8 +182,10 @@ Which will be transformed into:
     {
       "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
+      "logicalWrap": true,
       "ignoreUrls": true,
-      "ignoreCommentsWithCode": true
+      "ignoreCommentsWithCode": true,
+      "tabSize": 2
     }
   ]
 }
@@ -304,8 +317,10 @@ Which will be transformed into the snippet below when applying the automatic fix
     {
       "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
+      "logicalWrap": true,
       "ignoreUrls": true,
-      "ignoreCommentsWithCode": true
+      "ignoreCommentsWithCode": true,
+      "tabSize": 2
     }
   ]
 }
@@ -471,8 +486,10 @@ const myCss = css`
       // the configurations below will be propagated to the other rules that this rule extends.
       "mode": "overflow-only" | "compact-on-overflow" | "compact",
       "maxLength": 80,
+      "logicalWrap": true,
       "ignoreUrls": true,
-      "ignoreCommentsWithCode": true
+      "ignoreCommentsWithCode": true,
+      "tabSize": 2
     }
   ]
 }
