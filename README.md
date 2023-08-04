@@ -127,7 +127,7 @@ type Options = {
   tabSize: number;
 
   /**
-   * if set to true, then overflow lines including comments will be ignored
+   * if set to true, then overflow lines including URLs will be ignored
    *
    * @default true
    */
