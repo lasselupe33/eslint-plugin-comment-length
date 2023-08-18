@@ -1,3 +1,6 @@
+import { RuleModule } from "@typescript-eslint/utils/ts-eslint";
+import type { ESLint, Linter } from "eslint";
+
 import { limitMultiLineCommentsRule } from "./rules/limit-multi-line-comments/rule";
 import { limitSingleLineCommentsRule } from "./rules/limit-single-line-comments/rule";
 import { limitTaggedTemplateLiteralCommentsRule } from "./rules/limit-tagged-template-literal-comments/rule";
@@ -17,4 +20,16 @@ export const configs = {
       "comment-length/limit-multi-line-comments": ["warn"],
     },
   },
+} satisfies Record<
+  string,
+  | ESLint.ConfigData<Linter.RulesRecord>
+  | Linter.FlatConfig
+  | Linter.FlatConfig[]
+>;
+
+export default {
+  rules,
+  configs: configs,
+} satisfies Omit<ESLint.Plugin, "rules"> & {
+  rules: Record<string, RuleModule<string, unknown[]>>;
 };

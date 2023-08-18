@@ -1,9 +1,9 @@
 import fs from "fs";
 
-import {
+import type {
   InvalidTestCase,
   ValidTestCase,
-} from "@typescript-eslint/utils/dist/ts-eslint";
+} from "@typescript-eslint/utils/ts-eslint";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import resolve from "enhanced-resolve";
 

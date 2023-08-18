@@ -1,4 +1,4 @@
-import type { JSONSchema4 } from "@typescript-eslint/utils/dist/json-schema";
+import { JSONSchema4 } from "@typescript-eslint/utils/json-schema";
 
 export type Options = {
   /**
@@ -86,6 +86,7 @@ export const optionsSchema = [
     type: "object",
     properties: {
       mode: {
+        type: "string",
         enum: ["overflow-only", "compact-on-overflow", "compact"],
       },
       maxLength: { type: "integer" },
@@ -95,4 +96,4 @@ export const optionsSchema = [
       logicalWrap: { type: "boolean" },
     },
   },
-] as [JSONSchema4];
+] satisfies [JSONSchema4];

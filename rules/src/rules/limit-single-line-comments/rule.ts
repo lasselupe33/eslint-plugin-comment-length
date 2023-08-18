@@ -1,4 +1,4 @@
-import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
+import { TSESTree, ESLintUtils } from "@typescript-eslint/utils";
 
 import { MessageIds, reportMessages } from "../../const.message-ids";
 import {
@@ -22,7 +22,7 @@ export const limitSingleLineCommentsRule = createRule<RuleOptions, MessageIds>({
     docs: {
       description:
         "Reflows single-line comments to ensure that blocks never exceed the configured length",
-      recommended: "warn",
+      recommended: "stylistic",
     },
     schema: optionsSchema,
   },

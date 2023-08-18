@@ -1,9 +1,9 @@
 import {
   AST_TOKEN_TYPES,
-  ESLintUtils,
   TSESTree,
+  ESLintUtils,
 } from "@typescript-eslint/utils";
-import { isIdentifier } from "@typescript-eslint/utils/dist/ast-utils";
+import { isIdentifier } from "@typescript-eslint/utils/ast-utils";
 
 import { MessageIds, reportMessages } from "../../const.message-ids";
 import {
@@ -30,11 +30,12 @@ export const limitTaggedTemplateLiteralCommentsRule = createRule<
     docs: {
       description:
         "Reflows javascript comments within tagged template literals to ensure that blocks never exceed the configured length",
-      recommended: "warn",
+      recommended: "stylistic",
     },
     schema: [
       {
         ...optionsSchema,
+        type: "object",
         properties: {
           ...optionsSchema[0].properties,
           tags: { type: "array", items: { type: "string" } },

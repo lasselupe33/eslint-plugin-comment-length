@@ -13,9 +13,12 @@
     "plugin:import/typescript",
     "plugin:comment-length/recommended"
   ],
-  "plugins": [
-    "import"
-  ],
+  "plugins": ["import"],
+  "env": {
+    "browser": true,
+    "es2023": true,
+    "node": true
+  },
   "rules": {
     "comment-length/limit-tagged-template-literal-comments": "warn",
     "import/no-unresolved": "off",
@@ -50,13 +53,8 @@
   },
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "extends": [
-        "plugin:@typescript-eslint/recommended"
-      ],
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@typescript-eslint/recommended"],
       "rules": {
         "@typescript-eslint/no-use-before-define": "off"
       }

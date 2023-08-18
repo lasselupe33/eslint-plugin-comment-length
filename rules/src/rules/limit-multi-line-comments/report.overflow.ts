@@ -1,5 +1,5 @@
 import { TSESTree } from "@typescript-eslint/utils";
-import { RuleContext } from "@typescript-eslint/utils/dist/ts-eslint";
+import { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 
 import { MessageIds } from "../../const.message-ids";
 import { Context } from "../../typings.context";
