@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-comment-length",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "",
   "main": "./lib/index.js",
   "types": "./src/index.ts",
