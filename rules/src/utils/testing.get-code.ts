@@ -14,21 +14,21 @@ const resolver = resolve.create.sync({
 export function getCode<TOpts extends readonly unknown[]>(
   dirname: string,
   name: string,
-  options: TOpts
+  options: TOpts,
 ): ValidTestCase<TOpts>;
 export function getCode<TIds extends string, TOpts extends readonly unknown[]>(
   dirname: string,
   name: string,
   options: TOpts,
   expectedError: TIds,
-  repeat?: number
+  repeat?: number,
 ): InvalidTestCase<TIds, TOpts>;
 export function getCode<TIds extends string, TOpts extends readonly unknown[]>(
   dirname: string,
   name: string,
   options: TOpts,
   expectedError?: TIds,
-  repeat?: number
+  repeat?: number,
 ): ValidTestCase<TOpts> | InvalidTestCase<TIds, TOpts> {
   const resolvedPath = resolver(dirname, `./${name}`);
 

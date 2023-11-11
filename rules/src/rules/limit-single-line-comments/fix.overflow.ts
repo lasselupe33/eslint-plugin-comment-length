@@ -7,7 +7,7 @@ import { formatBlock } from "./util.format-block";
 export function fixOverflow(
   fixer: TSESLint.RuleFixer,
   fixableComment: TSESTree.LineComment,
-  context: Context
+  context: Context,
 ) {
   const newValue = formatBlock(fixableComment, context);
 

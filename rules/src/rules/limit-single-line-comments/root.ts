@@ -19,7 +19,7 @@ import { captureRelevantCommentsIntoBlock } from "./util.capture-relevant-commen
 export function limitSingleLineComments(
   ruleContext: RuleContext<string, unknown[]>,
   options: Options,
-  comments: TSESTree.LineComment[]
+  comments: TSESTree.LineComment[],
 ) {
   const sourceCode = ruleContext.getSourceCode();
   const lines = sourceCode.getLines();
@@ -47,7 +47,7 @@ export function limitSingleLineComments(
           .split("")
           .reduce(
             (acc, curr) => acc + (curr === "\t" ? options.tabSize : 1),
-            0
+            0,
           ),
       },
       boilerplateSize: SINGLE_LINE_COMMENT_BOILERPLATE_SIZE,
@@ -62,7 +62,7 @@ export function limitSingleLineComments(
       sourceCode,
       comments,
       i,
-      context
+      context,
     );
     const fixableComment = currentBlock.mergedComment;
 

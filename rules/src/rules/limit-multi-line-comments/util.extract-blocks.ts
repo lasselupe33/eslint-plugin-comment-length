@@ -23,7 +23,7 @@ export function extractBlocksFromMultilineComment(context: Context) {
     const [block, ignoreLines] = captureNextBlock(
       ignoreFollowingLines,
       i,
-      context
+      context,
     );
     blocks.push({
       ...block,

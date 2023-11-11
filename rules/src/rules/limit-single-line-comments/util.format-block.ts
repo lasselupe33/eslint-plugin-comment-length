@@ -9,7 +9,7 @@ import { SINGLE_LINE_COMMENT_BOILERPLATE_SIZE } from "./const.boilerplate-size";
 
 export function formatBlock(
   block: TSESTree.LineComment,
-  context: Context
+  context: Context,
 ): string {
   const lineStartSize =
     context.whitespace.size + SINGLE_LINE_COMMENT_BOILERPLATE_SIZE;
@@ -37,7 +37,7 @@ export function formatBlock(
         !isAnotherWrapPointComing(
           acc.currentLineLength,
           context.maxLength,
-          words.slice(index)
+          words.slice(index),
         );
 
       if (splitToNewline || splitEarly) {
@@ -52,7 +52,7 @@ export function formatBlock(
         };
       }
     },
-    { value: "//", currentLineLength: lineStartSize }
+    { value: "//", currentLineLength: lineStartSize },
   );
   return newValue.value;
 }

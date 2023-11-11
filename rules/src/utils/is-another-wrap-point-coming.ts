@@ -3,7 +3,7 @@ import { isPunctuation } from "./is-punctuation";
 export function isAnotherWrapPointComing(
   currentLength: number,
   maxLength: number,
-  wordsToCome: string[]
+  wordsToCome: string[],
 ): boolean {
   for (const word of wordsToCome) {
     if (isPunctuation(word.at(-1)) && word.length > 1) {

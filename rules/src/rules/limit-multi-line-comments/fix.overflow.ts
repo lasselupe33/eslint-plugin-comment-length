@@ -9,7 +9,7 @@ import { formatBlock } from "./util.format-block";
 export function fixOverflowingBlock(
   fixer: TSESLint.RuleFixer,
   fixableBlock: MultilineBlock,
-  context: Context
+  context: Context,
 ) {
   const newValue = formatBlock(fixableBlock, context);
 
@@ -19,7 +19,7 @@ export function fixOverflowingBlock(
   if (context.comment.lines.length === 1) {
     return fixer.replaceTextRange(
       context.comment.range,
-      `/**\n${newValue}\n${context.whitespace.string} */`
+      `/**\n${newValue}\n${context.whitespace.string} */`,
     );
   } else {
     // ... else we should simply replace the part of the comment which

@@ -1,7 +1,7 @@
 import { TSESTree } from "@typescript-eslint/utils";
 
 export function isSemanticComment(
-  comment: TSESTree.BlockComment | TSESTree.LineComment
+  comment: TSESTree.BlockComment | TSESTree.LineComment,
 ): boolean {
   return (
     comment.value.includes("eslint-disable") ||

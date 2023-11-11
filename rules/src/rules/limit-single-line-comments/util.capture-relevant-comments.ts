@@ -12,7 +12,7 @@ export function captureRelevantCommentsIntoBlock(
   sourceCode: TSESLint.SourceCode,
   comments: TSESTree.LineComment[],
   startIndex: number,
-  context: Context
+  context: Context,
 ): CommentBlock {
   let comment = comments[startIndex];
 

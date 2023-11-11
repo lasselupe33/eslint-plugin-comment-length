@@ -5,7 +5,7 @@ import { Context } from "../typings.context";
 export function isCodeInComment(
   value: string | undefined,
   parserPath: string,
-  context: Context
+  context: Context,
 ): boolean {
   if (!value || !context.ignoreCommentsWithCode) {
     return false;

@@ -8,7 +8,7 @@ import { CommentBlock } from "./typings.block";
 export function canBlockBeCompated(
   comments: TSESTree.LineComment[],
   block: CommentBlock,
-  context: Context
+  context: Context,
 ): boolean {
   for (let i = block.startIndex + 1; i <= block.endIndex; i++) {
     const prev = comments[i - 1];

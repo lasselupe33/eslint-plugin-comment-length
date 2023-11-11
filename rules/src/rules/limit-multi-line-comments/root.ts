@@ -18,7 +18,7 @@ import { extractBlocksFromMultilineComment } from "./util.extract-blocks";
 export function limitMultiLineComments(
   ruleContext: RuleContext<string, unknown[]>,
   options: Options,
-  comments: TSESTree.Comment[]
+  comments: TSESTree.Comment[],
 ) {
   const sourceCode = ruleContext.getSourceCode();
   const lines = sourceCode.getLines();
@@ -36,8 +36,19 @@ export function limitMultiLineComments(
       continue;
     }
 
-    const line = lines[comment.loc.start.line - 1];
-    const whitespaceString = line?.split("/*")[0] ?? "";
+    const whitespaceString = (() => {
+      const firstLine = lines[comment.loc.start.line - 1];
+      const lastLine = lines[comment.loc.end.line - 1];
+
+      if (
+        comment.loc.start.line === comment.loc.end.line ||
+        (lastLine && !/^( |\t)*\*/.test(lastLine))
+      ) {
+        return firstLine?.split("/*")[0] ?? "";
+      }
+
+      return lastLine?.split(" */")[0] ?? firstLine?.split("/*")[0] ?? "";
+    })();
 
     const commentLines = getCommentLines(comment);
     const context = {
@@ -48,7 +59,7 @@ export function limitMultiLineComments(
           .split("")
           .reduce(
             (acc, curr) => acc + (curr === "\t" ? options.tabSize : 1),
-            0
+            0,
           ),
       },
       boilerplateSize: getBoilerPlateSize(commentLines),
@@ -64,20 +75,20 @@ export function limitMultiLineComments(
     const blocks = extractBlocksFromMultilineComment(context).filter(
       (block) =>
         !block.lines.some(
-          (line) => isCommentInComment(line) || isJSDocLikeComment(line)
-        ) && !isCodeInComment(block.value, ruleContext.parserPath, context)
+          (line) => isCommentInComment(line) || isJSDocLikeComment(line),
+        ) && !isCodeInComment(block.value, ruleContext.parserPath, context),
     );
 
     const overflowingBlocks = detectOverflowInMultilineBlocks(
       ruleContext,
       context,
-      blocks
+      blocks,
     );
 
     reportOverflowingBlocks(ruleContext, comment, context, overflowingBlocks);
 
     const remainingBlocks = blocks.filter(
-      (it) => !overflowingBlocks.includes(it)
+      (it) => !overflowingBlocks.includes(it),
     );
     reportCompactableBlocks(ruleContext, comment, context, remainingBlocks);
   }

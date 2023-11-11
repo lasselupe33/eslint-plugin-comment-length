@@ -5,7 +5,7 @@ import { deepCloneValue } from "../../utils/immutable-deep-merge";
 export function mergeComments(
   a: TSESTree.LineComment,
   b: TSESTree.LineComment,
-  separator = " "
+  separator = " ",
 ): TSESTree.LineComment {
   const newComment = deepCloneValue(a);
 

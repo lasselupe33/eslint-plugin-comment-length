@@ -38,7 +38,7 @@ export function formatBlock(fixable: MultilineBlock, context: Context): string {
         !isAnotherWrapPointComing(
           acc.currentLineLength,
           context.maxLength,
-          words.slice(index)
+          words.slice(index),
         );
 
       if (splitToNewline || splitEarly) {
@@ -67,7 +67,7 @@ export function formatBlock(fixable: MultilineBlock, context: Context): string {
       }`,
       currentLineLength: lineStartSize,
       currentLineIndex: 0,
-    }
+    },
   );
 
   return newValue.value.trimEnd();

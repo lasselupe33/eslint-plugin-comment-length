@@ -24,7 +24,7 @@ import { MultilineBlock } from "./typings.block";
 export function captureNextBlock(
   ignoreFollowingLines: boolean,
   initialStartIndex: number,
-  context: Context
+  context: Context,
 ): [Omit<MultilineBlock, "value">, boolean] {
   let ignoreLines = ignoreFollowingLines;
   let startIndex = initialStartIndex;
@@ -54,7 +54,7 @@ export function captureNextBlock(
 
   const blockLines: string[] = context.comment.lines.slice(
     startIndex,
-    startIndex + 1
+    startIndex + 1,
   );
 
   // In case we could not resolve the start of a new block, then we cannot
@@ -87,7 +87,7 @@ export function captureNextBlock(
         ?.split("")
         .reduce(
           (acc, curr) => acc + (curr === "\t" ? context.tabSize : 1),
-          0
+          0,
         ) ?? 0;
 
     const nextLineOffset =
@@ -96,7 +96,7 @@ export function captureNextBlock(
         ?.split("")
         .reduce(
           (acc, curr) => acc + (curr === "\t" ? context.tabSize : 1),
-          0
+          0,
         ) ?? 0;
 
     if (
@@ -106,7 +106,7 @@ export function captureNextBlock(
       (context.mode === "overflow-only" &&
         !isLineOverflowing(
           `${currLine} ${nextLine.trimStart().split(" ")[0] ?? ""}`.trimEnd(),
-          context
+          context,
         ))
     ) {
       return [
@@ -128,7 +128,7 @@ export function captureNextBlock(
                   .split("")
                   .reduce(
                     (acc, curr) => acc + (curr === "\t" ? context.tabSize : 1),
-                    0
+                    0,
                   ) ?? 0,
             };
           }),
@@ -159,7 +159,7 @@ export function captureNextBlock(
               .split("")
               .reduce(
                 (acc, curr) => acc + (curr === "\t" ? context.tabSize : 1),
-                0
+                0,
               ) ?? 0,
         };
       }),

@@ -8,7 +8,7 @@ import { MultilineBlock } from "./typings.block";
 export function detectOverflowInMultilineBlocks(
   ruleContext: RuleContext<string, unknown[]>,
   context: Context,
-  blocks: MultilineBlock[]
+  blocks: MultilineBlock[],
 ) {
   const problematicBlocks = [] as MultilineBlock[];
 

@@ -12,7 +12,7 @@ export function reportCompactableBlocks(
   ruleContext: RuleContext<string, unknown[]>,
   baseComment: TSESTree.BlockComment,
   context: Context,
-  blocks: MultilineBlock[]
+  blocks: MultilineBlock[],
 ) {
   if (context.mode !== "compact") {
     return;

@@ -11,7 +11,7 @@ export function reportOverflowingBlocks(
   ruleContext: RuleContext<string, unknown[]>,
   baseComment: TSESTree.BlockComment,
   context: Context,
-  overflowingBlocks: MultilineBlock[]
+  overflowingBlocks: MultilineBlock[],
 ) {
   for (const fixableBlock of overflowingBlocks) {
     ruleContext.report({

@@ -4,7 +4,7 @@ import { mergeComments } from "./util.merge-comments";
 
 export function captureNearbyComments(
   comments: TSESTree.LineComment[],
-  startIndex: number
+  startIndex: number,
 ): TSESTree.LineComment | undefined {
   let comment = comments[startIndex];
 
