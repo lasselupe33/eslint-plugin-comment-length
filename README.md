@@ -4,19 +4,6 @@ This plugin provides [ESLint](https://eslint.org/) rules that limit the line len
 
 ![eslint-plugin-comment-length formatting a single-line comment block](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaCMj-mL_cZx4_155gWJEY1NVsgaztR2PTinfrH8el17pDjFu2Tjwhvz750T18J5D9hAf-RzVotOwmxcRPmkswAzAnu_3g=w1652-h1924)
 
-```ts
-// Here is a comment that is too long to fit on the current line, given the configured maximum.
-// It also includes a line afterwards which originally isn't too wide to fit.
-```
-
-Which will be transformed into the following:
-
-```ts
-// Here is a comment that is too long to fit on the current line, given the
-// configured maximum. It also includes a line afterwards which originally isn't
-// too wide to fit.
-```
-
 This project aims to ease the process of writing long comments where each line needs to be cropped to a specific line length. This is similar to the [`max-len`](https://eslint.org/docs/rules/max-len) ESLint rule. The primary difference is that this plugin can automatically fix violations.
 
 **NB:** There are several cases wherein the rules will not attempt to automatically format comments. This is to accomodate cases where it is *not* desired to break a comment into multiple lines. Examples include comments that:
@@ -26,9 +13,9 @@ This project aims to ease the process of writing long comments where each line n
 - are wrapped within backticks, as it normally indicate code-snippets within comments. (e.g. \```some-comment\```)
 - are part of JSDoc-like comments. (i.e. multi-line comment lines that starts with '@')
 
-![eslint-plugin-comment-length formatting a multi-line comment block](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaCDFPxthZEHem00PPXsRbCzvZTFAYB6u2HAo3fdkTWrGz_NAYRYsp8LsEmGtomjCYIiKsO94uGMPzRk8l7hKpMDWIhfUg=w3456-h1924)
-
 Specific cases will be expanded upon in the `example` sections below.
+
+![eslint-plugin-comment-length formatting a multi-line comment block](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaCDFPxthZEHem00PPXsRbCzvZTFAYB6u2HAo3fdkTWrGz_NAYRYsp8LsEmGtomjCYIiKsO94uGMPzRk8l7hKpMDWIhfUg=w3456-h1924)
 
 ## Installation
 
