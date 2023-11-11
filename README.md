@@ -1,6 +1,8 @@
 # eslint-plugin-comment-length
 
-This plugin provides [ESLint](https://eslint.org/) rules that limit the line length of your comments. Furthermore, an automatic fix is included such that you can save time manually formatting your comments. As such it is **recommended** to apply this rule every time a file is saved in order to avoid the hassle of manually formatting comments.
+This plugin provides [ESLint](https://eslint.org/) rules that limit the line length of your comments. Furthermore, an **automatic fix** is included such that you can save time manually formatting your comments. As such it is recommended to apply this rule every time a file is saved in order to avoid the hassle of manually formatting comments.
+
+![eslint-plugin-comment-length formatting a single-line comment block](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaCMj-mL_cZx4_155gWJEY1NVsgaztR2PTinfrH8el17pDjFu2Tjwhvz750T18J5D9hAf-RzVotOwmxcRPmkswAzAnu_3g=w1652-h1924)
 
 ```ts
 // Here is a comment that is too long to fit on the current line, given the configured maximum.
@@ -15,15 +17,16 @@ Which will be transformed into the following:
 // too wide to fit.
 ```
 
-This project aims to ease the process of writing long comments where each line needs to be cropped to a specific line length. This is similar to the [`max-len`](https://eslint.org/docs/rules/max-len) ESLint rule, but violations can be automatically fixed.
+This project aims to ease the process of writing long comments where each line needs to be cropped to a specific line length. This is similar to the [`max-len`](https://eslint.org/docs/rules/max-len) ESLint rule. The primary difference is that this plugin can automatically fix violations.
 
-**NB:** There are several cases wherein the rules will not attempt to automatically format comments. This is to accomodate cases wherein it is *not* desired to break a comment into multiple lines. Examples include comments that:
+**NB:** There are several cases wherein the rules will not attempt to automatically format comments. This is to accomodate cases where it is *not* desired to break a comment into multiple lines. Examples include comments that:
 
 - are not on their own lines.
 - include `eslint-[enable|disable]-*`, `stylelint-[enable|disable]-*`, `tslint:[enable|disable]`.
-- consists of code snippets.
-- are wrapped within backticks (e.g. \```some-comment\```)
-- are part of JSDoc-like comments (i.e. starting with '@')
+- are wrapped within backticks, as it normally indicate code-snippets within comments. (e.g. \```some-comment\```)
+- are part of JSDoc-like comments. (i.e. multi-line comment lines that starts with '@')
+
+![eslint-plugin-comment-length formatting a multi-line comment block](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaCDFPxthZEHem00PPXsRbCzvZTFAYB6u2HAo3fdkTWrGz_NAYRYsp8LsEmGtomjCYIiKsO94uGMPzRk8l7hKpMDWIhfUg=w3456-h1924)
 
 Specific cases will be expanded upon in the `example` sections below.
 
@@ -43,7 +46,20 @@ npm i --save-dev eslint-plugin-comment-length
 
 ## Usage
 
-Add the following to your `.eslintrc` configuration:
+Add the following to your `.eslint.config.js` configuration:
+
+```js
+import eslintPluginCommentLength from "eslint-plugin-comment-length";
+
+const eslintConfig = [
+  eslintPluginCommentLength.configs["flat/recommended"],
+  // ...
+]
+
+export default eslintConfig
+```
+
+**OR** add the following to your `.eslintrc` configuration:
 
 ```json
 {
@@ -54,6 +70,8 @@ Add the following to your `.eslintrc` configuration:
 ```
 
 ### Tagged Template Literals
+
+![eslint-plugin-comment-length formatting a comment block inside a tagged template literal](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaABSrXwNg5SFp2YOjdisGp0nPEt41q__BW8ExI45JurhAmK_mjTKWmOB4tofniPyvQm7MFLzhKHEyqWg8mWZ44tjG4wpA=w3456-h1924)
 
 In case you want to detect and fix overflow of JavaScript comments within `tagged template literals`, e.g. when using CSS-in-JS, you need to add the following rule to your configuration object:
 
