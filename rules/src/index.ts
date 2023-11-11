@@ -18,13 +18,26 @@ export const configs = {
       "comment-length/limit-single-line-comments": ["warn"],
       "comment-length/limit-multi-line-comments": ["warn"],
     },
-  },
-} satisfies Record<
-  string,
-  | ESLint.ConfigData<Linter.RulesRecord>
-  | Linter.FlatConfig
-  | Linter.FlatConfig[]
->;
+  } satisfies ESLint.ConfigData<Linter.RulesRecord>,
+
+  "flat/recommended": {
+    files: [
+      "**/*.js",
+      "**/*.mjs",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.mts",
+      "**/*.tsx",
+    ],
+    plugins: {
+      "comment-length": require("."),
+    },
+    rules: {
+      "comment-length/limit-single-line-comments": ["warn"],
+      "comment-length/limit-multi-line-comments": ["warn"],
+    },
+  } satisfies Linter.FlatConfig,
+} as const;
 
 export default {
   rules,

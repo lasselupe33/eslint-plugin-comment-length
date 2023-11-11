@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "preserve",
-    "module": "CommonJS",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -21,5 +21,5 @@
     "noFallthroughCasesInSwitch": true,
     "target": "ESNext",
   },
-  "include": ["./src/**/*", "@typescript-eslint/utils/**/*"],
+  "include": ["./src/**/*"],
 }
