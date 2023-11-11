@@ -9,10 +9,6 @@ export function isSemanticComment(
     comment.value.includes("tslint:disable") ||
     comment.value.includes("eslint-enable") ||
     comment.value.includes("stylelint-enable") ||
-    comment.value.includes("tslint:enable") ||
-    comment.value.includes("@ts-ignore") ||
-    comment.value.includes("@ts-expect-error") ||
-    comment.value.includes("@ts-check") ||
-    comment.value.includes("@ts-nocheck")
+    comment.value.includes("tslint:enable")
   );
 }
