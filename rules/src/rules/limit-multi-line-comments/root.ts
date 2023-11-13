@@ -42,7 +42,7 @@ export function limitMultiLineComments(
 
       if (
         comment.loc.start.line === comment.loc.end.line ||
-        (lastLine && !/^( |\t)*\*/.test(lastLine))
+        (lastLine && !/^( |\t)*\*\//.test(lastLine))
       ) {
         return firstLine?.split("/*")[0] ?? "";
       }

@@ -51,6 +51,12 @@ ruleTester.run(
       ),
       getCode(
         __dirname,
+        "invalid.malformed-2",
+        defaultOptions,
+        MessageIds.EXCEEDS_MAX_LENGTH
+      ),
+      getCode(
+        __dirname,
         "multiple-comments-with-overflow",
         defaultOptions,
         MessageIds.EXCEEDS_MAX_LENGTH,
