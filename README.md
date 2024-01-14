@@ -2,7 +2,7 @@
 
 This plugin provides [ESLint](https://eslint.org/) rules that limit the line length of your comments. Furthermore, an **automatic fix** is included such that you can save time manually formatting your comments. As such it is recommended to apply this rule every time a file is saved in order to avoid the hassle of manually formatting comments.
 
-![eslint-plugin-comment-length formatting a single-line comment block](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaCMj-mL_cZx4_155gWJEY1NVsgaztR2PTinfrH8el17pDjFu2Tjwhvz750T18J5D9hAf-RzVotOwmxcRPmkswAzAnu_3g=w1652-h1924)
+![eslint-plugin-comment-length formatting a single-line comment block](https://drive.google.com/uc?view=export&id=1zqF5PcY22DWrAPqinwkOc128WZL8uO6q)
 
 This project aims to ease the process of writing long comments where each line needs to be cropped to a specific line length. This is similar to the [`max-len`](https://eslint.org/docs/rules/max-len) ESLint rule. The primary difference is that this plugin can automatically fix violations.
 
