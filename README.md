@@ -2,7 +2,7 @@
 
 This plugin provides [ESLint](https://eslint.org/) rules that limit the line length of your comments. Furthermore, an **automatic fix** is included such that you can save time manually formatting your comments. As such it is recommended to apply this rule every time a file is saved in order to avoid the hassle of manually formatting comments.
 
-![eslint-plugin-comment-length formatting a single-line comment block](https://drive.google.com/uc?view=export&id=1zqF5PcY22DWrAPqinwkOc128WZL8uO6q)
+![eslint-plugin-comment-length formatting a single-line comment block](https://drive.google.com/uc?view=export&id=1hgYNVgY2GOwBjHM4Fmz91HsEafc2ZUdR)
 
 This project aims to ease the process of writing long comments where each line needs to be cropped to a specific line length. This is similar to the [`max-len`](https://eslint.org/docs/rules/max-len) ESLint rule. The primary difference is that this plugin can automatically fix violations.
 
@@ -15,7 +15,7 @@ This project aims to ease the process of writing long comments where each line n
 
 Specific cases will be expanded upon in the `example` sections below.
 
-![eslint-plugin-comment-length formatting a multi-line comment block](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaCDFPxthZEHem00PPXsRbCzvZTFAYB6u2HAo3fdkTWrGz_NAYRYsp8LsEmGtomjCYIiKsO94uGMPzRk8l7hKpMDWIhfUg=w3456-h1924)
+![eslint-plugin-comment-length formatting a multi-line comment block](https://drive.google.com/uc?view=export&id=1zqF5PcY22DWrAPqinwkOc128WZL8uO6q)
 
 ## Installation
 
@@ -58,7 +58,7 @@ export default eslintConfig
 
 ### Tagged Template Literals
 
-![eslint-plugin-comment-length formatting a comment block inside a tagged template literal](https://lh3.googleusercontent.com/u/0/drive-viewer/AK7aPaABSrXwNg5SFp2YOjdisGp0nPEt41q__BW8ExI45JurhAmK_mjTKWmOB4tofniPyvQm7MFLzhKHEyqWg8mWZ44tjG4wpA=w3456-h1924)
+![eslint-plugin-comment-length formatting a comment block inside a tagged template literal](https://drive.google.com/uc?view=export&id=1OihsJNCbmWUdJVISuMXfoKF2xfLAHCwV)
 
 In case you want to detect and fix overflow of JavaScript comments within `tagged template literals`, e.g. when using CSS-in-JS, you need to add the following rule to your configuration object:
 
