@@ -18,7 +18,7 @@ import { limitSingleLineComments } from "../limit-single-line-comments/root";
 const createRule = ESLintUtils.RuleCreator(resolveDocsRoute);
 
 export const limitTaggedTemplateLiteralCommentsRule = createRule<
-  RuleOptions & [{ tags: string[] }],
+  [RuleOptions[0] & { tags: string[] }],
   MessageIds
 >({
   name: "limit-tagged-template-literal-comments",
