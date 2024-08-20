@@ -51,6 +51,6 @@
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
-    "eslint": ">=9.0.0"
+    "eslint": ">=8.0.0"
   }
 }
