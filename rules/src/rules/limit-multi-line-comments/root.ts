@@ -1,8 +1,8 @@
-import { TSESTree } from "@typescript-eslint/utils";
-import { RuleContext } from "@typescript-eslint/utils/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 
-import { Context } from "../../typings.context";
-import { Options } from "../../typings.options";
+import type { Context } from "../../typings.context";
+import type { Options } from "../../typings.options";
 import { isCodeInComment } from "../../utils/is-code-in-comment";
 import { isCommentInComment } from "../../utils/is-comment-in-comment";
 import { isJSDocLikeComment } from "../../utils/is-jsdoc-like";
@@ -20,7 +20,7 @@ export function limitMultiLineComments(
   options: Options,
   comments: TSESTree.Comment[],
 ) {
-  const sourceCode = ruleContext.getSourceCode();
+  const sourceCode = ruleContext.sourceCode;
   const lines = sourceCode.getLines();
 
   for (const comment of comments) {
@@ -76,7 +76,7 @@ export function limitMultiLineComments(
       (block) =>
         !block.lines.some(
           (line) => isCommentInComment(line) || isJSDocLikeComment(line),
-        ) && !isCodeInComment(block.value, ruleContext.parserPath, context),
+        ) && !isCodeInComment(block.value, context),
     );
 
     const overflowingBlocks = detectOverflowInMultilineBlocks(

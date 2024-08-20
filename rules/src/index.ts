@@ -11,6 +11,14 @@ export const rules = {
     limitTaggedTemplateLiteralCommentsRule,
 } as unknown as Record<string, Rule.RuleModule>;
 
+const plugin = {
+  meta: {
+    name: "eslint-plugin-comment-length",
+    version: "2.0.0",
+  },
+  rules,
+};
+
 export const configs = {
   recommended: {
     plugins: ["comment-length"],
@@ -18,7 +26,7 @@ export const configs = {
       "comment-length/limit-single-line-comments": ["warn"],
       "comment-length/limit-multi-line-comments": ["warn"],
     },
-  } satisfies ESLint.ConfigData<Linter.RulesRecord>,
+  } satisfies ESLint.ConfigData,
 
   "flat/recommended": {
     files: [
@@ -30,16 +38,20 @@ export const configs = {
       "**/*.tsx",
     ],
     plugins: {
-      "comment-length": require("."),
+      "comment-length": plugin,
     },
     rules: {
       "comment-length/limit-single-line-comments": ["warn"],
       "comment-length/limit-multi-line-comments": ["warn"],
     },
-  } satisfies Linter.FlatConfig,
+  } satisfies Linter.Config,
 } as const;
 
 export default {
+  meta: {
+    name: "eslint-plugin-comment-length",
+    version: "2.0.0",
+  },
   rules,
   configs,
 };

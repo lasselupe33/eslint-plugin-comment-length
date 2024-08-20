@@ -1,9 +1,18 @@
 {
   "name": "eslint-plugin-comment-length",
   "version": "1.7.3",
-  "description": "",
-  "main": "./lib/index.js",
+  "description": "An ESLint plugin that provides rules that limit the line length of your comments",
   "types": "./src/index.ts",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/mjs/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./lib/mjs/index.mjs",
+      "require": "./lib/cjs/index.js",
+      "default": "./lib/cjs/index.js"
+    }
+  },
   "files": [
     "lib/**",
     "src/**"
@@ -16,9 +25,9 @@
     "reflow"
   ],
   "scripts": {
-    "build": "rm -rf ./lib && tsc -p ./tsconfig.build.json",
-    "watch": "yarn build --watch",
-    "prepublishOnly": "cp ../README.md ./README.md; yarn build",
+    "build": "rm -rf ./lib && ROLLUP__FORMAT=cjs rollup -c rollup.config.js && ROLLUP__FORMAT=esm rollup -c rollup.config.js",
+    "watch": "ROLLUP__FORMAT=cjs rollup -c rollup.config.js --watch; ROLLUP__FORMAT=esm rollup -c rollup.config.js --watch",
+    "prepublishOnly": "cp ../README.md ./README.md; npm run build",
     "postpublish": "rm README.md"
   },
   "author": "Lasse Felskov Agersten <lfa@appear.dk>",
@@ -28,16 +37,20 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@typescript-eslint/utils": "^6.10.0"
+    "@typescript-eslint/utils": "^8.2.0"
   },
   "devDependencies": {
-    "@types/eslint": "^8.44.7",
+    "@typescript-eslint/rule-tester": "^8.2.0",
+    "@types/eslint": "^9.6.0",
     "@types/estree": "^1.0.5",
-    "@types/node": "^20.9.0",
-    "enhanced-resolve": "^5.15.0",
-    "typescript": "^5.2.2"
+    "@types/node": "^20.16.1",
+    "enhanced-resolve": "^5.17.1",
+    "esbuild": "^0.23.1",
+    "rollup": "^4.21.0",
+    "rollup-plugin-esbuild": "^6.1.1",
+    "typescript": "^5.5.4"
   },
   "peerDependencies": {
-    "eslint": ">=8.0.0"
+    "eslint": ">=9.0.0"
   }
 }

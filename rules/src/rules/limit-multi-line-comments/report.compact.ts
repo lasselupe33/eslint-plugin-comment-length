@@ -1,8 +1,8 @@
-import { TSESTree } from "@typescript-eslint/utils";
-import { RuleContext } from "@typescript-eslint/utils/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 
 import { MessageIds } from "../../const.message-ids";
-import { Context } from "../../typings.context";
+import type { Context } from "../../typings.context";
 
 import { fixOverflowingBlock } from "./fix.overflow";
 import { MultilineBlock } from "./typings.block";

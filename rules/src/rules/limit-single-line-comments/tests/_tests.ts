@@ -1,27 +1,11 @@
-import path from "path";
-
 import { getCode } from "../../../utils/testing.get-code";
 
 import {  limitSingleLineCommentsRule } from "../rule";
 import { defaultOptions } from "../../../typings.options";
 import { MessageIds } from "../../../const.message-ids";
-import { RuleTester } from "@typescript-eslint/utils/ts-eslint";
+import { RuleTester } from "@typescript-eslint/rule-tester";
 
-const ruleTester = new RuleTester({
-  parser: require("@typescript-eslint/parser"),
-  parserOptions: {
-    project: "./tsconfig.test.json",
-    tsconfigRootDir: path.resolve(__dirname, "..", "..", "..", ".."),
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
-  env: {
-    browser: true,
-    es2023: true,
-    node: true,
-  },
-});
+const ruleTester = new RuleTester();
 
 ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
   valid: [

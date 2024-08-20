@@ -1,27 +1,11 @@
-import path from "path";
-
 import { getCode } from "../../../utils/testing.get-code";
 
 import { limitMultiLineCommentsRule } from "../rule";
 import { defaultOptions } from "../../../typings.options";
 import { MessageIds } from "../../../const.message-ids";
-import { RuleTester } from "@typescript-eslint/utils/ts-eslint";
+import { RuleTester } from "@typescript-eslint/rule-tester";
 
-const ruleTester = new RuleTester({
-  parser: require("@typescript-eslint/parser"),
-  parserOptions: {
-    project: "./tsconfig.test.json",
-    tsconfigRootDir: path.resolve(__dirname, "..", "..", "..", ".."),
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
-  env: {
-    browser: true,
-    es2023: true,
-    node: true,
-  },
-});
+const ruleTester = new RuleTester();
 
 ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
   valid: [
@@ -63,37 +47,37 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
       __dirname,
       "invalid.basic-overflow",
       defaultOptions,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
       "invalid.indentation",
       defaultOptions,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
       "invalid.single-line",
       defaultOptions,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
       "invalid.multiple-lines",
       defaultOptions,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
       "invalid.malformed",
       defaultOptions,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
       "invalid.final-line",
       defaultOptions,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
@@ -104,7 +88,7 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
           maxLength: 20,
         },
       ] as const,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
@@ -115,7 +99,7 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
           ignoreCommentsWithCode: false,
         },
       ] as const,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
@@ -126,7 +110,7 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
           ignoreUrls: false,
         },
       ] as const,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
@@ -137,14 +121,18 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
           mode: "compact",
         },
       ] as const,
-      MessageIds.CAN_COMPACT
+      MessageIds.CAN_COMPACT,
     ),
-    getCode(__dirname, "option.logical-wrap", [
-      {
-        ...defaultOptions[0],
-        logicalWrap: true
-      }
-    ] as const,
-    MessageIds.EXCEEDS_MAX_LENGTH),
+    getCode(
+      __dirname,
+      "option.logical-wrap",
+      [
+        {
+          ...defaultOptions[0],
+          logicalWrap: true,
+        },
+      ] as const,
+      MessageIds.EXCEEDS_MAX_LENGTH,
+    ),
   ],
 });

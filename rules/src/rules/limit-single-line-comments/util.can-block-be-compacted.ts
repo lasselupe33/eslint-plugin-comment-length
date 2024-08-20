@@ -1,9 +1,9 @@
-import { TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 import { Context } from "../../typings.context";
 import { isURL } from "../../utils/is-url";
 
-import { CommentBlock } from "./typings.block";
+import type { CommentBlock } from "./typings.block";
 
 export function canBlockBeCompated(
   comments: TSESTree.LineComment[],

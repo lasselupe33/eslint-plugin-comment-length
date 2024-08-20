@@ -1,6 +1,6 @@
-import { Context } from "../../typings.context";
+import type { Context } from "../../typings.context";
 
-import { MultilineBlock } from "./typings.block";
+import type { MultilineBlock } from "./typings.block";
 import { captureNextBlock } from "./util.capture-next-block";
 import { mergeLines } from "./util.merge-lines";
 

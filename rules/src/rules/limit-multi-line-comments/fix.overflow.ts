@@ -1,8 +1,8 @@
-import { TSESLint } from "@typescript-eslint/utils";
+import type { TSESLint } from "@typescript-eslint/utils";
 
-import { Context } from "../../typings.context";
+import type { Context } from "../../typings.context";
 
-import { MultilineBlock } from "./typings.block";
+import type { MultilineBlock } from "./typings.block";
 import { FIRST_LINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
 import { formatBlock } from "./util.format-block";
 

@@ -22,13 +22,12 @@ export const limitMultiLineCommentsRule = createRule<RuleOptions, MessageIds>({
     docs: {
       description:
         "Reflows multi-line comments to ensure that blocks never exceed the configured length",
-      recommended: "stylistic",
     },
     schema: optionsSchema,
   },
 
   create: (ruleContext, [options]) => {
-    const sourceCode = ruleContext.getSourceCode();
+    const sourceCode = ruleContext.sourceCode;
     const comments = sourceCode.getAllComments();
 
     limitMultiLineComments(ruleContext, options, comments);

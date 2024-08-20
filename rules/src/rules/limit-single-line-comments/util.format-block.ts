@@ -1,6 +1,6 @@
-import { TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 
-import { Context } from "../../typings.context";
+import type { Context } from "../../typings.context";
 import { isAnotherWrapPointComing } from "../../utils/is-another-wrap-point-coming";
 import { isPunctuation } from "../../utils/is-punctuation";
 import { isURL } from "../../utils/is-url";

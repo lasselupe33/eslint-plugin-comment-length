@@ -1,8 +1,8 @@
-import { Context } from "../../typings.context";
+import type { Context } from "../../typings.context";
 import { isAnotherWrapPointComing } from "../../utils/is-another-wrap-point-coming";
 import { isPunctuation } from "../../utils/is-punctuation";
 
-import { MultilineBlock } from "./typings.block";
+import type { MultilineBlock } from "./typings.block";
 import { MULTILINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
 
 /**

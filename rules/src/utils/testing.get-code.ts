@@ -3,8 +3,7 @@ import fs from "fs";
 import type {
   InvalidTestCase,
   ValidTestCase,
-} from "@typescript-eslint/utils/ts-eslint";
-// eslint-disable-next-line import/no-extraneous-dependencies
+} from "@typescript-eslint/rule-tester";
 import resolve from "enhanced-resolve";
 
 const resolver = resolve.create.sync({

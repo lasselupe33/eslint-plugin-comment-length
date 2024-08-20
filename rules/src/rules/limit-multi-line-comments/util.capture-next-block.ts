@@ -1,7 +1,7 @@
-import { Context } from "../../typings.context";
+import type { Context } from "../../typings.context";
 import { isLineOverflowing } from "../../utils/is-line-overflowing";
 
-import { MultilineBlock } from "./typings.block";
+import type { MultilineBlock } from "./typings.block";
 
 /**
  * captures the next logical group/block in the provided multi-line comment

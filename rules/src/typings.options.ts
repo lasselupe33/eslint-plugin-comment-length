@@ -1,4 +1,4 @@
-import { JSONSchema4 } from "@typescript-eslint/utils/json-schema";
+import type { JSONSchema4 } from "@typescript-eslint/utils/json-schema";
 
 export type Options = {
   /**

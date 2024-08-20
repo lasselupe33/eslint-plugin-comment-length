@@ -1,9 +1,9 @@
-import { TSESTree } from "@typescript-eslint/utils";
-import { RuleContext } from "@typescript-eslint/utils/ts-eslint";
+import type { TSESTree } from "@typescript-eslint/utils";
+import type { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 
 import { MessageIds } from "../../const.message-ids";
-import { Context } from "../../typings.context";
-import { Options } from "../../typings.options";
+import type { Context } from "../../typings.context";
+import type { Options } from "../../typings.options";
 import { isCodeInComment } from "../../utils/is-code-in-comment";
 import { isCommentInComment } from "../../utils/is-comment-in-comment";
 import { isLineOverflowing } from "../../utils/is-line-overflowing";
@@ -21,7 +21,7 @@ export function limitSingleLineComments(
   options: Options,
   comments: TSESTree.LineComment[],
 ) {
-  const sourceCode = ruleContext.getSourceCode();
+  const sourceCode = ruleContext.sourceCode;
   const lines = sourceCode.getLines();
 
   for (let i = 0; i < comments.length; i++) {
@@ -79,7 +79,7 @@ export function limitSingleLineComments(
       !fixableComment ||
       wrappedByBackticks ||
       isCommentInComment(fixableComment.value) ||
-      isCodeInComment(nearbyComments?.value, ruleContext.parserPath, context)
+      isCodeInComment(nearbyComments?.value, context)
     ) {
       continue;
     }

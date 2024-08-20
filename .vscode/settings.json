@@ -1,6 +1,94 @@
 {
-  "editor.formatOnSave": false,
+  "files.associations": {
+    // default to allowing comments in json files, as many configurations files
+    // will support this and it makes things easier to decipher for developers
+    // when skimming through config files
+    "*.json": "jsonc",
+
+    // ... however, some extensions in VSCode need package.json to be
+    // interpreted as plain json in order to work as intended (namely Version
+    // Lens)
+    "package.json": "json",
+
+    // for some reason CODEOWNERS default to Markdown within VSCode - this is
+    // wrong!
+    "CODEOWNERS": "plaintext"
+  },
+
+  //
+  // PRETTIER
+  //
+
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  //
+  // ESLINT + STYLELINT
+  //
+
+  "eslint.validate": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact"
+  ],
+
+  "stylelint.validate": [
+    "css",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  "prettier.configPath": "./.prettierrc",
+
+  // auto-fix on save
+
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  }
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+
+  //
+  // JEST
+  //
+
+  "jest.enable": false,
+
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

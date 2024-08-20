@@ -1,6 +1,6 @@
-import { TSESLint, TSESTree } from "@typescript-eslint/utils";
+import type { TSESLint, TSESTree } from "@typescript-eslint/utils";
 
-import { Context } from "../../typings.context";
+import type { Context } from "../../typings.context";
 
 import { formatBlock } from "./util.format-block";
 

@@ -1,16 +1,12 @@
 import {
   AST_TOKEN_TYPES,
-  TSESTree,
+  type TSESTree,
   ESLintUtils,
 } from "@typescript-eslint/utils";
 import { isIdentifier } from "@typescript-eslint/utils/ast-utils";
 
 import { MessageIds, reportMessages } from "../../const.message-ids";
-import {
-  RuleOptions,
-  defaultOptions,
-  optionsSchema,
-} from "../../typings.options";
+import { Options, defaultOptions, optionsSchema } from "../../typings.options";
 import { resolveDocsRoute } from "../../utils/resolve-docs-route";
 import { limitMultiLineComments } from "../limit-multi-line-comments/root";
 import { limitSingleLineComments } from "../limit-single-line-comments/root";
@@ -18,7 +14,7 @@ import { limitSingleLineComments } from "../limit-single-line-comments/root";
 const createRule = ESLintUtils.RuleCreator(resolveDocsRoute);
 
 export const limitTaggedTemplateLiteralCommentsRule = createRule<
-  RuleOptions & [{ tags: string[] }],
+  [Options & { tags: string[] }],
   MessageIds
 >({
   name: "limit-tagged-template-literal-comments",
@@ -30,7 +26,6 @@ export const limitTaggedTemplateLiteralCommentsRule = createRule<
     docs: {
       description:
         "Reflows javascript comments within tagged template literals to ensure that blocks never exceed the configured length",
-      recommended: "stylistic",
     },
     schema: [
       {

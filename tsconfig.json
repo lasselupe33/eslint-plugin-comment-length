@@ -1,8 +1,16 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "./lib",
-    "lib": ["DOM", "DOM.Iterable", "esnext"],
+    "plugins": [
+      {
+        "name": "@styled/typescript-styled-plugin",
+        "validate": false
+      }
+    ],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "esnext"
+    ],
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -20,7 +28,11 @@
     "noPropertyAccessFromIndexSignature": true,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": true,
-    "target": "ES6"
+    "target": "ES6",
   },
-  "include": ["./src/**/*"],
+  "include": ["src/**/*", "dummy/**/*", "file.tsx"],
+  "exclude": [
+    "**/lib",
+    "**/node_modules"
+  ]
 }
