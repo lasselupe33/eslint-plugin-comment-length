@@ -1,6 +1,6 @@
-import { Context } from "../typings.context";
+import { type Context } from "../typings.context.js";
 
-import { isURL } from "./is-url";
+import { isURL } from "./is-url.js";
 
 export function isLineOverflowing(line: string, context: Context): boolean {
   return (

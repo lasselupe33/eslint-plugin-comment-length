@@ -1,7 +1,7 @@
-import type { Context } from "../../typings.context";
+import type { Context } from "../../typings.context.js";
 
-import type { MultilineBlock } from "./typings.block";
-import { formatBlock } from "./util.format-block";
+import type { MultilineBlock } from "./typings.block.js";
+import { formatBlock } from "./util.format-block.js";
 
 export function canBlockBeCompated(block: MultilineBlock, context: Context) {
   if (!block.value.trim()) {

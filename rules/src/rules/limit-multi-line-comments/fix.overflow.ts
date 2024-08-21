@@ -1,10 +1,10 @@
 import type { TSESLint } from "@typescript-eslint/utils";
 
-import type { Context } from "../../typings.context";
+import type { Context } from "../../typings.context.js";
 
-import type { MultilineBlock } from "./typings.block";
-import { FIRST_LINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
-import { formatBlock } from "./util.format-block";
+import type { MultilineBlock } from "./typings.block.js";
+import { FIRST_LINE_BOILERPLATE_SIZE } from "./util.boilerplate-size.js";
+import { formatBlock } from "./util.format-block.js";
 
 export function fixOverflowingBlock(
   fixer: TSESLint.RuleFixer,

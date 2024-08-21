@@ -1,9 +1,9 @@
-import type { Context } from "../../typings.context";
-import { isAnotherWrapPointComing } from "../../utils/is-another-wrap-point-coming";
-import { isPunctuation } from "../../utils/is-punctuation";
+import type { Context } from "../../typings.context.js";
+import { isAnotherWrapPointComing } from "../../utils/is-another-wrap-point-coming.js";
+import { isPunctuation } from "../../utils/is-punctuation.js";
 
-import type { MultilineBlock } from "./typings.block";
-import { MULTILINE_BOILERPLATE_SIZE } from "./util.boilerplate-size";
+import type { MultilineBlock } from "./typings.block.js";
+import { MULTILINE_BOILERPLATE_SIZE } from "./util.boilerplate-size.js";
 
 /**
  * takes a fixable block and transform it into a singular string which

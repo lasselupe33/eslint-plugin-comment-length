@@ -1,14 +1,14 @@
 import { ESLintUtils } from "@typescript-eslint/utils";
 
-import { MessageIds, reportMessages } from "../../const.message-ids";
+import { MessageIds, reportMessages } from "../../const.message-ids.js";
 import {
-  RuleOptions,
+  type RuleOptions,
   defaultOptions,
   optionsSchema,
-} from "../../typings.options";
-import { resolveDocsRoute } from "../../utils/resolve-docs-route";
+} from "../../typings.options.js";
+import { resolveDocsRoute } from "../../utils/resolve-docs-route.js";
 
-import { limitMultiLineComments } from "./root";
+import { limitMultiLineComments } from "./root.js";
 
 const createRule = ESLintUtils.RuleCreator(resolveDocsRoute);
 

@@ -1,11 +1,11 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import type { Context } from "../../typings.context";
-import { isAnotherWrapPointComing } from "../../utils/is-another-wrap-point-coming";
-import { isPunctuation } from "../../utils/is-punctuation";
-import { isURL } from "../../utils/is-url";
+import type { Context } from "../../typings.context.js";
+import { isAnotherWrapPointComing } from "../../utils/is-another-wrap-point-coming.js";
+import { isPunctuation } from "../../utils/is-punctuation.js";
+import { isURL } from "../../utils/is-url.js";
 
-import { SINGLE_LINE_COMMENT_BOILERPLATE_SIZE } from "./const.boilerplate-size";
+import { SINGLE_LINE_COMMENT_BOILERPLATE_SIZE } from "./const.boilerplate-size.js";
 
 export function formatBlock(
   block: TSESTree.LineComment,

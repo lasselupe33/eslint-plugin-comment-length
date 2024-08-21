@@ -1,8 +1,8 @@
-import type { Context } from "../../typings.context";
+import type { Context } from "../../typings.context.js";
 
-import type { MultilineBlock } from "./typings.block";
-import { captureNextBlock } from "./util.capture-next-block";
-import { mergeLines } from "./util.merge-lines";
+import type { MultilineBlock } from "./typings.block.js";
+import { captureNextBlock } from "./util.capture-next-block.js";
+import { mergeLines } from "./util.merge-lines.js";
 
 export function extractBlocksFromMultilineComment(context: Context) {
   const blocks = [] as MultilineBlock[];

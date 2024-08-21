@@ -1,4 +1,4 @@
-import { isPunctuation } from "./is-punctuation";
+import { isPunctuation } from "./is-punctuation.js";
 
 export function isAnotherWrapPointComing(
   currentLength: number,

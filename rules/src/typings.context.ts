@@ -1,6 +1,6 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import type { Options } from "./typings.options";
+import type { Options } from "./typings.options.js";
 
 export type Context = Options & {
   /**

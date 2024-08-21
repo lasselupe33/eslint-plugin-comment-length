@@ -1,9 +1,9 @@
 import type { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 
-import type { Context } from "../../typings.context";
-import { isLineOverflowing } from "../../utils/is-line-overflowing";
+import type { Context } from "../../typings.context.js";
+import { isLineOverflowing } from "../../utils/is-line-overflowing.js";
 
-import type { MultilineBlock } from "./typings.block";
+import type { MultilineBlock } from "./typings.block.js";
 
 export function detectOverflowInMultilineBlocks(
   ruleContext: RuleContext<string, unknown[]>,

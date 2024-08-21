@@ -1,20 +1,20 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 
-import { MessageIds } from "../../const.message-ids";
-import type { Context } from "../../typings.context";
-import type { Options } from "../../typings.options";
-import { isCodeInComment } from "../../utils/is-code-in-comment";
-import { isCommentInComment } from "../../utils/is-comment-in-comment";
-import { isLineOverflowing } from "../../utils/is-line-overflowing";
-import { isCommentOnOwnLine } from "../../utils/is-on-own-line";
-import { isSemanticComment } from "../../utils/is-semantic-comment";
+import { MessageIds } from "../../const.message-ids.js";
+import type { Context } from "../../typings.context.js";
+import type { Options } from "../../typings.options.js";
+import { isCodeInComment } from "../../utils/is-code-in-comment.js";
+import { isCommentInComment } from "../../utils/is-comment-in-comment.js";
+import { isLineOverflowing } from "../../utils/is-line-overflowing.js";
+import { isCommentOnOwnLine } from "../../utils/is-on-own-line.js";
+import { isSemanticComment } from "../../utils/is-semantic-comment.js";
 
-import { SINGLE_LINE_COMMENT_BOILERPLATE_SIZE } from "./const.boilerplate-size";
-import { fixOverflow } from "./fix.overflow";
-import { canBlockBeCompated } from "./util.can-block-be-compacted";
-import { captureNearbyComments } from "./util.capture-nearby-comments";
-import { captureRelevantCommentsIntoBlock } from "./util.capture-relevant-comments";
+import { SINGLE_LINE_COMMENT_BOILERPLATE_SIZE } from "./const.boilerplate-size.js";
+import { fixOverflow } from "./fix.overflow.js";
+import { canBlockBeCompated } from "./util.can-block-be-compacted.js";
+import { captureNearbyComments } from "./util.capture-nearby-comments.js";
+import { captureRelevantCommentsIntoBlock } from "./util.capture-relevant-comments.js";
 
 export function limitSingleLineComments(
   ruleContext: RuleContext<string, unknown[]>,

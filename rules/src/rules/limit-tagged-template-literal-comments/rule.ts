@@ -5,11 +5,15 @@ import {
 } from "@typescript-eslint/utils";
 import { isIdentifier } from "@typescript-eslint/utils/ast-utils";
 
-import { MessageIds, reportMessages } from "../../const.message-ids";
-import { Options, defaultOptions, optionsSchema } from "../../typings.options";
-import { resolveDocsRoute } from "../../utils/resolve-docs-route";
-import { limitMultiLineComments } from "../limit-multi-line-comments/root";
-import { limitSingleLineComments } from "../limit-single-line-comments/root";
+import { MessageIds, reportMessages } from "../../const.message-ids.js";
+import {
+  type Options,
+  defaultOptions,
+  optionsSchema,
+} from "../../typings.options.js";
+import { resolveDocsRoute } from "../../utils/resolve-docs-route.js";
+import { limitMultiLineComments } from "../limit-multi-line-comments/root.js";
+import { limitSingleLineComments } from "../limit-single-line-comments/root.js";
 
 const createRule = ESLintUtils.RuleCreator(resolveDocsRoute);
 

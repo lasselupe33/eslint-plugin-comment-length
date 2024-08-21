@@ -1,12 +1,12 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 
-import { MessageIds } from "../../const.message-ids";
-import type { Context } from "../../typings.context";
+import { MessageIds } from "../../const.message-ids.js";
+import type { Context } from "../../typings.context.js";
 
-import { fixOverflowingBlock } from "./fix.overflow";
-import { MultilineBlock } from "./typings.block";
-import { canBlockBeCompated } from "./util.can-block-be-compacted";
+import { fixOverflowingBlock } from "./fix.overflow.js";
+import { type MultilineBlock } from "./typings.block.js";
+import { canBlockBeCompated } from "./util.can-block-be-compacted.js";
 
 export function reportCompactableBlocks(
   ruleContext: RuleContext<string, unknown[]>,

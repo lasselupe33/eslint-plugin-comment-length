@@ -1,12 +1,12 @@
 import type { TSESLint, TSESTree } from "@typescript-eslint/utils";
 
-import type { Context } from "../../typings.context";
-import { isLineOverflowing } from "../../utils/is-line-overflowing";
-import { isCommentOnOwnLine } from "../../utils/is-on-own-line";
-import { isSemanticComment } from "../../utils/is-semantic-comment";
+import type { Context } from "../../typings.context.js";
+import { isLineOverflowing } from "../../utils/is-line-overflowing.js";
+import { isCommentOnOwnLine } from "../../utils/is-on-own-line.js";
+import { isSemanticComment } from "../../utils/is-semantic-comment.js";
 
-import type { CommentBlock } from "./typings.block";
-import { mergeComments } from "./util.merge-comments";
+import type { CommentBlock } from "./typings.block.js";
+import { mergeComments } from "./util.merge-comments.js";
 
 export function captureRelevantCommentsIntoBlock(
   sourceCode: TSESLint.SourceCode,

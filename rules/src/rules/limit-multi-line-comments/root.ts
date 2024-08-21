@@ -1,19 +1,19 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 import type { RuleContext } from "@typescript-eslint/utils/ts-eslint";
 
-import type { Context } from "../../typings.context";
-import type { Options } from "../../typings.options";
-import { isCodeInComment } from "../../utils/is-code-in-comment";
-import { isCommentInComment } from "../../utils/is-comment-in-comment";
-import { isJSDocLikeComment } from "../../utils/is-jsdoc-like";
-import { isCommentOnOwnLine } from "../../utils/is-on-own-line";
-import { isSemanticComment } from "../../utils/is-semantic-comment";
+import type { Context } from "../../typings.context.js";
+import type { Options } from "../../typings.options.js";
+import { isCodeInComment } from "../../utils/is-code-in-comment.js";
+import { isCommentInComment } from "../../utils/is-comment-in-comment.js";
+import { isJSDocLikeComment } from "../../utils/is-jsdoc-like.js";
+import { isCommentOnOwnLine } from "../../utils/is-on-own-line.js";
+import { isSemanticComment } from "../../utils/is-semantic-comment.js";
 
-import { detectOverflowInMultilineBlocks } from "./detect.overflow";
-import { reportCompactableBlocks } from "./report.compact";
-import { reportOverflowingBlocks } from "./report.overflow";
-import { getBoilerPlateSize } from "./util.boilerplate-size";
-import { extractBlocksFromMultilineComment } from "./util.extract-blocks";
+import { detectOverflowInMultilineBlocks } from "./detect.overflow.js";
+import { reportCompactableBlocks } from "./report.compact.js";
+import { reportOverflowingBlocks } from "./report.overflow.js";
+import { getBoilerPlateSize } from "./util.boilerplate-size.js";
+import { extractBlocksFromMultilineComment } from "./util.extract-blocks.js";
 
 export function limitMultiLineComments(
   ruleContext: RuleContext<string, unknown[]>,

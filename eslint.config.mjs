@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import eslintPluginCommentLength from "eslint-plugin-comment-length";

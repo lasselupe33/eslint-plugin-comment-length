@@ -1,6 +1,6 @@
 import { Linter } from "@typescript-eslint/utils/ts-eslint";
 
-import { Context } from "../typings.context";
+import { type Context } from "../typings.context.js";
 
 export function isCodeInComment(
   value: string | undefined,

@@ -1,6 +1,6 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import { mergeComments } from "./util.merge-comments";
+import { mergeComments } from "./util.merge-comments.js";
 
 export function captureNearbyComments(
   comments: TSESTree.LineComment[],

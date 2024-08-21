@@ -1,13 +1,18 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-const esbuild = require("rollup-plugin-esbuild").default;
+import esbuild from "rollup-plugin-esbuild";
 
 /**
  * @param {string} projectRoot
  * @param {Partial<import('rollup').RollupOptions>} rollupConfig
  * @returns {import('rollup').RollupOptions}
  */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const srcFolder = path.resolve(__dirname, "src");
 const libFolder = path.resolve(__dirname, "lib");
 
@@ -22,7 +27,7 @@ const format = (() => {
   }
 })();
 
-module.exports = {
+export default {
   input: resolveIndexFile(srcFolder, "index", [".ts", ".tsx"]),
 
   external: (moduleId, importedFrom) => {
@@ -45,7 +50,7 @@ module.exports = {
     dir: format === "cjs" ? "lib/cjs" : "lib/mjs",
     format,
     preserveModules: true,
-    entryFileNames: format === "cjs" ? "[name].js" : "[name].mjs",
+    entryFileNames: format === "cjs" ? "[name].cjs" : "[name].js",
 
     assetFileNames: "[name][extname]",
     sourcemap: true,

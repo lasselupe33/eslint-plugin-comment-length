@@ -1,7 +1,7 @@
-import type { Context } from "../../typings.context";
-import { isLineOverflowing } from "../../utils/is-line-overflowing";
+import type { Context } from "../../typings.context.js";
+import { isLineOverflowing } from "../../utils/is-line-overflowing.js";
 
-import type { MultilineBlock } from "./typings.block";
+import type { MultilineBlock } from "./typings.block.js";
 
 /**
  * captures the next logical group/block in the provided multi-line comment
@@ -118,7 +118,7 @@ export function captureNextBlock(
             const whitespaceString = context.comment.value
               .split("\n")
               [startIndex + lineIndex]?.includes("*")
-              ? it.match(/^( |\t)*/)?.[0] ?? ""
+              ? (it.match(/^( |\t)*/)?.[0] ?? "")
               : " ";
 
             return {
@@ -149,7 +149,7 @@ export function captureNextBlock(
         const whitespaceString = context.comment.value
           .split("\n")
           [startIndex + lineIndex]?.includes("*")
-          ? it.match(/^( |\t)*/)?.[0] ?? ""
+          ? (it.match(/^( |\t)*/)?.[0] ?? "")
           : " ";
 
         return {

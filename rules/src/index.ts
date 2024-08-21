@@ -1,8 +1,8 @@
 import type { ESLint, Linter, Rule } from "eslint";
 
-import { limitMultiLineCommentsRule } from "./rules/limit-multi-line-comments/rule";
-import { limitSingleLineCommentsRule } from "./rules/limit-single-line-comments/rule";
-import { limitTaggedTemplateLiteralCommentsRule } from "./rules/limit-tagged-template-literal-comments/rule";
+import { limitMultiLineCommentsRule } from "./rules/limit-multi-line-comments/rule.js";
+import { limitSingleLineCommentsRule } from "./rules/limit-single-line-comments/rule.js";
+import { limitTaggedTemplateLiteralCommentsRule } from "./rules/limit-tagged-template-literal-comments/rule.js";
 
 export const rules = {
   "limit-single-line-comments": limitSingleLineCommentsRule,

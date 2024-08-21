@@ -1,6 +1,6 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
-import { deepCloneValue } from "../../utils/immutable-deep-merge";
+import { deepCloneValue } from "../../utils/immutable-deep-merge.js";
 
 export function mergeComments(
   a: TSESTree.LineComment,

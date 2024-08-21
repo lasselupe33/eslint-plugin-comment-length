@@ -1,8 +1,8 @@
 import type { TSESLint, TSESTree } from "@typescript-eslint/utils";
 
-import type { Context } from "../../typings.context";
+import type { Context } from "../../typings.context.js";
 
-import { formatBlock } from "./util.format-block";
+import { formatBlock } from "./util.format-block.js";
 
 export function fixOverflow(
   fixer: TSESLint.RuleFixer,
