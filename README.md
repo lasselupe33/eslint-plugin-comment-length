@@ -2,11 +2,11 @@
 
 This plugin provides [ESLint](https://eslint.org/) rules that limit the line length of your comments. Furthermore, an **automatic fix** is included such that you can save time manually formatting your comments. As such it is recommended to apply this rule every time a file is saved in order to avoid the hassle of manually formatting comments.
 
-![eslint-plugin-comment-length formatting a single-line comment block](https://drive.google.com/uc?view=export&id=1hgYNVgY2GOwBjHM4Fmz91HsEafc2ZUdR)
+![eslint-plugin-comment-length formatting a single-line comment block](https://lh3.googleusercontent.com/d/1hgYNVgY2GOwBjHM4Fmz91HsEafc2ZUdR)
 
 This project aims to ease the process of writing long comments where each line needs to be cropped to a specific line length. This is similar to the [`max-len`](https://eslint.org/docs/rules/max-len) ESLint rule. The primary difference is that this plugin can automatically fix violations.
 
-**NB:** There are several cases wherein the rules will not attempt to automatically format comments. This is to accomodate cases where it is *not* desired to break a comment into multiple lines. Examples include comments that:
+**NB:** There are several cases wherein the rules will not attempt to automatically format comments. This is to accomodate cases where it is _not_ desired to break a comment into multiple lines. Examples include comments that:
 
 - are not on their own lines.
 - include `eslint-[enable|disable]-*`, `stylelint-[enable|disable]-*`, `tslint:[enable|disable]`.
@@ -15,7 +15,7 @@ This project aims to ease the process of writing long comments where each line n
 
 Specific cases will be expanded upon in the `example` sections below.
 
-![eslint-plugin-comment-length formatting a multi-line comment block](https://drive.google.com/uc?view=export&id=1zqF5PcY22DWrAPqinwkOc128WZL8uO6q)
+![eslint-plugin-comment-length formatting a multi-line comment block](https://lh3.googleusercontent.com/d/1zqF5PcY22DWrAPqinwkOc128WZL8uO6q)
 
 ## Installation
 
@@ -41,34 +41,35 @@ import eslintPluginCommentLength from "eslint-plugin-comment-length";
 const eslintConfig = [
   eslintPluginCommentLength.configs["flat/recommended"],
   // ...
-]
+];
 
-export default eslintConfig
+export default eslintConfig;
 ```
 
 **OR** add the following to your `.eslintrc` configuration:
 
 ```json
 {
-  "extends": [
-    "plugin:comment-length/recommended"
-  ]
+  "extends": ["plugin:comment-length/recommended"]
 }
 ```
 
 ### Tagged Template Literals
 
-![eslint-plugin-comment-length formatting a comment block inside a tagged template literal](https://drive.google.com/uc?view=export&id=1OihsJNCbmWUdJVISuMXfoKF2xfLAHCwV)
+![eslint-plugin-comment-length formatting a comment block inside a tagged template literal](https://lh3.googleusercontent.com/d/1OihsJNCbmWUdJVISuMXfoKF2xfLAHCwV)
 
 In case you want to detect and fix overflow of JavaScript comments within `tagged template literals`, e.g. when using CSS-in-JS, you need to add the following rule to your configuration object:
 
 ```jsonc
 {
   "rules": {
-    "comment-length/limit-tagged-template-literal-comments": ["warn", {
-      "tags": ["css"] // will perform comment analysis on all tagged template literals named `css`
-    }]
-  }
+    "comment-length/limit-tagged-template-literal-comments": [
+      "warn",
+      {
+        "tags": ["css"], // will perform comment analysis on all tagged template literals named `css`
+      },
+    ],
+  },
 }
 ```
 
@@ -277,14 +278,14 @@ If a line violates this rule, the auto-fixer will attempt to combine logical gro
 
 As an example the comment below, which combines several comments from the `ESLint` source code, is perfectly valid:
 
-```ts
+````ts
 /*
  * NOTE: The CLI object should *not* call process.exit() directly. It should
  * only return exit codes. This allows other programs to use the CLI object and
  * still control when the program exits.
- * 
+ *
  * @property {("directive" | "problem" | "suggestion" | "layout")[]} [fixType] Specify the types of fixes to apply (directive, problem, suggestion, layout)
- * 
+ *
  * @example
  * ```tsx
  * const someValueAfterProcessing = process(value, (node) => ({
@@ -293,7 +294,7 @@ As an example the comment below, which combines several comments from the `ESLin
  * }));
  * ```
  */
-```
+````
 
 But the following would be considered as a violation:
 
@@ -340,7 +341,7 @@ Which will be transformed into the snippet below when applying the automatic fix
  * This is a single block.
  * This is another block which violates the maximum length. This block will as such be automatically fixed.
  * This is part of the previous block.
- * 
+ *
  * This is a third block.
  */
 ```
@@ -371,14 +372,14 @@ At times, when JSDoc declarations (e.g. @example) span multiple lines, then it m
 
 Backticks inside a multi-line comment acts as an escape hatch for the automatic fix. In other words, all content within backticks will never be considered as a block that can be automatically fixed.
 
-```ts
+````ts
 /**
  * @example
  * ```ts
  * Everything within backticks will not be automatically formatted. They essientially acts as an escape-hatch for the automatic fix.
  * ```
  */
-```
+````
 
 ##### Indentation
 
@@ -445,7 +446,7 @@ The comment below will NOT be automatically fixable as it includes a comment wit
 The rationaly is essentially the same as above. In particular we wish to avoid breaking lines when code is out-commented during debugging.
 
 ```ts
-/** 
+/**
  * const myVariableWhichDefinitelyOverflows = window.getComputedStyle(document.body).accentColor;
  */
 ```
