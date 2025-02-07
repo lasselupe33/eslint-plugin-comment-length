@@ -66,6 +66,7 @@ export type Options = {
    * @default 2
    */
   tabSize: number;
+  semanticComments?: string[];
 };
 
 export type RuleOptions = [Options];

@@ -31,7 +31,7 @@ export function limitMultiLineComments(
       !comment.loc ||
       comment.type !== "Block" ||
       !isCommentOnOwnLine(sourceCode, comment) ||
-      isSemanticComment(comment)
+      isSemanticComment(comment, options.semanticComments)
     ) {
       continue;
     }
