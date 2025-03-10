@@ -1,4 +1,3 @@
-
 # `comment-length/limit-single-line-comments`
 
 Locates single-line commments, i.e. `// comment`, and ensures that each line never exceeds the configured length.
@@ -36,7 +35,8 @@ Which will be transformed into:
       "logicalWrap": true,
       "ignoreUrls": true,
       "ignoreCommentsWithCode": true,
-      "tabSize": 2
+      "tabSize": 2,
+      "semanticComments": ["<string>"],
     }
   ]
 }

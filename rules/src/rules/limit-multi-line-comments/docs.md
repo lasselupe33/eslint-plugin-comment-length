@@ -1,4 +1,3 @@
-
 # `comment-length/limit-multi-line-comments`
 
 Locates multi-line comments, i.e. `/* comment */` and ensures that each line in the comment never exceeds the configured length.
@@ -7,14 +6,14 @@ If a line violates this rule, the auto-fixer will attempt to combine logical gro
 
 As an example the comment below, which combines several comments from the `ESLint` source code, is perfectly valid:
 
-```ts
+````ts
 /*
  * NOTE: The CLI object should *not* call process.exit() directly. It should
  * only return exit codes. This allows other programs to use the CLI object and
  * still control when the program exits.
- * 
+ *
  * @property {("directive" | "problem" | "suggestion" | "layout")[]} [fixType] Specify the types of fixes to apply (directive, problem, suggestion, layout)
- * 
+ *
  * @example
  * ```tsx
  * const someValueAfterProcessing = process(value, (node) => ({
@@ -23,7 +22,7 @@ As an example the comment below, which combines several comments from the `ESLin
  * }));
  * ```
  */
-```
+````
 
 But the following would be considered as a violation:
 
@@ -55,7 +54,8 @@ Which will be transformed into the snippet below when applying the automatic fix
       "logicalWrap": true,
       "ignoreUrls": true,
       "ignoreCommentsWithCode": true,
-      "tabSize": 2
+      "tabSize": 2,
+      "semanticComments": ["<string>"],
     }
   ]
 }
@@ -70,7 +70,7 @@ Which will be transformed into the snippet below when applying the automatic fix
  * This is a single block.
  * This is another block which violates the maximum length. This block will as such be automatically fixed.
  * This is part of the previous block.
- * 
+ *
  * This is a third block.
  */
 ```
@@ -101,14 +101,14 @@ At times, when JSDoc declarations (e.g. @example) span multiple lines, then it m
 
 Backticks inside a multi-line comment acts as an escape hatch for the automatic fix. In other words, all content within backticks will never be considered as a block that can be automatically fixed.
 
-```ts
+````ts
 /**
  * @example
  * ```ts
  * Everything within backticks will not be automatically formatted. They essientially acts as an escape-hatch for the automatic fix.
  * ```
  */
-```
+````
 
 ### Indentation
 
@@ -175,7 +175,7 @@ The comment below will NOT be automatically fixable as it includes a comment wit
 The rationaly is essentially the same as above. In particular we wish to avoid breaking lines when code is out-commented during debugging.
 
 ```ts
-/** 
+/**
  * const myVariableWhichDefinitelyOverflows = window.getComputedStyle(document.body).accentColor;
  */
 ```

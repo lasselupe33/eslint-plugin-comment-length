@@ -1,7 +1,7 @@
 import { getCode } from "../../../utils/testing.get-code";
 
-import {  limitSingleLineCommentsRule } from "../rule";
-import { defaultOptions } from "../../../typings.options";
+import { limitSingleLineCommentsRule } from "../rule";
+import { defaultOptions, Options } from "../../../typings.options";
 import { MessageIds } from "../../../const.message-ids";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
@@ -34,19 +34,25 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
         mode: "compact-on-overflow",
       },
     ] as const),
+    getCode(__dirname, "option.semantic", [
+      {
+        ...defaultOptions[0],
+        semanticComments: ["my-custom-semantic"],
+      } as Options,
+    ] as const),
   ],
   invalid: [
     getCode(
       __dirname,
       "invalid.basic-overflow",
       defaultOptions,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
       "invalid.indentation",
       defaultOptions,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
@@ -57,7 +63,7 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
           maxLength: 20,
         },
       ] as const,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
@@ -68,7 +74,7 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
           ignoreCommentsWithCode: false,
         },
       ] as const,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
@@ -79,7 +85,7 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
           ignoreUrls: false,
         },
       ] as const,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
     getCode(
       __dirname,
@@ -90,7 +96,7 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
           mode: "compact",
         },
       ] as const,
-      MessageIds.CAN_COMPACT
+      MessageIds.CAN_COMPACT,
     ),
     getCode(
       __dirname,
@@ -101,7 +107,7 @@ ruleTester.run("limit-single-line-comments", limitSingleLineCommentsRule, {
           logicalWrap: true,
         },
       ] as const,
-      MessageIds.EXCEEDS_MAX_LENGTH
+      MessageIds.EXCEEDS_MAX_LENGTH,
     ),
   ],
 });

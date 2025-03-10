@@ -9,7 +9,7 @@ This project aims to ease the process of writing long comments where each line n
 **NB:** There are several cases wherein the rules will not attempt to automatically format comments. This is to accomodate cases where it is _not_ desired to break a comment into multiple lines. Examples include comments that:
 
 - are not on their own lines.
-- include `eslint-[enable|disable]-*`, `stylelint-[enable|disable]-*`, `tslint:[enable|disable]`.
+- include `eslint-[enable|disable]-*`, `stylelint-[enable|disable]-*`, `tslint:[enable|disable]`. _NB_: Additional commnts like this can be added via the `semanticComments` configuration option.
 - are wrapped within backticks, as it normally indicate code-snippets within comments. (e.g. \```some-comment\```)
 - are part of JSDoc-like comments. (i.e. multi-line comment lines that starts with '@')
 
@@ -149,6 +149,18 @@ type Options = {
    * @default true
    */
   ignoreCommentsWithCode: boolean;
+
+  /**
+   * by default semantic comments such as // eslint-disable* will be ignored by
+   * this plugin as they may alter the functionality of other programs.
+   *
+   * In case you need to add additional variants of comments that should be
+   * ignored by this plugin, then they can be added through this option.
+   *
+   * @example
+   * semanticComments: ["i18n-extract-keys", "i18n-extract-mark-context"]
+   */
+  semanticComments?: string[];
 };
 ```
 
@@ -191,7 +203,8 @@ Which will be transformed into:
       "logicalWrap": true,
       "ignoreUrls": true,
       "ignoreCommentsWithCode": true,
-      "tabSize": 2
+      "tabSize": 2,
+      "semanticComments": ["<string>"],
     }
   ]
 }

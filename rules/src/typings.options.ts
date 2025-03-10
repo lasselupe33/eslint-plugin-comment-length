@@ -66,6 +66,17 @@ export type Options = {
    * @default 2
    */
   tabSize: number;
+
+  /**
+   * by default semantic comments such as // eslint-disable* will be ignored by
+   * this plugin as they may alter the functionality of other programs.
+   *
+   * In case you need to add additional variants of comments that should be
+   * ignored by this plugin, then they can be added through this option.
+   *
+   * @example
+   * semanticComments: ["i18n-extract-keys", "i18n-extract-mark-context"]
+   */
   semanticComments?: string[];
 };
 
@@ -79,6 +90,7 @@ export const defaultOptions = [
     ignoreCommentsWithCode: false,
     tabSize: 2,
     logicalWrap: false,
+    semanticComments: [],
   },
 ] satisfies RuleOptions;
 
@@ -95,6 +107,10 @@ export const optionsSchema = [
       ignoreCommentsWithCode: { type: "boolean" },
       tabSize: { type: "integer" },
       logicalWrap: { type: "boolean" },
+      semanticComments: {
+        type: "array",
+        items: { type: "string" },
+      },
     },
   },
 ] satisfies [JSONSchema4];

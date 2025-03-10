@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "build": "rm -rf ./lib && ROLLUP__FORMAT=cjs rollup -c rollup.config.js && ROLLUP__FORMAT=esm rollup -c rollup.config.js",
-    "watch": "ROLLUP__FORMAT=cjs rollup -c rollup.config.js --watch; ROLLUP__FORMAT=esm rollup -c rollup.config.js --watch",
+    "watch": "ROLLUP__FORMAT=esm rollup -c rollup.config.js --watch",
     "prepublishOnly": "cp ../README.md ./README.md; npm run build",
     "postpublish": "rm README.md",
     "type-check": "tsc --noEmit"

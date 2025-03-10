@@ -1,7 +1,7 @@
 import { getCode } from "../../../utils/testing.get-code";
 
 import { limitMultiLineCommentsRule } from "../rule";
-import { defaultOptions } from "../../../typings.options";
+import { defaultOptions, Options } from "../../../typings.options";
 import { MessageIds } from "../../../const.message-ids";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
@@ -40,6 +40,12 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
         ...defaultOptions[0],
         mode: "compact-on-overflow",
       },
+    ] as const),
+    getCode(__dirname, "option.semantic", [
+      {
+        ...defaultOptions[0],
+        semanticComments: ["my-custom-semantic"],
+      } as Options,
     ] as const),
   ],
   invalid: [

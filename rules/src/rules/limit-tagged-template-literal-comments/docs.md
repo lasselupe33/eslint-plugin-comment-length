@@ -1,4 +1,3 @@
-
 # `comment-length/limit-tagged-template-literal-comments`
 
 Locates javascript comments, i.e. `/* comment */` or `// comment` within `tagged template literals` and ensures that each line in the comment never exceeds the configured length.
@@ -43,7 +42,8 @@ const myCss = css`
       "logicalWrap": true,
       "ignoreUrls": true,
       "ignoreCommentsWithCode": true,
-      "tabSize": 2
+      "tabSize": 2,
+      "semanticComments": ["<string>"],
     }
   ]
 }
