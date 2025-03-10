@@ -9,6 +9,24 @@ export function canBlockBeCompated(block: MultilineBlock, context: Context) {
   }
 
   const formattedBlock = formatBlock(block, context).trim();
+  const formattedLines = formattedBlock.split("\n");
 
-  return formattedBlock !== context.comment.value.trim();
+  if (formattedLines.length !== block.lines.length) {
+    return true;
+  }
+
+  for (let i = 0; i < formattedLines.length; i++) {
+    const formattedLine = formattedLines[i]?.replace(/^ *\*/, "").trim();
+    const originalLine = block.lines[i]?.trim();
+
+    if (!formattedLine || !originalLine) {
+      continue;
+    }
+
+    if (formattedLine !== originalLine) {
+      return true;
+    }
+  }
+
+  return false;
 }

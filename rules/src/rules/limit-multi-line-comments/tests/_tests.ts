@@ -41,6 +41,12 @@ ruleTester.run("limit-multi-line-comments", limitMultiLineCommentsRule, {
         mode: "compact-on-overflow",
       },
     ] as const),
+    getCode(__dirname, "option.compact.valid", [
+      {
+        ...defaultOptions[0],
+        mode: "compact",
+      },
+    ] as const),
     getCode(__dirname, "option.semantic", [
       {
         ...defaultOptions[0],
