@@ -31,7 +31,7 @@ export function limitSingleLineComments(
       !currentCommentLine?.range ||
       !currentCommentLine.value ||
       !isCommentOnOwnLine(sourceCode, currentCommentLine) ||
-      isSemanticComment(currentCommentLine)
+      isSemanticComment(currentCommentLine, options.semanticComments)
     ) {
       continue;
     }

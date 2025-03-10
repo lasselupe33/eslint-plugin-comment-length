@@ -31,7 +31,7 @@ export function captureRelevantCommentsIntoBlock(
       !nextComment ||
       nextComment.value.trim() === "" ||
       nextComment.loc?.start.line !== (comment.loc?.end.line ?? 0) + 1 ||
-      isSemanticComment(nextComment) ||
+      isSemanticComment(nextComment, context.semanticComments) ||
       !isCommentOnOwnLine(sourceCode, nextComment)
     ) {
       break;
