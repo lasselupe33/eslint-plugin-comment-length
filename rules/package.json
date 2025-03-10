@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-comment-length",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "An ESLint plugin that provides rules that limit the line length of your comments",
   "types": "./src/index.ts",
   "main": "./lib/cjs/index.cjs",
