@@ -6,7 +6,7 @@ import { isLineOverflowing } from "../../utils/is-line-overflowing.js";
 import type { MultilineBlock } from "./typings.block.js";
 
 export function detectOverflowInMultilineBlocks(
-  ruleContext: RuleContext<string, unknown[]>,
+  _ruleContext: RuleContext<string, unknown[]>,
   context: Context,
   blocks: MultilineBlock[],
 ) {
