@@ -23,7 +23,8 @@
     "noPropertyAccessFromIndexSignature": true,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": true,
-    "target": "ES6"
+    "target": "ES6",
+    "erasableSyntaxOnly": true,
   },
   "include": ["./src/**/*"],
   "exclude": ["./src/**/tests/**/*"]
