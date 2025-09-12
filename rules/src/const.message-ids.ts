@@ -1,7 +1,9 @@
-export enum MessageIds {
-  EXCEEDS_MAX_LENGTH = "exceeds-max-length",
-  CAN_COMPACT = "can-compact",
-}
+export const MessageIds = {
+  EXCEEDS_MAX_LENGTH: "exceeds-max-length",
+  CAN_COMPACT: "can-compact",
+} as const;
+
+export type MessageIds = typeof MessageIds[keyof typeof MessageIds];
 
 export const reportMessages = {
   [MessageIds.EXCEEDS_MAX_LENGTH]:
