@@ -16,9 +16,7 @@ export function detectOverflowInMultilineBlocks(
   // our rule to mark it as fixable using logic similar to the single-line
   // rule.
   for (const block of blocks) {
-    for (let i = 0; i < block.lines.length; i++) {
-      const line = block.lines[i];
-
+    for (const line of block.lines) {
       if (line && isLineOverflowing(line, context)) {
         problematicBlocks.push(block);
         break;

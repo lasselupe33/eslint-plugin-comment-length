@@ -19,7 +19,7 @@ export function deepCloneObject<T extends Record<string, unknown>>(a: T): T {
   return clone as T;
 }
 
-function deepCloneArray<T extends Array<unknown>>(arr: T): T {
+function deepCloneArray<T extends unknown[]>(arr: T): T {
   const newArr = [];
 
   for (const val of arr) {

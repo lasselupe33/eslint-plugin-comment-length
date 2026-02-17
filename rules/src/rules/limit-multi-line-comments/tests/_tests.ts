@@ -1,9 +1,10 @@
-import { getCode } from "../../../utils/testing.get-code";
-
-import { limitMultiLineCommentsRule } from "../rule";
-import { defaultOptions, Options } from "../../../typings.options";
-import { MessageIds } from "../../../const.message-ids";
 import { RuleTester } from "@typescript-eslint/rule-tester";
+
+import { MessageIds } from "../../../const.message-ids";
+import type { Options } from "../../../typings.options";
+import { defaultOptions } from "../../../typings.options";
+import { getCode } from "../../../utils/testing.get-code";
+import { limitMultiLineCommentsRule } from "../rule";
 
 const ruleTester = new RuleTester();
 

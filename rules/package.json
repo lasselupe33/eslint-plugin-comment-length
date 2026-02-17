@@ -8,7 +8,7 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
+      "types": "./lib/index.d.ts",
       "import": "./lib/mjs/index.js",
       "require": "./lib/cjs/index.cjs",
       "default": "./lib/cjs/index.cjs"
@@ -30,7 +30,8 @@
     "watch": "ROLLUP__FORMAT=esm rollup -c rollup.config.js --watch",
     "prepublishOnly": "cp ../README.md ./README.md; npm run build",
     "postpublish": "rm README.md",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "jest --config=.jestrc.json"
   },
   "author": "Lasse Felskov Agersten <lfa@appear.dk>",
   "repository": {
@@ -39,18 +40,18 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@typescript-eslint/utils": "^8.2.0"
+    "@typescript-eslint/utils": "^8.56.0"
   },
   "devDependencies": {
-    "@types/eslint": "^9.6.0",
-    "@types/estree": "^1.0.5",
-    "@types/node": "^20.16.1",
-    "@typescript-eslint/rule-tester": "^8.2.0",
-    "enhanced-resolve": "^5.17.1",
-    "esbuild": "^0.23.1",
-    "rollup": "^4.21.0",
-    "rollup-plugin-esbuild": "^6.1.1",
-    "typescript": "^5.5.4"
+    "@types/eslint": "^9.6.1",
+    "@types/estree": "^1.0.8",
+    "@types/node": "^24.10.13",
+    "@typescript-eslint/rule-tester": "^8.56.0",
+    "enhanced-resolve": "^5.19.0",
+    "esbuild": "^0.27.3",
+    "rollup": "^4.57.1",
+    "rollup-plugin-esbuild": "^6.2.1",
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "eslint": ">=8.0.0"

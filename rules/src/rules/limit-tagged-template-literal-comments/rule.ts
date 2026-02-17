@@ -5,7 +5,8 @@ import {
 } from "@typescript-eslint/utils";
 import { isIdentifier } from "@typescript-eslint/utils/ast-utils";
 
-import { MessageIds, reportMessages } from "../../const.message-ids.js";
+import type { MessageIds } from "../../const.message-ids.js";
+import { reportMessages } from "../../const.message-ids.js";
 import {
   type Options,
   defaultOptions,

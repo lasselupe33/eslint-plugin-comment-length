@@ -15,6 +15,11 @@
     "CODEOWNERS": "plaintext"
   },
 
+  "files.exclude": {
+    "**/node_modules": false,
+    "**/*.wyw-in-js.module.css": true
+  },
+
   //
   // PRETTIER
   //
@@ -67,13 +72,9 @@
     "javascriptreact"
   ],
 
-  "stylelint.validate": [
-    "css",
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
+  "stylelint.validate": ["css"],
+
+  "eslint.debug": true,
 
   "prettier.configPath": "./.prettierrc",
 
@@ -88,7 +89,14 @@
   // JEST
   //
 
-  "jest.enable": false,
+  "jest.rootPath": "./",
+  "jest.jestCommandLine": "yarn test",
+  "jest.runMode": {
+    "type": "on-save",
+    "testFileOnly": true
+  },
 
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsserver.nodePath": "node",
+  "typescript.tsserver.maxTsServerMemory": 6144
 }

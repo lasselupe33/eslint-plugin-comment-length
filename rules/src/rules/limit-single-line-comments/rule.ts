@@ -1,6 +1,7 @@
 import { type TSESTree, ESLintUtils } from "@typescript-eslint/utils";
 
-import { MessageIds, reportMessages } from "../../const.message-ids.js";
+import type { MessageIds } from "../../const.message-ids.js";
+import { reportMessages } from "../../const.message-ids.js";
 import {
   type RuleOptions,
   defaultOptions,

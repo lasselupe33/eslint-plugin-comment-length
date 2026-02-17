@@ -4,9 +4,9 @@ import type {
   InvalidTestCase,
   ValidTestCase,
 } from "@typescript-eslint/rule-tester";
-import resolve from "enhanced-resolve";
+import { create } from "enhanced-resolve";
 
-const resolver = resolve.create.sync({
+const resolver = create.sync({
   extensions: [".ts", ".tsx", ".js", ".jsx"],
 });
 
