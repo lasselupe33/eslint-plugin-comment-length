@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "rootDir": "./src",
     "outDir": "./lib",
     "lib": ["DOM", "DOM.Iterable", "esnext"],
     "isolatedModules": true,
@@ -10,7 +10,6 @@
     "verbatimModuleSyntax": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "downlevelIteration": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
@@ -23,7 +22,8 @@
     "noPropertyAccessFromIndexSignature": true,
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": true,
-    "target": "ES6"
+    "target": "ES6",
+    "types": ["node"]
   },
   "include": ["./src/**/*"],
   "exclude": ["./src/**/tests/**/*"]

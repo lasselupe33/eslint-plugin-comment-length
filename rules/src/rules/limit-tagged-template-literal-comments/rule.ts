@@ -62,9 +62,13 @@ export const limitTaggedTemplateLiteralCommentsRule = createRule<
           let currentBlockComment: undefined | TSESTree.BlockComment;
           let currentLineComment: undefined | TSESTree.LineComment;
 
-          for (let cursor = 0; cursor < quasi.value.cooked.length; cursor++) {
-            const currentChar = quasi.value.cooked[cursor];
-            const nextChar = quasi.value.cooked[cursor + 1];
+          for (
+            let cursor = 0;
+            cursor < (quasi.value.cooked ?? []).length;
+            cursor++
+          ) {
+            const currentChar = quasi.value.cooked?.[cursor];
+            const nextChar = quasi.value.cooked?.[cursor + 1];
 
             rangeIndex++;
 
@@ -115,7 +119,7 @@ export const limitTaggedTemplateLiteralCommentsRule = createRule<
             if (
               currentChar === "/" &&
               nextChar === "/" &&
-              quasi.value.cooked[cursor + 2] === " "
+              quasi.value.cooked?.[cursor + 2] === " "
             ) {
               currentLineComment = {
                 type: AST_TOKEN_TYPES.Line,
