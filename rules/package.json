@@ -40,18 +40,18 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@typescript-eslint/utils": "^8.56.0"
+    "@typescript-eslint/utils": "^8.59.0"
   },
   "devDependencies": {
     "@types/eslint": "^9.6.1",
     "@types/estree": "^1.0.8",
-    "@types/node": "^24.10.13",
-    "@typescript-eslint/rule-tester": "^8.56.0",
-    "enhanced-resolve": "^5.19.0",
-    "esbuild": "^0.27.3",
-    "rollup": "^4.57.1",
+    "@types/node": "^24.12.2",
+    "@typescript-eslint/rule-tester": "^8.59.0",
+    "enhanced-resolve": "^5.20.1",
+    "esbuild": "^0.28.0",
+    "rollup": "^4.60.2",
     "rollup-plugin-esbuild": "^6.2.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "peerDependencies": {
     "eslint": ">=8.0.0"
