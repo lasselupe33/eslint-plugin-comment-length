@@ -38,6 +38,10 @@
     "type": "git",
     "url": "https://github.com/lasselupe33/eslint-plugin-comment-length.git"
   },
+  "homepage": "https://github.com/lasselupe33/eslint-plugin-comment-length/tree/master/rules#readme",
+  "bugs": {
+    "url": "https://github.com/lasselupe33/eslint-plugin-comment-length/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "@typescript-eslint/utils": "^8.59.0"
