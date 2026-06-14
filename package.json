@@ -39,5 +39,9 @@
     "prettier": "^3.8.3",
     "typescript-eslint": "^8.59.0",
     "typescript": "^6.0.3"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/lasselupe33/eslint-plugin-comment-length/issues"
+  },
+  "homepage": "https://github.com/lasselupe33/eslint-plugin-comment-length#readme"
 }
