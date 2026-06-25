@@ -117,7 +117,8 @@ export function captureNextBlock(
           lineOffsets: blockLines.map((it, lineIndex) => {
             const whitespaceString = context.comment.value
               .split("\n")
-              [startIndex + lineIndex]?.includes("*")
+              [startIndex + lineIndex]?.replace(/\r$/, "")
+              .includes("*")
               ? (it.match(/^( |\t)*/)?.[0] ?? "")
               : " ";
 
@@ -148,7 +149,8 @@ export function captureNextBlock(
       lineOffsets: blockLines.map((it, lineIndex) => {
         const whitespaceString = context.comment.value
           .split("\n")
-          [startIndex + lineIndex]?.includes("*")
+          [startIndex + lineIndex]?.replace(/\r$/, "")
+          .includes("*")
           ? (it.match(/^( |\t)*/)?.[0] ?? "")
           : " ";
 

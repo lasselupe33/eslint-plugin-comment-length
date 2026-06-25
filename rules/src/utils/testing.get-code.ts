@@ -37,7 +37,7 @@ export function getCode<TIds extends string, TOpts extends readonly unknown[]>(
 
   const base = {
     name,
-    code: fs.readFileSync(resolvedPath, "utf-8"),
+    code: fs.readFileSync(resolvedPath, "utf-8").replace(/\r\n/g, "\n"),
     filename: resolvedPath,
     options: options,
   };
@@ -55,6 +55,6 @@ export function getCode<TIds extends string, TOpts extends readonly unknown[]>(
   return {
     ...base,
     errors: new Array(repeat ?? 1).fill({ messageId: expectedError }),
-    output: fs.readFileSync(expectedValuePath, "utf-8"),
+    output: fs.readFileSync(expectedValuePath, "utf-8").replace(/\r\n/g, "\n"),
   };
 }
