@@ -95,5 +95,7 @@ export function limitMultiLineComments(
 }
 
 function getCommentLines(comment: TSESTree.BlockComment): string[] {
-  return comment.value.split("\n").map((it) => it.replace(/^( |\t)*?\*/, ""));
+  return comment.value
+    .split("\n")
+    .map((it) => it.replace(/\r$/, "").replace(/^( |\t)*?\*/, ""));
 }
