@@ -16,6 +16,8 @@ export function isSemanticComment(
     comment.value.includes("eslint-enable") ||
     comment.value.includes("stylelint-enable") ||
     comment.value.includes("tslint:enable") ||
+    comment.value.includes("oxlint-disable") ||
+    comment.value.includes("oxlint-enable") ||
     includesCustomSemanticComment
   );
 }

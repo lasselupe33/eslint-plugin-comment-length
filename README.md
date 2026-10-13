@@ -9,7 +9,7 @@ This project aims to ease the process of writing long comments where each line n
 **NB:** There are several cases wherein the rules will not attempt to automatically format comments. This is to accomodate cases where it is _not_ desired to break a comment into multiple lines. Examples include comments that:
 
 - are not on their own lines.
-- include `eslint-[enable|disable]-*`, `stylelint-[enable|disable]-*`, `tslint:[enable|disable]`. _NB_: Additional commnts like this can be added via the `semanticComments` configuration option.
+- include `eslint-[enable|disable]-*`, `stylelint-[enable|disable]-*`, `tslint:[enable|disable]`, `oxlint-[enable|disable]-*`. _NB_: Additional commnts like this can be added via the `semanticComments` configuration option.
 - are wrapped within backticks, as it normally indicate code-snippets within comments. (e.g. \```some-comment\```)
 - are part of JSDoc-like comments. (i.e. multi-line comment lines that starts with '@')
 
